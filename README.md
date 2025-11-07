@@ -40,6 +40,15 @@ ProjectTemplate/
 │   ├── install-rules.sh          # Main installer (Bash)
 │   └── README.md                 # Installation documentation
 │
+├── BC27/                          # BC27 Comprehensive Base Code Index (NEW! 🆕)
+│   ├── BC27_INDEX_README.md      # Navigation guide for BC27 documentation
+│   ├── BC27_ARCHITECTURE.md      # System design, layering, patterns
+│   ├── BC27_MODULES_OVERVIEW.md  # Complete inventory of all 73 modules
+│   ├── BC27_MODULES_BY_CATEGORY.md  # Organized by functional category
+│   ├── BC27_DEPENDENCY_REFERENCE.md # Module relationships & chains
+│   ├── BC27_FEATURES_INDEX.md    # Complete feature reference matrix
+│   └── BC27_INTEGRATION_GUIDE.md # External integrations & cloud services
+│
 ├── .cursor/rules/                 # Cursor AI rules (MDC format)
 │   ├── 000-project-overview.mdc
 │   ├── 001-naming-conventions.mdc
@@ -48,7 +57,8 @@ ProjectTemplate/
 │   ├── 004-performance.mdc
 │   ├── 005-bc26-symbols.mdc
 │   ├── 006-tools-review.mdc
-│   └── 007-deployment-security.mdc
+│   ├── 007-deployment-security.mdc
+│   └── 008-bc27-base-index.mdc   # BC27 base code reference (NEW! 🆕)
 │
 └── .claude/                       # Claude Code configuration
     ├── commands/                  # Slash commands (ENHANCED! ✨)
@@ -99,6 +109,7 @@ ProjectTemplate/
 **Wat gebeurt er?**
 - ✅ Pulled automatisch laatste versie van GitHub (main branch)
 - ✅ Kopieert `.cursor/rules/`, `.claude/commands/`, `CLAUDE.md`
+- ✅ Kopieert `BC27/` documentatie (7 comprehensive reference files)
 - ✅ Vervangt `ABC` met jouw prefix in alle bestanden
 - ✅ Installeert hooks naar `~/.cursor/hooks.json`
 - ✅ Maakt `.agent/` directory structuur aan
@@ -182,7 +193,61 @@ bash scripts/install-rules.sh /pad/naar/project ABC
 - **006-tools-review.mdc** (85 regels) - Extensions, Object Ninja, review
 - **007-deployment-security.mdc** (90 regels) - Upgrade paths, security
 
-**Totaal: ~575 regels** (was 1330+ regels)
+### Base Code Reference (NEW! 🆕) (200+ regels)
+- **008-bc27-base-index.mdc** - BC27 architecture, module index, design patterns
+  - ✅ All 73 BC27 modules documented
+  - ✅ 22 functional categories
+  - ✅ Architecture layering & dependency model
+  - ✅ Feature combinations by company type
+  - ✅ Integration points (15+ external systems)
+  - ✅ Design principles & patterns
+  - ✅ Auto-loads for AL files
+
+**Totaal: ~850-900 regels** (erweiterd von 575 regels met BC27 index)
+
+## 📚 BC27 Base Code Comprehensive Index (NEW! 🆕)
+
+Complete reference documentation for Business Central 27 with all 73 modules documented:
+
+### What's Included
+- **73 Modules** - Complete inventory of core + extensions
+- **22 Categories** - Organized by functional domain (Financial, Manufacturing, APIs, etc.)
+- **Architecture** - System layering, design patterns, extension model
+- **Dependencies** - Module relationships with no circular dependencies
+- **Features** - 200+ capabilities organized by area
+- **Integrations** - 15+ external systems (Azure, M365, Shopify, etc.)
+
+### Quick Navigation
+```
+BC27/BC27_INDEX_README.md         ← Start here (navigation guide)
+  ↓
+BC27/BC27_ARCHITECTURE.md         ← System design & patterns
+  ↓
+BC27/BC27_MODULES_OVERVIEW.md     ← Find modules
+  OR
+BC27/BC27_MODULES_BY_CATEGORY.md  ← Browse by function
+  ↓
+BC27/BC27_DEPENDENCY_REFERENCE.md ← Understand relationships
+BC27/BC27_FEATURES_INDEX.md       ← Feature matrix
+BC27/BC27_INTEGRATION_GUIDE.md    ← External integrations
+```
+
+### Automatic Integration
+- ✅ Cursor rule `008-bc27-base-index.mdc` auto-loads for AL files
+- ✅ Installation scripts copy BC27 folder automatically
+- ✅ Cursor highlights module & feature references
+- ✅ Quick lookup during development
+
+### Use Cases
+- **Planning**: Which modules do I need? → See BC27_MODULES_BY_CATEGORY.md
+- **Architecture**: How should I design this? → See BC27_ARCHITECTURE.md
+- **Dependencies**: What depends on what? → See BC27_DEPENDENCY_REFERENCE.md
+- **Integration**: How do I integrate with X? → See BC27_INTEGRATION_GUIDE.md
+- **Features**: What can BC27 do? → See BC27_FEATURES_INDEX.md
+
+**Source:** Stefan Maron's Code History Repository (be-27 branch, BC v27)
+
+---
 
 ## 🔧 BC26 Symbols Configuratie
 
@@ -472,6 +537,42 @@ Project-scoped memory enabled for context persistence across sessions.
 - **Claude Skills:** https://code.claude.com/docs/en/skills
 - **BC26 Documentation:** Microsoft Learn
 
+## 🎯 What's New in v2.2.0
+
+### 🆕 Major Addition: BC27 Comprehensive Base Code Index
+1. **BC27/ directory** - 7 comprehensive documentation files (161 KB)
+   - BC27_INDEX_README.md - Navigation guide
+   - BC27_ARCHITECTURE.md - System design & patterns
+   - BC27_MODULES_OVERVIEW.md - All 73 modules detailed
+   - BC27_MODULES_BY_CATEGORY.md - Organized by function
+   - BC27_DEPENDENCY_REFERENCE.md - Module relationships
+   - BC27_FEATURES_INDEX.md - Complete feature matrix
+   - BC27_INTEGRATION_GUIDE.md - External integrations
+
+2. **008-bc27-base-index.mdc** - Cursor rule for instant BC27 reference
+   - Auto-loads for AL files
+   - 200+ lines of architecture & pattern reference
+   - Module statistics, feature combinations
+   - Integration points documentation
+
+3. **Enhanced Installation Scripts** - Copy BC27 automatically
+   - install-rules.sh & install-rules.ps1 updated
+   - BC27 folder created during setup
+   - Success messages highlight BC27 documentation
+
+4. **Updated Documentation**
+   - Project overview rule references BC27
+   - Auto-install command mentions BC27 docs
+   - README enhanced with BC27 section
+
+**BC27 in Development:**
+- Cursor rule auto-loads module & architecture info
+- Quick lookup for any BC27 question
+- Reference during feature planning & design
+- Integration patterns & best practices
+
+---
+
 ## 🎯 What's New in v2.1.0
 
 ### 🚀 Major Addition: Automated Installation
@@ -500,7 +601,25 @@ Project-scoped memory enabled for context persistence across sessions.
 8. **Memory** - Project-scoped context persistence
 
 ### Breaking Changes
-None - fully backward compatible with v1.0.0 and v2.0.0
+None - fully backward compatible with all previous versions
+
+### Migration from v2.1.0 to v2.2.0
+**Automatic (Recommended)** - Run installation script again:
+```powershell
+.\install-to-project.ps1
+```
+
+This will add:
+- ✅ BC27/ documentation folder
+- ✅ New 008-bc27-base-index.mdc cursor rule
+- ✅ Updated installation scripts
+- ✅ Updated project overview rule
+
+**Manual** - If you prefer:
+1. Copy `BC27/` directory to your template
+2. Copy `.cursor/rules/008-bc27-base-index.mdc`
+3. Update `.cursor/rules/000-project-overview.mdc` to reference BC27
+4. Update `.claude/commands/6-auto-install-rules.md` to list BC27
 
 ### Migration from v2.0.0 to v2.1.0
 **Option 1: Automated (Recommended)**
@@ -536,11 +655,12 @@ Dit template is vrij te gebruiken voor ESC BC26 projecten.
 
 ---
 
-**Versie:** 2.1.0 🎉
-**BC Version:** 26 (SaaS)
+**Versie:** 2.2.0 🎉
+**BC Version:** 26 (SaaS) + BC27 Base Code Reference
 **Laatst bijgewerkt:** 2025-11-07
 
 ### Version History
+- **v2.2.0** (2025-11-07): BC27 comprehensive base code index with 73 modules, cursor rule, integration
 - **v2.1.0** (2025-11-07): Automated installation system with git integration, zero manual config
 - **v2.0.0** (2025-11-07): Added hooks, subagents, skills, enhanced commands, CLAUDE.md
 - **v1.0.0** (2025-11-07): Initial release with basic commands and rules
