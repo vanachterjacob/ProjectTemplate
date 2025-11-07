@@ -39,7 +39,7 @@ description: ESC document field extension patterns for BC26
 // Always verify custom fields are transferred
 procedure OnAfterTransferFields(var SalesInvoiceHeader: Record "Sales Invoice Header")
 begin
-    SalesInvoiceHeader."QEX Custom Field" := "QEX Custom Field";
+    SalesInvoiceHeader."ABC Custom Field" := "ABC Custom Field";
 end;
 ```
 

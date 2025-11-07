@@ -25,7 +25,7 @@ end;
 ## Clean Conditionals (CASE over IF)
 
 ```al
-procedure GetPriorityText(Status: Enum "QEX Document Status"): Text
+procedure GetPriorityText(Status: Enum "ABC Document Status"): Text
 var
     OpenLbl: Label 'Open';
     ApprovedLbl: Label 'Approved';

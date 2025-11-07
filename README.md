@@ -6,9 +6,24 @@ Centralized configuration template voor Business Central 26 (SaaS) extensie ontw
 
 Dit template helpt bij het schrijven van BC26 extensies door:
 - **Compacte context** voor LLM's (alle rules <100 regels)
-- **Gestandaardiseerde workflows** via Claude slash commands
+- **Gestandaardiseerde workflows** via Claude Code slash commands
 - **ESC development standards** compliance
 - **Lokale BC26 symbols** referentie (geen MCP afhankelijkheid)
+
+## 🤖 Tool Strategy
+
+**Cursor Rules** (`.cursor/rules/`) - Voor AI context
+- MDC format met metadata
+- Always applied tijdens Agent/Inline Edit
+- Zorgt voor consistente code quality
+
+**Claude Code Commands** (`.claude/commands/`) - Voor workflows
+- Gestructureerde development workflows
+- Frontmatter met `$ARGUMENTS` support
+- Krachtigere features dan Cursor commands
+- Focus op één tool = minder onderhoud
+
+> **Note:** Cursor heeft ook custom commands (`.cursor/commands/`), maar we gebruiken alleen Claude Code commands om overlap te vermijden en te focussen op de krachtigere features.
 
 ## 📁 Structuur
 
@@ -45,8 +60,8 @@ cp -r ProjectTemplate/.claude your-bc-project/.claude
 ### 2. Configureer project specifics
 
 Open `.cursor/rules/000-project-overview.mdc` en vervang:
-- `QEX` → Je 3-letter customer prefix
-- `Alistar` → Je publisher naam (indien anders)
+- `ABC` → Je 3-letter customer prefix (bijv. `CTM` voor Contoso)
+- `[Your Publisher Name]` → Je publisher naam
 
 ### 3. Gebruik Claude workflow
 
@@ -131,7 +146,7 @@ Zie `005-bc26-symbols.mdc` voor complete lijst.
 ## ✅ ESC Standards Checklist
 
 **Voor elke commit:**
-- [ ] QEX prefix consistent gebruikt
+- [ ] Prefix consistent gebruikt (bijv. ABC)
 - [ ] English-only code (geen Dutch)
 - [ ] Early exit pattern toegepast
 - [ ] ConfirmManagement i.p.v. Confirm()

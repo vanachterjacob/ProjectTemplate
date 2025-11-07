@@ -4,25 +4,25 @@ description: ESC AL naming conventions for BC26 development
 ---
 # ESC Naming Conventions
 
-## Object Naming (QEX prefix mandatory)
+## Object Naming (ABC prefix mandatory)
 
 ### New Objects
 ```al
-table 50000 "QEX Setup"
-page 50002 "QEX Setup Card"
-codeunit 50004 "QEX Process Management"
+table 50000 "ABC Setup"
+page 50002 "ABC Setup Card"
+codeunit 50004 "ABC Process Management"
 ```
 
 **File naming:**
 - Pattern: `<ObjectNameShort>.<ObjectType>.al`
-- Example: `QEXSetup.Table.al`, `QEXCustomerCard.Page.al`
+- Example: `ABCSetup.Table.al`, `ABCCustomerCard.Page.al`
 
 ### Extension Objects
 ```al
-tableextension 50001 "QEX Customer" extends Customer
-pageextension 50003 "QEX Customer Card" extends "Customer Card"
-reportextension 50005 "QEX Customer List" extends "Customer - List"
-enumextension 50007 "QEX Payment Terms" extends "Payment Terms"
+tableextension 50001 "ABC Customer" extends Customer
+pageextension 50003 "ABC Customer Card" extends "Customer Card"
+reportextension 50005 "ABC Customer List" extends "Customer - List"
+enumextension 50007 "ABC Payment Terms" extends "Payment Terms"
 ```
 
 **File naming:**
@@ -31,8 +31,8 @@ enumextension 50007 "QEX Payment Terms" extends "Payment Terms"
 
 ### Interface Pattern
 ```al
-interface "IQEX Customer Service"
-codeunit 50008 "QEX Customer Service Impl"
+interface "IABC Customer Service"
+codeunit 50008 "ABC Customer Service Impl"
 ```
 
 ## Variable Naming (FBakkensen Pattern)
@@ -90,13 +90,13 @@ local procedure ValidateCustomerData(Customer: Record Customer)
 ```
 src/
 ├── CustomerCredit/
-│   ├── QEXCreditLimit.Codeunit.al
-│   └── QEXCreditSetup.Table.al
+│   ├── ABCCreditLimit.Codeunit.al
+│   └── ABCCreditSetup.Table.al
 ├── Documents/
 │   ├── SalesHeader.TableExt37-Ext.al
 │   └── SalesOrder.PageExt42-Ext.al
 └── _Permissions/
-    └── QEXPermissions.PermissionSet.al
+    └── ABCPermissions.PermissionSet.al
 ```
 
 **Guidelines:**
