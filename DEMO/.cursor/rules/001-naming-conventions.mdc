@@ -1,0 +1,108 @@
+---
+alwaysApply: false
+description: ESC AL naming conventions for BC26 development
+globs:
+  - "src/**/*.al"
+  - "app.json"
+---
+# ESC Naming Conventions
+
+## Object Naming (CON prefix mandatory)
+
+### New Objects
+```al
+table 50000 "CON Setup"
+page 50002 "CON Setup Card"
+codeunit 50004 "CON Process Management"
+```
+
+**File naming:**
+- Pattern: `<ObjectNameShort>.<ObjectType>.al`
+- Example: `CONSetup.Table.al`, `CONCustomerCard.Page.al`
+
+### Extension Objects
+```al
+tableextension 50001 "CON Customer" extends Customer
+pageextension 50003 "CON Customer Card" extends "Customer Card"
+reportextension 50005 "CON Customer List" extends "Customer - List"
+enumextension 50007 "CON Payment Terms" extends "Payment Terms"
+```
+
+**File naming:**
+- Pattern: `<BaseNameShort>.<ObjectTypeShort><BaseId>-Ext.al`
+- Example: `Customer.TableExt18-Ext.al`, `CustomerCard.PageExt21-Ext.al`
+
+### Interface Pattern
+```al
+interface "ICON Customer Service"
+codeunit 50008 "CON Customer Service Impl"
+```
+
+## Variable Naming (FBakkensen Pattern)
+
+**Order: Record → Report → Codeunit → Page → Query → Simple types**
+
+```al
+var
+    CustomerRec: Record Customer;              // Avoid table name conflicts
+    TempSalesLine: Record "Sales Line" temporary;  // Temp prefix mandatory
+    CustomerReport: Report "Customer - Top 10 List";
+    SalesPost: Codeunit "Sales-Post";
+    CustomerCardPage: Page "Customer Card";
+    IsProcessed: Boolean;
+    TotalAmount: Decimal;
+    AmountLbl: Label 'Amount';  // Lbl suffix for labels
+```
+
+**Critical rules:**
+- Temp tables: `Temp` prefix mandatory
+- Records: `Rec` suffix to avoid conflicts
+- Labels: `Lbl` suffix
+- English-only names (no Dutch)
+
+## Label Management
+
+```al
+var
+    DeleteQst: Label 'Delete %1?';
+    SuccessMsg: Label 'Process completed successfully';
+    AmountLbl: Label 'Amount';
+```
+
+**Naming suffixes:**
+- `Qst` - Questions/Confirmations
+- `Msg` - Messages
+- `Err` - Errors
+- `Lbl` - Labels
+
+## Procedure Naming
+
+```al
+procedure CalculateAmount(): Decimal
+procedure TryProcessCustomer(CustomerNo: Code[20]): Boolean
+local procedure ValidateCustomerData(Customer: Record Customer)
+```
+
+**Rules:**
+- English verbs: Calculate, Process, Validate, Get, Set
+- Boolean returns: Use `Is`, `Has`, `Can` prefix
+- TryFunctions: `Try` prefix
+
+## File Organization
+
+```
+src/
+├── CustomerCredit/
+│   ├── CONCreditLimit.Codeunit.al
+│   └── CONCreditSetup.Table.al
+├── Documents/
+│   ├── SalesHeader.TableExt37-Ext.al
+│   └── SalesOrder.PageExt42-Ext.al
+└── _Permissions/
+    └── CONPermissions.PermissionSet.al
+```
+
+**Guidelines:**
+- Group by feature/module
+- Permissions in `_Permissions/` folder
+- Use descriptive folder names

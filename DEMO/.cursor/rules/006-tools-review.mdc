@@ -1,0 +1,76 @@
+---
+alwaysApply: false
+description: ESC development tools and code review standards for @-mention when reviewing code
+---
+# ESC Development Tools & Review
+
+## Mandatory Extensions
+
+- **AL Language** (Microsoft) - Required
+- **AL Toolbox** - Productivity for AL development
+- **Object Ninja** - Automated object ID assignment
+- **CRS AL Language Extension** - File naming standards
+- **XLIFF Sync** - Translation management
+- **BC LinterCop** - Advanced code analysis (ESC requirement)
+
+## Centralized Ruleset (Mandatory)
+
+```json
+{
+    "name": "ESC App Rules",
+    "description": "ESC centralized ruleset",
+    "includedRuleSets": [
+        {
+            "path": "https://sadynavisiondevops.blob.core.windows.net/development/project.ruleset.json",
+            "action": "Default"
+        }
+    ]
+}
+```
+
+**ESC Policy:**
+- No project-specific rule exceptions
+- Consistent code quality across all projects
+- Centralized maintenance and updates
+
+## Object Numbering Strategy
+
+- **Start development:** Dummy range (77100-77200)
+- **Final IDs:** Assigned by Object Ninja from customer range
+- **Never manually assign** production IDs
+
+## Code Review Checklist
+
+### Before Merge - Mandatory
+- [ ] SetLoadFields used appropriately (read-only only)
+- [ ] No explicit Commit() without documentation (LC0002)
+- [ ] Proper error handling with labeled messages
+- [ ] Cyclomatic complexity ≤ 15 for all functions
+- [ ] English-only code (no translation comments)
+- [ ] Variables don't match table names
+- [ ] Performance tested with production-scale data
+
+### LinterCop Compliance
+- [ ] All objects have Access property (LC0011)
+- [ ] All tables have DataPerCompany property (LC0007)
+- [ ] Public objects have Extensible property (LC0034)
+- [ ] FlowFields are non-editable (LC0001)
+- [ ] No hardcoded IDs (LC0012)
+- [ ] SecretText for sensitive data (LC0043)
+- [ ] ReadIsolation over LockTable (LC0031)
+- [ ] ConfirmManagement instead of Confirm() (LC0021)
+
+### ESC-Specific
+- [ ] Document fields extended to ALL related tables
+- [ ] Performance impact considered for operations > 30s
+- [ ] Object Ninja used for final ID assignment
+- [ ] Centralized ruleset compliance verified
+
+## Red Flags (Immediate Action)
+
+1. **Mixed language code** - Refactor immediately
+2. **Variable name conflicts** - Rename to clear patterns
+3. **Missing error handling** - Add comprehensive try-catch
+4. **No permission validation** - Add security checks
+5. **Untested upgrade path** - Block deployment
+6. **Production performance not validated** - Require testing
