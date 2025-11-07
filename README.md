@@ -32,6 +32,13 @@ Dit template helpt bij het schrijven van BC26 extensies door:
 ```
 ProjectTemplate/
 ├── CLAUDE.md                      # AI context file (NEW! 🆕)
+├── install-to-project.ps1         # Easy installation wrapper (Windows) (NEW! 🆕)
+├── install-to-project.sh          # Easy installation wrapper (Linux/Mac) (NEW! 🆕)
+│
+├── scripts/                       # Installation scripts (NEW! 🆕)
+│   ├── install-rules.ps1         # Main installer (PowerShell)
+│   ├── install-rules.sh          # Main installer (Bash)
+│   └── README.md                 # Installation documentation
 │
 ├── .cursor/rules/                 # Cursor AI rules (MDC format)
 │   ├── 000-project-overview.mdc
@@ -66,23 +73,63 @@ ProjectTemplate/
 
 ## 🚀 Quick Start
 
-### 1. Kopieer template naar je project
+### 🎯 Automatische Installatie (Nieuw!)
 
+**3 Simpele Stappen:**
+
+1. **Edit het installatiescript:**
+   - Open `install-to-project.ps1` (Windows) of `install-to-project.sh` (Linux/Mac)
+   - Pas aan:
+     ```powershell
+     $TargetProject = "C:\Projects\MijnProject"  # Pad naar je AL project
+     $ProjectPrefix = "ABC"                       # Je 3-letter prefix
+     ```
+
+2. **Run het script:**
+   ```powershell
+   # Windows
+   .\install-to-project.ps1
+
+   # Linux/Mac
+   bash install-to-project.sh
+   ```
+
+3. **Reload Cursor/VS Code** en je bent klaar! ✅
+
+**Wat gebeurt er?**
+- ✅ Pulled automatisch laatste versie van GitHub (main branch)
+- ✅ Kopieert `.cursor/rules/`, `.claude/commands/`, `CLAUDE.md`
+- ✅ Vervangt `ABC` met jouw prefix in alle bestanden
+- ✅ Installeert hooks naar `~/.cursor/hooks.json`
+- ✅ Maakt `.agent/` directory structuur aan
+
+**Voor bestaande projecten:**
+- Je `app.json` blijft ongewijzigd (idRanges, dependencies, publisher)
+- Alleen AI tooling wordt toegevoegd
+- 100% klaar na Cursor reload - geen verdere configuratie nodig!
+
+### 🔄 Alternatieve Installatie Opties
+
+**Via Claude Code slash command:**
 ```bash
-cp -r ProjectTemplate/.cursor your-bc-project/.cursor
-cp -r ProjectTemplate/.claude your-bc-project/.claude
-cp ProjectTemplate/CLAUDE.md your-bc-project/CLAUDE.md
+/auto-install-rules
+# Interactieve installer, vraagt naar directory & prefix
 ```
 
-### 2. Configureer project specifics
+**Direct via command line:**
+```bash
+# Windows PowerShell
+.\scripts\install-rules.ps1 -TargetDirectory "C:\Projects\MijnProject" -ProjectPrefix "ABC"
 
-Open `.cursor/rules/000-project-overview.mdc` en vervang:
-- `ABC` → Je 3-letter customer prefix (bijv. `CTM` voor Contoso)
-- `[Your Publisher Name]` → Je publisher naam
+# Linux/Mac Bash
+bash scripts/install-rules.sh /pad/naar/project ABC
+```
 
-Update `CLAUDE.md`:
-- Vervang `ABC` met je customer prefix
-- Vervang `[Your Publisher Name]` met je publisher naam
+**Met custom git branch:**
+```bash
+# Pull van andere branch (bijv. develop)
+.\scripts\install-rules.ps1 -TargetDirectory "C:\Projects\MijnProject" -ProjectPrefix "ABC" -RepoBranch "develop"
+```
 
 ### 3. Gebruik Claude workflow
 
@@ -425,9 +472,24 @@ Project-scoped memory enabled for context persistence across sessions.
 - **Claude Skills:** https://code.claude.com/docs/en/skills
 - **BC26 Documentation:** Microsoft Learn
 
-## 🎯 What's New in v2.0.0
+## 🎯 What's New in v2.1.0
 
-### Major Additions
+### 🚀 Major Addition: Automated Installation
+1. **install-to-project.ps1/.sh** - Easy wrapper scripts with editable variables
+2. **scripts/install-rules.ps1/.sh** - Full-featured installers with git integration
+3. **scripts/README.md** - Complete installation documentation
+4. **/auto-install-rules** - Interactive Claude Code slash command
+5. **Git Integration** - Always pulls latest template from main branch
+6. **Automatic Prefix Replacement** - ABC → your prefix in all files
+7. **Hooks Installation** - Automatic setup to ~/.cursor/hooks.json
+8. **Zero Manual Config** - 100% ready after reload for existing projects
+
+**Installation in 3 steps:**
+1. Edit `install-to-project.ps1` (target directory + prefix)
+2. Run `.\install-to-project.ps1`
+3. Reload Cursor/VS Code ✅
+
+### What's in v2.0.0
 1. **CLAUDE.md** - Comprehensive AI context file
 2. **Hooks System** - Automated quality control and warnings
 3. **Subagents** - bc26-reviewer and bc26-architect specialists
@@ -438,14 +500,25 @@ Project-scoped memory enabled for context persistence across sessions.
 8. **Memory** - Project-scoped context persistence
 
 ### Breaking Changes
-None - fully backward compatible with v1.0.0
+None - fully backward compatible with v1.0.0 and v2.0.0
+
+### Migration from v2.0.0 to v2.1.0
+**Option 1: Automated (Recommended)**
+```powershell
+# Edit variables in install-to-project.ps1 and run
+.\install-to-project.ps1
+```
+
+**Option 2: Manual**
+1. Copy `scripts/` directory to your template
+2. Copy `install-to-project.ps1` and `install-to-project.sh` to root
+3. Copy `.claude/commands/6-auto-install-rules.md`
 
 ### Migration from v1.0.0
-1. Copy CLAUDE.md to your project root
-2. Update .claude/settings.json with new structure
-3. Copy .claude/subagents/ directory
-4. Copy .claude/skills/ directory
-5. Replace command files in .claude/commands/ (or keep old ones)
+Use the automated installer - it handles everything:
+```powershell
+.\install-to-project.ps1
+```
 
 ## 🤝 Contributing
 
@@ -463,10 +536,11 @@ Dit template is vrij te gebruiken voor ESC BC26 projecten.
 
 ---
 
-**Versie:** 2.0.0 🎉
+**Versie:** 2.1.0 🎉
 **BC Version:** 26 (SaaS)
 **Laatst bijgewerkt:** 2025-11-07
 
 ### Version History
+- **v2.1.0** (2025-11-07): Automated installation system with git integration, zero manual config
 - **v2.0.0** (2025-11-07): Added hooks, subagents, skills, enhanced commands, CLAUDE.md
 - **v1.0.0** (2025-11-07): Initial release with basic commands and rules
