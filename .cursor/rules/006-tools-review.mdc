@@ -1,6 +1,6 @@
 ---
-alwaysApply: true
-description: ESC development tools and code review standards
+alwaysApply: false
+description: ESC development tools and code review standards for @-mention when reviewing code
 ---
 # ESC Development Tools & Review
 

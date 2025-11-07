@@ -1,6 +1,14 @@
 ---
-alwaysApply: true
+alwaysApply: false
 description: ESC document field extension patterns for BC26
+globs:
+  - "src/**/*Document*.al"
+  - "src/**/*Sales*.al"
+  - "src/**/*Purchase*.al"
+  - "src/**/*Order*.al"
+  - "src/**/*Invoice*.al"
+  - "src/**/*Header*.al"
+  - "src/**/*Line*.al"
 ---
 # Document Field Extensions
 

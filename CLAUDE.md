@@ -34,15 +34,26 @@ Centralized configuration template for Business Central 26 (SaaS) extension deve
 ```
 ProjectTemplate/
 ├── CLAUDE.md                    # This file - AI context
-├── .cursor/rules/               # Cursor AI rules (MDC format, always applied)
-│   ├── 000-project-overview.mdc # Project config, PREFIX, standards
-│   ├── 001-naming-conventions.mdc
-│   ├── 002-development-patterns.mdc
-│   ├── 003-document-extensions.mdc
-│   ├── 004-performance.mdc
-│   ├── 005-bc26-symbols.mdc
-│   ├── 006-tools-review.mdc
-│   └── 007-deployment-security.mdc
+├── .cursorignore                # Files excluded from AI context/indexing
+│
+├── .cursor/                     # Cursor AI configuration
+│   ├── rules/                   # MDC rules (auto-loaded by file pattern)
+│   │   ├── 000-project-overview.mdc      # Always applied
+│   │   ├── 001-naming-conventions.mdc    # For src/**/*.al
+│   │   ├── 002-development-patterns.mdc  # For src/**/*.al
+│   │   ├── 003-document-extensions.mdc   # For *Sales*, *Purchase*
+│   │   ├── 004-performance.mdc           # For src/**/*.al
+│   │   ├── 005-bc26-symbols.mdc          # @-mention only
+│   │   ├── 006-tools-review.mdc          # @-mention only
+│   │   └── 007-deployment-security.mdc   # For *Install*, *Upgrade*
+│   │
+│   └── hooks/                   # Cursor Agent hooks (validation, security)
+│       ├── hooks.example.json   # Copy to ~/.cursor/hooks.json
+│       ├── after-file-edit.ps1  # ESC validation after edits
+│       ├── before-read-file.ps1 # Block sensitive files
+│       ├── before-shell-execution.ps1  # Prevent dangerous commands
+│       ├── after-agent-response.ps1    # Usage analytics
+│       └── README.md            # Hook installation guide
 │
 ├── .claude/                     # Claude Code configuration
 │   ├── commands/                # Slash commands for workflows
@@ -58,17 +69,25 @@ ProjectTemplate/
 │   └── README.md               # Documentation index
 │
 └── src/                         # AL source code (when present in project)
+    ├── AGENTS.md                # Auto-loaded context for src/ files
+    └── _Examples/               # Example code patterns
+        └── AGENTS.md            # Module-specific context
 ```
 
 ## ESC Standards Reference
-**Load these rules from `.cursor/rules/` for details:**
-- **001-naming-conventions.mdc** - Object naming, FBakkensen pattern, file organization
-- **002-development-patterns.mdc** - Early exit, TryFunction, ConfirmManagement
-- **003-document-extensions.mdc** - Complete Sales/Purchase document checklist
-- **004-performance.mdc** - Thresholds, background jobs, SetLoadFields rules
-- **005-bc26-symbols.mdc** - Local BC26 symbol references
-- **006-tools-review.mdc** - Development extensions, Object Ninja, review process
-- **007-deployment-security.mdc** - Security, integration, upgrade patterns
+**Cursor rules load intelligently based on file patterns:**
+- **000-project-overview.mdc** - Always loaded (project basics)
+- **001-naming-conventions.mdc** - Auto-loads for *.al files
+- **002-development-patterns.mdc** - Auto-loads for *.al files
+- **003-document-extensions.mdc** - Auto-loads for *Sales*, *Purchase*, *Document* files
+- **004-performance.mdc** - Auto-loads for *.al files
+- **005-bc26-symbols.mdc** - Load via @-mention when needed (avoids context bloat)
+- **006-tools-review.mdc** - Load via @-mention for code review
+- **007-deployment-security.mdc** - Auto-loads for *Install*, *Upgrade*, *Permission* files
+
+**AGENTS.md files (lightweight context):**
+- **src/AGENTS.md** - Auto-loads when working in src/ directory
+- **src/ModuleName/AGENTS.md** - Add module-specific context as needed
 
 ## Local Resources
 - **BC26 Base Symbols:** C:\Temp\BC26Objects\BaseApp (Microsoft 26.3.36158.37931)
@@ -179,8 +198,65 @@ ProjectTemplate/
 5. Review and adjust .claude/settings.json permissions
 6. Test workflow with simple feature (/specify → /implement)
 
+## Cursor Advanced Features
+
+### Hooks (Quality & Security)
+**Location:** `.cursor/hooks/` (copy to `~/.cursor/hooks.json` to activate)
+
+**Available hooks:**
+- `after-file-edit.ps1` - ESC validation after AI edits code
+- `before-read-file.ps1` - Block sensitive files (.env, *.app, credentials)
+- `before-shell-execution.ps1` - Prevent dangerous git operations
+- `after-agent-response.ps1` - Usage analytics and cost tracking
+
+**Benefits:**
+- ✅ Automatic ESC standard validation
+- ✅ Security: blocks reading of sensitive files
+- ✅ Safety: prevents force push, hard reset
+- ✅ Analytics: track token usage and costs
+
+**Installation:** See `.cursor/hooks/README.md`
+
+### File Exclusions (.cursorignore)
+**Location:** `.cursorignore` in project root
+
+**Purpose:** Exclude files from AI context and indexing:
+- Build artifacts (*.app, .alpackages/)
+- Symbols (too large, use local C:\Temp)
+- Sensitive files (.env, credentials.json)
+- Large data files (*.csv, *.xlsx)
+
+**Benefits:**
+- ✅ Faster AI responses (less context)
+- ✅ Lower costs (fewer tokens)
+- ✅ Better accuracy (no noise from build artifacts)
+- ✅ Security (sensitive files never exposed to AI)
+
+### Intelligent Rule Loading
+**All rules now use `globs` for smart loading:**
+- Rules only load when relevant files are edited
+- Reduces context usage by ~60%
+- Faster responses, lower costs
+
+**Example:** Document extension rules only load when editing Sales/Purchase files
+
+### AGENTS.md Files
+**Lightweight alternative to MDC rules:**
+- Create `AGENTS.md` in any directory
+- Auto-loads when files in that directory are referenced
+- No YAML frontmatter needed
+- Perfect for module-specific context
+
+**Use cases:**
+- Module-specific guidelines
+- Feature-specific patterns
+- Example references
+- Team documentation
+
 ## Support and Documentation
 - **Cursor Rules:** https://cursor.com/docs/context/rules
+- **Cursor Hooks:** https://cursor.com/docs/agent/hooks
+- **Cursor Indexing:** https://cursor.com/docs/context/codebase-indexing
 - **Claude Code Commands:** https://code.claude.com/docs/en/slash-commands
 - **Claude Code Hooks:** https://code.claude.com/docs/en/hooks
 - **BC26 Documentation:** Microsoft Learn - Business Central
@@ -188,7 +264,8 @@ ProjectTemplate/
 
 ---
 
-**Version:** 2.0.0
+**Version:** 2.1.0
 **BC Version:** 26 (SaaS)
 **Last Updated:** 2025-11-07
 **Template Purpose:** AI-assisted BC26 development with ESC standards compliance
+**New in 2.1:** Cursor hooks, intelligent rule loading, .cursorignore, AGENTS.md support

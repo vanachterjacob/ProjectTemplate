@@ -1,6 +1,6 @@
 ---
-alwaysApply: true
-description: BC26 base symbols reference configuration
+alwaysApply: false
+description: BC26 base symbols reference configuration for @-mention when needed
 ---
 # BC26 Base Symbols Reference
 
