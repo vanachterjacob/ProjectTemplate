@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Sandbox_DEV",
+            "type": "al",
+            "request": "launch",
+            "launchBrowser": true,
+            "tenant": "XXX",
+            "environmentName": "XXX",
+            "environmentType": "Sandbox",
+            "startupObjectType": "Page",
+            "startupObjectId": 22,
+            "breakOnError": true,
+            "breakOnRecordWrite": false,
+            "schemaUpdateMode": "Synchronize"
+        }
+    ]
+}
