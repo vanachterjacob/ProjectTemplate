@@ -1,6 +1,8 @@
 ---
-alwaysApply: true
+alwaysApply: false
 description: ESC AL development patterns for BC26
+globs:
+  - "src/**/*.al"
 ---
 # ESC Development Patterns
 

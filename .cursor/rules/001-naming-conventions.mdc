@@ -1,6 +1,9 @@
 ---
-alwaysApply: true
+alwaysApply: false
 description: ESC AL naming conventions for BC26 development
+globs:
+  - "src/**/*.al"
+  - "app.json"
 ---
 # ESC Naming Conventions
 

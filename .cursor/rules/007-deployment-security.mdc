@@ -1,6 +1,11 @@
 ---
-alwaysApply: true
+alwaysApply: false
 description: ESC deployment and security standards for BC26
+globs:
+  - "src/**/*Install*.al"
+  - "src/**/*Upgrade*.al"
+  - "src/**/*Permission*.al"
+  - "app.json"
 ---
 # ESC Deployment & Security
 
