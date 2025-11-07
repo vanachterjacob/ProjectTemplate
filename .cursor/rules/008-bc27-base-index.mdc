@@ -1,0 +1,201 @@
+---
+globs: ["*.al", "app.json", "**/src/**"]
+description: BC27 base code index and architecture reference
+---
+
+# BC27 Base Code Index & Architecture Reference
+
+## Quick Access
+
+The BC27 complete index is located in `/BC27/` directory with 7 comprehensive documentation files.
+
+### Main Index Files
+
+- **BC27_INDEX_README.md** - Navigation guide, quick reference, and overview
+- **BC27_MODULES_OVERVIEW.md** - Complete inventory of all 73 modules with details
+- **BC27_ARCHITECTURE.md** - System design, layering, patterns, and principles
+- **BC27_MODULES_BY_CATEGORY.md** - Functional organization and installation recommendations
+- **BC27_DEPENDENCY_REFERENCE.md** - Module relationships and dependency chains
+- **BC27_FEATURES_INDEX.md** - Complete feature reference by capability area
+- **BC27_INTEGRATION_GUIDE.md** - External integrations and third-party services
+
+## When to Use BC27 Index
+
+### Start Here For:
+- **Understanding BC architecture** → `BC27_ARCHITECTURE.md`
+- **Finding a specific module** → `BC27_MODULES_OVERVIEW.md`
+- **Understanding dependencies** → `BC27_DEPENDENCY_REFERENCE.md`
+- **Feature planning** → `BC27_MODULES_BY_CATEGORY.md`
+- **Integration planning** → `BC27_INTEGRATION_GUIDE.md`
+
+### Reference For:
+- Extension development patterns
+- Understanding module interactions
+- Dependency chain analysis
+- Integration architecture
+- Feature capability matrix
+
+## Key Statistics
+
+- **Total Modules:** 73 (4 core + 69 extensions)
+- **Categories:** 22 functional domains
+- **Integrations:** 15+ external systems
+- **Features:** 200+ documented capabilities
+- **Architecture:** Clean layering with NO circular dependencies
+
+## Core Modules (All Required)
+
+```
+System Application (foundation)
+    ↓
+BaseApp (core ERP)
+    ↓
+BusinessFoundation (shared logic)
+    ↓
+Application (metadata/localization)
+```
+
+## Extension Categories at a Glance
+
+| Category | Count | Key Modules |
+|----------|-------|-------------|
+| **Financial** | 5 | GL Review, Tax, Audit Export |
+| **Banking** | 6 | Bank Rec AI, Payments, SEPA |
+| **Manufacturing** | 1 | Complete MRP/scheduling |
+| **Service** | 1 | Orders, contracts, resources |
+| **APIs** | 4 | REST v1/v2, Events, Field Service |
+| **E-Commerce** | 1 | Shopify bidirectional sync |
+| **AI/Copilot** | 7 | Bank Rec, Sales, Forecasting |
+| **Sustainability** | 3 | ESG accounting, CSRD |
+| **Compliance** | 8 | Intrastat, Digital Vouchers, VAT |
+| **Cloud** | 4 | Azure, SharePoint, Universal Print |
+
+## Design Principles
+
+✅ **Extension-based** - 69 modules extend minimal core
+✅ **Event-driven** - Pub/Sub throughout for loose coupling
+✅ **Modular** - Clear dependencies, no circular references
+✅ **Upgradeable** - Smooth version transitions
+✅ **Secure** - Permission model, encryption, audit trails
+✅ **Cloud-native** - SaaS-first architecture
+
+## Dependency Chain Examples
+
+### E-Document to Tax Authority
+```
+Sales Invoice → EDocument Core → EDocumentConnectors → Tax Authority
+```
+
+### Inventory Forecast to Production
+```
+Item Posted → SalesAndInventoryForecast → Manufacturing → Production Order
+```
+
+### Sustainability Reporting
+```
+Purchase → Sustainability → StatisticalAccounts → ESG Reports
+```
+
+## Common Feature Combinations
+
+### Manufacturing Company
+- Manufacturing (required)
+- SalesAndInventoryForecast
+- Email connectors
+- Banking modules
+
+### Service Organization
+- ServiceManagement (required)
+- FieldServiceIntegration
+- SubscriptionBilling
+- Email/Notification connectors
+
+### E-Commerce Retailer
+- Shopify integration
+- SalesLinesSuggestions (Copilot)
+- SalesAndInventoryForecast
+- Payment gateways (PayPal/WorldPay)
+
+### Enterprise Multi-Company
+- MasterDataManagement
+- VATGroupManagement
+- DataArchive
+- CompanyHub
+- All localization modules
+
+### Sustainability-Focused
+- Sustainability module (core)
+- SustainabilityCopilotSuggestion
+- StatisticalAccounts
+- ESG demo data
+
+## Integration Quick Reference
+
+| System | Module | Type |
+|--------|--------|------|
+| **Microsoft 365** | Email - M365, SharePoint, Universal Print | Cloud |
+| **Azure** | Blob, Files, ML, OpenAI | Cloud |
+| **Shopify** | Shopify | E-Commerce |
+| **PayPal/WorldPay** | Payment modules | Payments |
+| **Field Service** | FieldServiceIntegration | Dynamics 365 |
+| **Banks** | AMCBanking, SimplifiedImport | Banking |
+| **Email** | 7 Email modules (SMTP, M365, Outlook) | Communications |
+
+## Architecture Principles
+
+### No Circular Dependencies
+- Strict dependency hierarchy
+- Safe upgrade path
+- Independent testing possible
+- Module can be independently uninstalled
+
+### Clean Layering
+```
+System Application (foundation)
+    ↓
+BaseApp (core only)
+    ↓
+Extensions (all features)
+```
+
+### Event-Driven Communication
+- Loose coupling between modules
+- Multiple subscribers possible
+- No hard module references
+- Easy to add/remove features
+
+## Development Notes
+
+### When Extending BC27:
+1. **Follow the core dependency model** - Never reverse dependencies
+2. **Use events** - Don't hard-code module references
+3. **Refer to BC27_ARCHITECTURE.md** - Understand design patterns
+4. **Check dependencies** - Use BC27_DEPENDENCY_REFERENCE.md
+5. **Plan feature set** - Use BC27_MODULES_BY_CATEGORY.md
+
+### Common Patterns:
+- Table Extensions (don't modify core tables)
+- Page Extensions (add fields to existing pages)
+- Event Subscribers (hook into core logic)
+- New Codeunits (custom business logic)
+
+## For ESC Compliance
+
+Refer to BC27 index when:
+- Evaluating module selection for compliance
+- Understanding regulatory modules (Intrastat, VAT, Audit)
+- Planning document extensions
+- Analyzing performance impact
+- Reviewing integration security
+
+## Documentation Version
+
+- **Version:** 1.0
+- **BC Version:** 27
+- **Analysis Date:** 2025-11-07
+- **Source:** Stefan Maron's Code History (be-27 branch)
+
+---
+
+> 💡 **Tip:** Use Find (Ctrl+F) in BC27 documentation to quickly search modules and features
+

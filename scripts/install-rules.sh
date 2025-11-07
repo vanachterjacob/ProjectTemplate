@@ -127,6 +127,7 @@ mkdir -p "$TARGET_DIR/.claude/skills"
 mkdir -p "$TARGET_DIR/.agent/specs"
 mkdir -p "$TARGET_DIR/.agent/plans"
 mkdir -p "$TARGET_DIR/.agent/tasks"
+mkdir -p "$TARGET_DIR/BC27"
 
 # Step 4: Copy files
 print_info "Copying configuration files..."
@@ -171,6 +172,13 @@ fi
 if [ -f "$TEMPLATE_DIR/src/AGENTS.md" ] && [ -d "$TARGET_DIR/src" ]; then
     cp "$TEMPLATE_DIR/src/AGENTS.md" "$TARGET_DIR/src/AGENTS.md"
     print_success "Copied src/AGENTS.md template"
+fi
+
+# Copy BC27 documentation if it exists
+if [ -d "$TEMPLATE_DIR/BC27" ]; then
+    cp -r "$TEMPLATE_DIR/BC27"/* "$TARGET_DIR/BC27/"
+    BC27_COUNT=$(ls -1 "$TEMPLATE_DIR/BC27" | wc -l)
+    print_success "Copied BC27/ documentation (${GREEN}${BC27_COUNT}${NC} files)"
 fi
 
 # Step 5: Replace ABC prefix with project prefix
@@ -276,6 +284,7 @@ echo "   • .cursor/hooks/ - Quality & security hooks"
 echo "   • .claude/commands/ - Workflow slash commands"
 echo "   • CLAUDE.md - AI context documentation"
 echo "   • .cursorignore - File exclusions"
+echo "   • BC27/ - Base code comprehensive index (7 documentation files)"
 echo "   • Hooks configured in $HOOKS_DIR/hooks.json"
 echo ""
 echo "📝 Project Prefix: $PROJECT_PREFIX"
@@ -293,6 +302,11 @@ echo "   • /tasks [plan-name] [phase] - Break down tasks"
 echo "   • /implement [task-file] [task-id|next] - Implement code"
 echo "   • /review [file-or-folder] - ESC compliance check"
 echo "   • /update_doc [init|update] - Maintain documentation"
+echo ""
+echo "📖 Documentation:"
+echo "   • BC27/ - Business Central 27 base code comprehensive index"
+echo "      Start with: BC27/BC27_INDEX_README.md"
+echo "      Then: BC27_ARCHITECTURE.md → BC27_MODULES_OVERVIEW.md"
 echo ""
 echo "⚡ Hooks active:"
 echo "   • after-file-edit.ps1 - ESC validation"
