@@ -1,5 +1,5 @@
 ---
-description: Maintain .agent/ documentation structure for BC26 project
+description: Maintain .agent/ documentation structure for BC27 project
 argument-hint: [init|update]
 allowed-tools: ["Read", "Write", "Grep", "Glob", "Bash(ls:*)"]
 model: haiku

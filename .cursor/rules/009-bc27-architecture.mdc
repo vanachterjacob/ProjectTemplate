@@ -1,0 +1,201 @@
+---
+alwaysApply: false
+description: BC27 architecture deep dive (@ mention only for comprehensive details)
+---
+
+# BC27 Architecture Deep Dive
+
+> **Usage:** @-mention this file when you need comprehensive architecture details.
+> **Quick Reference:** Use 008-bc27-quick-reference.mdc (auto-loaded)
+> **Full Details:** Read `/BC27/` directory files (161 KB documentation)
+
+## Documentation Files Reference
+
+### Essential Reading
+1. **BC27_ARCHITECTURE.md** - Complete system design, layering patterns
+2. **BC27_MODULES_OVERVIEW.md** - All 73 modules with full details
+3. **BC27_DEPENDENCY_REFERENCE.md** - Module relationships and chains
+4. **BC27_FEATURES_INDEX.md** - 200+ features organized by capability
+5. **BC27_INTEGRATION_GUIDE.md** - External integrations (15+ systems)
+6. **BC27_MODULES_BY_CATEGORY.md** - 22 functional categories
+7. **BC27_INDEX_README.md** - Navigation guide
+
+## Architecture Layers
+
+### Core Stack (Required)
+```
+System Application → BaseApp → BusinessFoundation → Application
+```
+
+**System Application:** Low-level utilities (auth, encryption, email, telemetry)
+**BaseApp:** Core ERP (G/L, Sales, Purchase, Inventory, Manufacturing, Service)
+**BusinessFoundation:** Shared business logic for extensions
+**Application:** Localization and metadata
+
+### Extension Layer (69 Optional Modules)
+**Design:** Event-driven, no circular dependencies
+**Categories:** Financial, Banking, Manufacturing, Service, APIs, E-Commerce, AI/Copilot, Sustainability, Compliance, Cloud
+
+## Key Architecture Patterns
+
+### 1. Event-Driven Communication
+```al
+// Publisher (BaseApp)
+[IntegrationEvent(false, false)]
+local procedure OnAfterPostSalesDoc(var SalesHeader: Record "Sales Header")
+begin
+end;
+
+// Subscriber (Extension)
+[EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", 'OnAfterPostSalesDoc', '', false, false)]
+local procedure OnAfterPostSalesDoc(var SalesHeader: Record "Sales Header")
+begin
+    // Custom logic - no coupling
+end;
+```
+
+### 2. Table Extensions (Not Modification)
+```al
+tableextension 77100 "ABC Customer" extends Customer
+{
+    fields
+    {
+        field(77100; "ABC Custom Field"; Text[50]) { }
+    }
+}
+```
+
+### 3. Page Extensions
+```al
+pageextension 77100 "ABC Customer Card" extends "Customer Card"
+{
+    layout
+    {
+        addafter(Name)
+        {
+            field("ABC Custom Field"; Rec."ABC Custom Field") { }
+        }
+    }
+}
+```
+
+## Common Module Combinations
+
+| Scenario | Modules Required | Purpose |
+|----------|------------------|---------|
+| **Manufacturing** | Manufacturing + SalesAndInventoryForecast + Banking + Email | Full MRP with AI forecasting |
+| **E-Commerce** | Shopify + SalesLinesSuggestions + Payment gateways + Forecast | Online store with Copilot |
+| **Enterprise** | MasterDataManagement + VATGroupManagement + DataArchive + CompanyHub | Multi-company governance |
+| **Sustainability** | Sustainability + SustainabilityCopilotSuggestion + StatisticalAccounts | ESG/CSRD reporting |
+| **Service** | ServiceManagement + FieldServiceIntegration + SubscriptionBilling | Field service + recurring |
+
+## Integration Points
+
+### Cloud Services
+- **Azure:** Blob Storage, Files, ML, OpenAI
+- **Microsoft 365:** Email, SharePoint, Universal Print
+- **Dynamics 365:** Field Service Integration
+
+### E-Commerce & Payments
+- **Shopify:** Bidirectional sync
+- **PayPal, WorldPay:** Payment processing
+
+### Banking
+- **AMC Banking:** Bank file conversion
+- **SEPA:** EU direct debit/credit transfer
+
+**Full Integration Details:** See `BC27_INTEGRATION_GUIDE.md`
+
+## AI/Copilot Architecture
+
+### 7 Available Copilots
+1. Bank Reconciliation (auto-match transactions)
+2. Sales Line Suggestions (product recommendations)
+3. Late Payment Prediction (credit risk)
+4. Sales & Inventory Forecast (demand planning)
+5. Sustainability Suggestions (ESG data)
+6. SmartList (natural language queries)
+7. Analysis Mode (data analysis)
+
+**Flow:** `User → Azure OpenAI → BC27 Business Logic → Data → AI Response`
+
+## Extension Development Best Practices
+
+### Do:
+✅ Use events (don't modify BaseApp)
+✅ Table/Page extensions (not modifications)
+✅ Follow dependency hierarchy
+✅ Check if module exists before building custom
+✅ Use SetLoadFields for read-only operations
+✅ Batch operations (ModifyAll/DeleteAll)
+✅ Background jobs for long operations
+
+### Don't:
+❌ Create circular dependencies
+❌ Modify core tables directly
+❌ Hard-code module references
+❌ Nested loops on large datasets
+❌ SetLoadFields before Modify/Insert/Delete
+
+## Performance Patterns
+
+**On-Demand Loading:** Extensions load only when used
+**Lazy Initialization:** Heavy modules defer startup
+**Caching:** Metadata cached in memory
+
+## Security & Permissions
+
+Each module defines permission sets (Read, Insert, Modify, Delete, Execute)
+
+```al
+permissionset 77100 "ABC Feature"
+{
+    Caption = 'ABC Feature';
+    Assignable = true;
+    Permissions =
+        tabledata "ABC Table" = RIMD,
+        table "ABC Table" = X,
+        page "ABC Page" = X;
+}
+```
+
+## Upgrade Path
+
+**BC26 → BC27:** Automated, no breaking changes in core
+**BC27 → BC28:** Automated, minor breaking changes possible
+**Extensions:** Individual upgrade via `OnUpgrade` trigger
+
+```al
+codeunit 77100 "ABC Upgrade"
+{
+    Subtype = Upgrade;
+
+    trigger OnUpgradePerCompany()
+    begin
+        // Company-specific data upgrades
+    end;
+}
+```
+
+## When to Reference This File
+
+**Architecture Decisions:**
+- Should I extend or create new table?
+- Which modules should I install?
+- How do I integrate with external system?
+
+**Dependency Questions:**
+- What does module X depend on?
+- Can I remove module Y?
+- What's the dependency chain for feature Z?
+
+**Deep Dive Needed:**
+- Complete module details → `BC27_MODULES_OVERVIEW.md`
+- Integration specifics → `BC27_INTEGRATION_GUIDE.md`
+- Feature matrix → `BC27_FEATURES_INDEX.md`
+
+## Version Info
+- **BC Version:** 27
+- **Source:** Stefan Maron's Code History (be-27 branch)
+- **Coverage:** 73 modules, 200+ features, 15+ integrations
+- **Last Updated:** 2025-11-07

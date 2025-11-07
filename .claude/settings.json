@@ -19,13 +19,18 @@
     "deny": [
       "Write(//**/.git/**)",
       "Edit(//**/.git/**)",
+      "Write(//**/node_modules/**)",
+      "Edit(//**/package.json)",
+      "Write(//**/.alpackages/**)",
+      "Write(//**/.vscode/**)",
+      "Write(//**/.cursor/hooks.json)",
+      "Write(//**/app.json)",
       "Bash(rm:-rf*)",
       "Bash(rm:/*)",
       "Bash(rmdir:*)",
       "Bash(rm --*)",
-      "Write(//**/app.json)",
-      "Write(//**/.alpackages/**)",
-      "Write(//**/.vscode/**)"
+      "Bash(git push --force*)",
+      "Bash(git reset --hard*)"
     ],
     "ask": [
       "Edit(//**/app.json)",
@@ -51,7 +56,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo '🚀 BC26 Development Environment Active\\n📋 Prefix: ABC (verify in .cursor/rules/000-project-overview.mdc)\\n📖 Workflow: /specify → /plan → /tasks → /implement → /review\\n💡 Check CLAUDE.md for complete context'"
+            "command": "echo '🚀 BC27 Development Environment Active\\n📋 Prefix: ABC (verify in .cursor/rules/000-project-overview.mdc)\\n📖 Workflow: /specify → /plan → /tasks → /implement → /review\\n💡 Check CLAUDE.md for complete context\\n🔗 BC27 docs: /BC27/ directory'"
           }
         ]
       }
@@ -62,7 +67,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "if echo \"$TOOL_USE_FILE_PATH\" | grep -qE '(app\\.json|permissions\\.xml)$'; then echo '⚠️  WARNING: Modifying critical BC26 file: '\"$TOOL_USE_FILE_PATH\"'\\n✅ Verify customer ID ranges and permissions!' >&2; fi"
+            "command": "if echo \"$TOOL_USE_FILE_PATH\" | grep -qE '(app\\.json|permissions\\.xml)$'; then echo '⚠️  WARNING: Modifying critical BC27 file: '\"$TOOL_USE_FILE_PATH\"'\\n✅ Verify customer ID ranges and permissions!' >&2; fi"
           }
         ]
       }

@@ -1,11 +1,11 @@
 ---
-description: Review BC26 code for ESC standards compliance
+description: Review BC27 code for ESC standards compliance
 argument-hint: [file-or-folder-path]
 allowed-tools: ["Read", "Grep", "Glob"]
 model: sonnet
 disable-model-invocation: true
 ---
-BC26 code reviewer for ESC standards compliance
+BC27 code reviewer for ESC standards compliance
 
 Scope: $ARGUMENTS
 

@@ -1,0 +1,107 @@
+---
+globs: ["*.al", "app.json"]
+description: BC27 quick reference and module overview
+---
+
+# BC27 Quick Reference
+
+## 📁 Complete Documentation
+**Location:** `/BC27/` directory with 7 comprehensive files (161 KB)
+
+**Start Here:** `BC27_INDEX_README.md` → Navigation guide
+
+## Key Statistics
+- **Total Modules:** 73 (4 core + 69 extensions)
+- **Categories:** 22 functional domains
+- **Integrations:** 15+ external systems
+- **Architecture:** Clean layering, NO circular dependencies
+
+## Core Modules (Required)
+```
+System Application (foundation)
+    ↓
+BaseApp (core ERP)
+    ↓
+BusinessFoundation (shared logic)
+    ↓
+Application (metadata/localization)
+```
+
+## Top Categories
+
+| Category | Count | Example Modules |
+|----------|-------|-----------------|
+| **Financial** | 5 | GL Review, Tax, Audit Export |
+| **Banking** | 6 | Bank Rec AI, Payments, SEPA |
+| **APIs** | 4 | REST v1/v2, Events, Field Service |
+| **AI/Copilot** | 7 | Bank Rec, Sales, Forecasting |
+| **Compliance** | 8 | Intrastat, Digital Vouchers, VAT |
+| **Cloud** | 4 | Azure, SharePoint, Universal Print |
+
+## Common Feature Combinations
+
+**Manufacturing Company:**
+- Manufacturing + SalesAndInventoryForecast + Banking
+
+**E-Commerce Retailer:**
+- Shopify + SalesLinesSuggestions + Payment gateways
+
+**Enterprise Multi-Company:**
+- MasterDataManagement + VATGroupManagement + DataArchive
+
+**Sustainability-Focused:**
+- Sustainability + SustainabilityCopilotSuggestion + StatisticalAccounts
+
+## Design Principles
+✅ **Extension-based** - 69 modules extend minimal core
+✅ **Event-driven** - Pub/Sub for loose coupling
+✅ **Modular** - Clear dependencies only
+✅ **Cloud-native** - SaaS-first architecture
+
+## When to Use Full Index
+
+**Quick Questions:**
+- "Which module handles X?" → Use this file or BC27_MODULES_OVERVIEW.md
+- "How many modules?" → See Key Statistics above
+
+**Deep Dive:**
+- Architecture patterns → Read BC27_ARCHITECTURE.md
+- Module dependencies → Read BC27_DEPENDENCY_REFERENCE.md
+- Feature matrix → Read BC27_FEATURES_INDEX.md
+- Integration details → Read BC27_INTEGRATION_GUIDE.md
+- Category breakdown → Read BC27_MODULES_BY_CATEGORY.md
+
+**In Cursor:** @-mention `.cursor/rules/009-bc27-architecture.mdc` for complete details
+
+## Development Notes
+
+### Extending BC27:
+1. **Follow dependency model** - Never reverse dependencies
+2. **Use events** - No hard module references
+3. **Table Extensions** - Don't modify core tables
+4. **Page Extensions** - Add fields to existing pages
+5. **Event Subscribers** - Hook into core logic
+
+### Common Patterns:
+```al
+// Table Extension (recommended)
+tableextension 77100 "ABC Customer" extends Customer
+{
+    fields
+    {
+        field(77100; "ABC Custom Field"; Text[50]) { }
+    }
+}
+
+// Event Subscriber (loosely coupled)
+[EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", 'OnBeforePostSalesDoc', '', false, false)]
+local procedure OnBeforePostSalesDoc(var SalesHeader: Record "Sales Header")
+begin
+    // Custom logic
+end;
+```
+
+## Version Info
+- **BC Version:** 27
+- **Source:** Stefan Maron's Code History (be-27 branch)
+- **Last Updated:** 2025-11-07

@@ -7,8 +7,9 @@ description: ESC project configuration and standards overview
 ## Project Standards
 - **Publisher:** [Your Publisher Name]
 - **Prefix:** ABC (replace with 3-letter customer code)
-- **BC Version:** 26 (SaaS)
+- **BC Version:** 27 (SaaS)
 - **Development:** Extensions for Business Central SaaS
+- **Compatibility:** BC26+ (tested with BC26 and BC27)
 
 ## Object ID Management
 - **Start:** Dummy range 77100-77200
@@ -30,14 +31,15 @@ description: ESC project configuration and standards overview
 
 **Performance & Symbols:**
 - `004-performance.mdc` - Thresholds, background processing
-- `005-bc26-symbols.mdc` - Local symbols at C:\Temp\BC26Objects
+- `005-bc26-symbols.mdc` - Local symbols at C:\Temp\BC26Objects (also valid for BC27)
 
 **Tools & Quality:**
 - `006-tools-review.mdc` - Extensions, Object Ninja, review
 - `007-deployment-security.mdc` - Upgrade, integration, security
 
 **Base Code Reference:**
-- `008-bc27-base-index.mdc` - BC27 comprehensive base code index (/BC27/ directory)
+- `008-bc27-quick-reference.mdc` - BC27 quick reference (auto-loads)
+- `009-bc27-architecture.mdc` - BC27 architecture deep dive (@-mention only)
 
 > 📖 See README.md for full documentation
 > 📊 See /BC27/ directory for BC27 base code comprehensive index (7 documentation files)

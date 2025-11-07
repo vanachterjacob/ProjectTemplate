@@ -1,5 +1,5 @@
 ---
-description: Create user-focused spec for BC26 feature (not technical)
+description: Create user-focused spec for BC27 feature (not technical)
 argument-hint: [feature-name]
 allowed-tools: ["Read", "Write", "Grep", "Glob"]
 model: haiku

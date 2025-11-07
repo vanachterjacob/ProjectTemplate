@@ -1,5 +1,5 @@
 ---
-description: Create technical plan from spec for BC26 extension
+description: Create technical plan from spec for BC27 extension
 argument-hint: [spec-name]
 allowed-tools: ["Read", "Write", "Grep", "Glob"]
 model: sonnet
