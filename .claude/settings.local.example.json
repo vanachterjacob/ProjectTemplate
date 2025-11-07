@@ -1,0 +1,40 @@
+{
+  "_comment": "Copy this file to settings.local.json for personal overrides",
+  "_usage": "Personal settings that override team-shared settings.json",
+  
+  "permissions": {
+    "allow": [
+      "Bash(git push*)",
+      "Write(//**/test-data/**)",
+      "Write(//**/temp/**)",
+      "Bash(dotnet run*)"
+    ],
+    "deny": [
+      "_comment": "Add personal restrictions here"
+    ],
+    "ask": [
+      "_comment": "Files you want to be prompted about before AI modifies"
+    ]
+  },
+
+  "environmentVariables": {
+    "_comment": "Personal environment variables",
+    "MY_DEV_PATH": "C:\\MyProjects\\",
+    "CUSTOM_TOOL_PATH": "C:\\Tools\\"
+  },
+
+  "hooks": {
+    "_comment": "Override hooks or add personal hooks",
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'Personal dev environment loaded'"
+          }
+        ]
+      }
+    ]
+  }
+}

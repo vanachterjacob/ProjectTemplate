@@ -52,30 +52,58 @@ try {
     $content = Get-Content $filePath -Raw
     $violations = @()
 
-    # Check 1: ABC prefix usage
-    if ($content -match '(table|page|codeunit|report|query|xmlport)\s+\d+\s+"(?!ABC\s)') {
+    # Check 1: ABC prefix usage (improved - all object types including extensions)
+    $objectPattern = '(table|page|codeunit|report|query|xmlport|enum|interface|controladdin|permissionset)(\s+extension)?\s+\d+\s+"(?!ABC\s)'
+    if ($content -match $objectPattern) {
         $violations += "❌ Missing ABC prefix in object name"
     }
 
-    # Check 2: Dutch language in code
+    # Check 2a: Dutch language - accented characters
     if ($content -match '[àáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ]') {
-        $violations += "❌ Dutch characters detected - use English only"
+        $violations += "❌ Dutch accented characters detected - use English only"
     }
 
-    # Check 3: Nested if statements (basic check)
+    # Check 2b: Dutch language - common Dutch words in code
+    $dutchWords = @('wordt', 'deze', 'voor', 'naar', 'van', 'het', 'een', 'als', 'bij', 'ook', 'maar', 'zijn', 'met', 'die', 'dat', 'de')
+    $dutchPattern = '\b(' + ($dutchWords -join '|') + ')\b'
+    if ($content -match $dutchPattern) {
+        $violations += "❌ Dutch words detected - use English only"
+    }
+
+    # Check 2c: Dutch variable prefixes
+    if ($content -match '\b(gebruiker|klant|artikel|bedrijf|factuur|bestelling|levering)[A-Z]') {
+        $violations += "❌ Dutch variable names detected"
+    }
+
+    # Check 3: Nested if statements
     $nestedIfCount = ([regex]::Matches($content, 'if\s+.*\s+then\s+if')).Count
     if ($nestedIfCount -gt 0) {
-        $violations += "⚠️ Possible nested if statements detected - use early exit pattern"
+        $violations += "⚠️ Nested if statements - use early exit pattern"
     }
 
-    # Check 4: Old Confirm pattern
+    # Check 4: Direct Confirm() usage
     if ($content -match '\bConfirm\s*\(') {
-        $violations += "❌ Use ConfirmManagement.GetResponseOrDefault() instead of Confirm()"
+        $violations += "❌ Use ConfirmManagement.GetResponse() instead of Confirm()"
     }
 
-    # Check 5: SetLoadFields before Modify/Insert/Delete
-    if ($content -match 'SetLoadFields.*\n.*\.(Modify|Insert|Delete)\(') {
-        $violations += "❌ CRITICAL: SetLoadFields used before Modify/Insert/Delete"
+    # Check 5: SetLoadFields before Modify/Insert/Delete (line-by-line check)
+    $lines = $content -split "`n"
+    for ($i = 0; $i -lt ($lines.Count - 1); $i++) {
+        # Check if current line has SetLoadFields and next line has Modify/Insert/Delete
+        if ($lines[$i] -match 'SetLoadFields' -and $lines[$i+1] -match '\.(Modify|Insert|Delete)\(') {
+            $violations += "❌ CRITICAL: SetLoadFields before Modify/Insert/Delete at line $($i+2)"
+            break
+        }
+    }
+
+    # Check 6: Direct Error() without TryFunction
+    if ($content -match '\bError\s*\(' -and -not ($content -match '\[TryFunction\]')) {
+        $violations += "⚠️ Direct Error() call - consider TryFunction pattern"
+    }
+
+    # Check 7: Missing DataClassification on fields
+    if ($content -match 'field\s*\(\s*\d+' -and -not ($content -match 'DataClassification')) {
+        $violations += "⚠️ Fields should have DataClassification property"
     }
 
     # Report violations

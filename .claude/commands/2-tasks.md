@@ -1,10 +1,10 @@
 ---
-description: Break plan into small code tasks for BC26 extension
+description: Break plan into small code tasks for BC27 extension
 argument-hint: [plan-name] [phase]
 allowed-tools: ["Read", "Write", "Grep", "Glob"]
 model: sonnet
 ---
-BC26 task manager breaking plan into tasks: `.agent/plans/$ARGUMENTS-plan.md`
+BC27 task manager breaking plan into tasks: `.agent/plans/$ARGUMENTS-plan.md`
 
 ## Ask User
 1. Which plan? (from `.agent/plans/`)

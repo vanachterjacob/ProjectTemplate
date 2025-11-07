@@ -1,10 +1,10 @@
 ---
-description: Implement BC26 tasks sequentially from task file
+description: Implement BC27 tasks sequentially from task file
 argument-hint: [task-file] [task-id|next]
 allowed-tools: ["Read", "Write", "Edit", "Grep", "Glob"]
 model: sonnet
 ---
-BC26 developer implementing: `.agent/tasks/$ARGUMENTS-tasks.md`
+BC27 developer implementing: `.agent/tasks/$ARGUMENTS-tasks.md`
 
 ## Ask User
 1. Task file? (from `.agent/tasks/`)
