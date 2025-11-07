@@ -9,6 +9,8 @@ Dit template helpt bij het schrijven van BC26 extensies door:
 - **Gestandaardiseerde workflows** via Claude Code slash commands
 - **ESC development standards** compliance
 - **Lokale BC26 symbols** referentie (geen MCP afhankelijkheid)
+- **Geautomatiseerde kwaliteitscontrole** via hooks en subagents
+- **Intelligente context loading** via skills
 
 ## 🤖 Tool Strategy
 
@@ -29,7 +31,9 @@ Dit template helpt bij het schrijven van BC26 extensies door:
 
 ```
 ProjectTemplate/
-├── .cursor/rules/          # Cursor AI rules (MDC format)
+├── CLAUDE.md                      # AI context file (NEW! 🆕)
+│
+├── .cursor/rules/                 # Cursor AI rules (MDC format)
 │   ├── 000-project-overview.mdc
 │   ├── 001-naming-conventions.mdc
 │   ├── 002-development-patterns.mdc
@@ -39,13 +43,25 @@ ProjectTemplate/
 │   ├── 006-tools-review.mdc
 │   └── 007-deployment-security.mdc
 │
-└── .claude/commands/       # Claude Code slash commands
-    ├── 0-specify.md        # /specify - Create user spec
-    ├── 1-plan.md           # /plan - Create technical plan
-    ├── 2-tasks.md          # /tasks - Break into tasks
-    ├── 3-implement.md      # /implement - Write code
-    ├── 4-review.md         # /review - ESC compliance check
-    └── 5-update_doc.md     # /update_doc - Maintain docs
+└── .claude/                       # Claude Code configuration
+    ├── commands/                  # Slash commands (ENHANCED! ✨)
+    │   ├── 0-specify.md          # /specify - Create user spec
+    │   ├── 1-plan.md             # /plan - Create technical plan
+    │   ├── 2-tasks.md            # /tasks - Break into tasks
+    │   ├── 3-implement.md        # /implement - Write code
+    │   ├── 4-review.md           # /review - ESC compliance check
+    │   └── 5-update_doc.md       # /update_doc - Maintain docs
+    │
+    ├── subagents/                 # Specialized AI agents (NEW! 🆕)
+    │   ├── bc26-reviewer.md      # ESC standards compliance reviewer
+    │   └── bc26-architect.md     # Architecture and design specialist
+    │
+    ├── skills/                    # Auto-invoked capabilities (NEW! 🆕)
+    │   └── bc26-context-loader/  # Automatic project context loading
+    │       └── skill.md
+    │
+    ├── settings.json              # Team-shared settings (ENHANCED! ✨)
+    └── settings.local.json        # Personal overrides (ENHANCED! ✨)
 ```
 
 ## 🚀 Quick Start
@@ -55,6 +71,7 @@ ProjectTemplate/
 ```bash
 cp -r ProjectTemplate/.cursor your-bc-project/.cursor
 cp -r ProjectTemplate/.claude your-bc-project/.claude
+cp ProjectTemplate/CLAUDE.md your-bc-project/CLAUDE.md
 ```
 
 ### 2. Configureer project specifics
@@ -62,6 +79,10 @@ cp -r ProjectTemplate/.claude your-bc-project/.claude
 Open `.cursor/rules/000-project-overview.mdc` en vervang:
 - `ABC` → Je 3-letter customer prefix (bijv. `CTM` voor Contoso)
 - `[Your Publisher Name]` → Je publisher naam
+
+Update `CLAUDE.md`:
+- Vervang `ABC` met je customer prefix
+- Vervang `[Your Publisher Name]` met je publisher naam
 
 ### 3. Gebruik Claude workflow
 
@@ -78,9 +99,26 @@ Open `.cursor/rules/000-project-overview.mdc` en vervang:
 # 4. Implementeren
 /implement feature-name next
 
-# 5. Code review
+# 5. Code review (manual or use subagent)
 /review src/
+# OR use subagent for detailed review:
+# "Use bc26-reviewer to review my code in src/"
+
+# 6. Get architecture guidance (when needed)
+# "Use bc26-architect to help design the customer credit limit feature"
 ```
+
+### 4. Automated Features (NEW! 🆕)
+
+**Hooks worden automatisch uitgevoerd:**
+- **SessionStart**: Toont project context bij opstarten
+- **PreToolUse**: Waarschuwt bij wijzigingen aan app.json
+- **PostToolUse**: Bevestigt AL file wijzigingen
+- **Stop**: Controleert ESC standards voor afsluiten
+
+**Skills worden automatisch geactiveerd:**
+- Vraag over BC26? → Context wordt automatisch geladen
+- Begin met feature? → Relevante informatie wordt getoond
 
 ## 📖 Cursor Rules Overzicht
 
@@ -111,18 +149,25 @@ Bevat:
 
 Zie `005-bc26-symbols.mdc` voor complete lijst.
 
-## 📋 Claude Commands
+## 📋 Claude Commands (ENHANCED! ✨)
 
 ### Development Workflow
 
-| Command | Argument | Beschrijving |
-|---------|----------|-------------|
-| `/specify` | `[feature-name]` | Create user-focused spec |
-| `/plan` | `[spec-name]` | Create technical plan |
-| `/tasks` | `[plan-name] [phase]` | Break into code tasks |
-| `/implement` | `[task-file] [task-id]` | Write code |
-| `/review` | `[file-or-folder]` | ESC compliance check |
-| `/update_doc` | `[init\|update]` | Maintain docs |
+| Command | Argument | Beschrijving | Nieuw |
+|---------|----------|-------------|-------|
+| `/specify` | `[feature-name]` | Create user-focused spec | ✨ Enhanced frontmatter |
+| `/plan` | `[spec-name]` | Create technical plan | ✨ Enhanced frontmatter |
+| `/tasks` | `[plan-name] [phase]` | Break into code tasks | ✨ Enhanced frontmatter |
+| `/implement` | `[task-file] [task-id]` | Write code | ✨ Enhanced frontmatter |
+| `/review` | `[file-or-folder]` | ESC compliance check | ✨ Enhanced frontmatter |
+| `/update_doc` | `[init\|update]` | Maintain docs | ✨ Enhanced frontmatter |
+
+**Command Enhancements:**
+- ✅ `allowed-tools` - Beperkte tool toegang voor security
+- ✅ `model` - Optimale model selectie (haiku/sonnet)
+- ✅ `disable-model-invocation` - Voorkom ongewenste auto-execution
+- ✅ `@CLAUDE.md` - Automatische context loading
+- ✅ `$ARGUMENTS` - Verbeterde argument handling
 
 ### Voorbeelden
 
@@ -130,7 +175,7 @@ Zie `005-bc26-symbols.mdc` voor complete lijst.
 # Start nieuwe feature
 /specify customer-credit-limit
 
-# Plan architectuur
+# Plan architectuur (met context loading)
 /plan customer-credit-limit
 
 # Maak tasks voor UI fase
@@ -139,9 +184,126 @@ Zie `005-bc26-symbols.mdc` voor complete lijst.
 # Implementeer volgende task
 /implement customer-credit-limit next
 
-# Review code
+# Review code (manual)
 /review src/CustomerCredit/
+
+# Review code (with subagent for detailed analysis)
+"Use bc26-reviewer to review src/CustomerCredit/"
+
+# Get architecture guidance
+"Use bc26-architect to help design the integration pattern for external API"
 ```
+
+## 🤖 Subagents (NEW! 🆕)
+
+Gespecialiseerde AI agents voor specifieke taken:
+
+### bc26-reviewer
+**Purpose:** Detailed ESC standards compliance review
+**When to use:**
+- Final code review before commit
+- Checking ESC standards compliance
+- Getting detailed feedback with file:line references
+
+**Example:**
+```
+"Use bc26-reviewer to review my changes in src/Sales/"
+```
+
+**Output:** Comprehensive review report with:
+- Overall score and ESC compliance %
+- Critical issues, warnings, informational items
+- Standards compliance matrix
+- Concrete fixes with code examples
+- Recommendations and next steps
+
+### bc26-architect
+**Purpose:** Architecture and design pattern guidance
+**When to use:**
+- Designing new features
+- Choosing between architectural approaches
+- Complex integration patterns
+- Performance optimization decisions
+
+**Example:**
+```
+"Use bc26-architect to help design the customer credit limit feature"
+"Use bc26-architect: should I extend Sales Header or create new table?"
+```
+
+**Output:** Architecture decision framework with:
+- Context and requirements analysis
+- Multiple options with pros/cons
+- Recommended approach with rationale
+- Implementation steps and object structure
+- ESC compliance considerations
+- Performance and security aspects
+
+## 🎯 Skills (NEW! 🆕)
+
+Auto-invoked capabilities (Claude decides when to use):
+
+### bc26-context-loader
+**Purpose:** Automatically load project context when needed
+**Activates when you:**
+- Ask about BC26 or Business Central
+- Mention AL development or features
+- Start working on a feature
+- Ask "what's our prefix?" or similar
+
+**What it provides:**
+- Current PREFIX configuration
+- Object ID ranges
+- BC26 symbols location
+- Development workflow reminder
+- ESC standards summary
+- Available tools (subagents, hooks)
+
+**Example:**
+```
+You: "Let's work on customer credit limit"
+Skill: [Automatically loads context]
+      "BC26 Project Context Loaded
+      Prefix: ABC (verify before use)
+      ID Range: 77100-77200
+      Workflow: /specify → /plan → /tasks → /implement → /review"
+```
+
+## 🔗 Hooks (NEW! 🆕)
+
+Automatische acties bij bepaalde events:
+
+### SessionStart Hook
+**Triggers:** Bij start van Claude Code sessie
+**Action:** Toont welkomstbericht met project info
+```
+🚀 BC26 Development Environment Active
+📋 Prefix: ABC (verify in .cursor/rules/000-project-overview.mdc)
+📖 Workflow: /specify → /plan → /tasks → /implement → /review
+💡 Check CLAUDE.md for complete context
+```
+
+### PreToolUse Hook
+**Triggers:** Voor Write/Edit operaties
+**Action:** Waarschuwt bij wijzigingen aan kritieke bestanden
+```
+⚠️ WARNING: Modifying critical BC26 file: app.json
+✅ Verify customer ID ranges and permissions!
+```
+
+### PostToolUse Hook
+**Triggers:** Na Write/Edit operaties
+**Action:** Bevestigt AL file wijzigingen
+```
+✅ AL file modified: src/CustomerCredit/Tab77100.CustomerCredit.al
+💡 Remember: ESC standards - Prefix, English-only, Early exit, TryFunction
+```
+
+### Stop Hook (LLM-based)
+**Triggers:** Bij afsluiten van Claude agent
+**Action:** Controleert ESC standards compliance
+- ✅ Approve als alle standards gevolgd zijn
+- 🛑 Block als er violations zijn, vraagt om fixes
 
 ## ✅ ESC Standards Checklist
 
@@ -156,6 +318,12 @@ Zie `005-bc26-symbols.mdc` voor complete lijst.
 - [ ] Performance tested (production-scale data)
 - [ ] LinterCop compliant
 - [ ] Object Ninja voor final IDs
+
+**Automatische controle (NEW! 🆕):**
+- ✅ Stop Hook controleert automatisch bij afsluiten
+- ✅ PreToolUse Hook waarschuwt bij kritieke bestanden
+- ✅ PostToolUse Hook bevestigt AL wijzigingen
+- ✅ bc26-reviewer subagent voor gedetailleerde review
 
 ## 🏗️ Project Aanpassen
 
@@ -221,19 +389,73 @@ Template gebruikt **alleen lokale resources:**
 - Geen externe API calls
 - Volledig offline werkend
 
+## 🔧 Configuration Details
+
+### Permissions (Enhanced)
+
+**Team-shared (settings.json):**
+- ✅ Allow: Read BC26 symbols, dotnet build, WebFetch trusted domains
+- 🛑 Deny: Write .git/**, app.json, .alpackages/**
+- ❓ Ask: Edit app.json, git push, git reset --hard, permissions.xml
+
+**Personal (settings.local.json):**
+- ✅ Allow: Git commands, file operations, development tools
+- Fully customizable per developer
+
+### Environment Variables
+
+```json
+{
+  "BC_SYMBOLS_PATH": "C:\\Temp\\BC26Objects\\BaseApp",
+  "ESC_PREFIX": "ABC"
+}
+```
+
+### Memory
+
+Project-scoped memory enabled for context persistence across sessions.
+
 ## 📚 Resources
 
+- **CLAUDE.md:** Complete AI context reference
 - **Cursor Rules:** https://cursor.com/docs/context/rules
 - **Claude Commands:** https://code.claude.com/docs/en/slash-commands
+- **Claude Hooks:** https://code.claude.com/docs/en/hooks
+- **Claude Subagents:** https://code.claude.com/docs/en/sub-agents
+- **Claude Skills:** https://code.claude.com/docs/en/skills
 - **BC26 Documentation:** Microsoft Learn
+
+## 🎯 What's New in v2.0.0
+
+### Major Additions
+1. **CLAUDE.md** - Comprehensive AI context file
+2. **Hooks System** - Automated quality control and warnings
+3. **Subagents** - bc26-reviewer and bc26-architect specialists
+4. **Skills** - bc26-context-loader for automatic context loading
+5. **Enhanced Commands** - Better frontmatter with allowed-tools and model selection
+6. **Enhanced Permissions** - Team-shared settings with deny/ask lists
+7. **Environment Variables** - BC_SYMBOLS_PATH and ESC_PREFIX
+8. **Memory** - Project-scoped context persistence
+
+### Breaking Changes
+None - fully backward compatible with v1.0.0
+
+### Migration from v1.0.0
+1. Copy CLAUDE.md to your project root
+2. Update .claude/settings.json with new structure
+3. Copy .claude/subagents/ directory
+4. Copy .claude/skills/ directory
+5. Replace command files in .claude/commands/ (or keep old ones)
 
 ## 🤝 Contributing
 
 Template verbeteren:
-1. Houd files <100 regels
+1. Houd files <100 regels waar mogelijk
 2. Test met LLM's (Cursor/Claude)
 3. Gebruik concrete voorbeelden
 4. Update deze README
+5. Test hooks en subagents thoroughly
+6. Documenteer nieuwe features in CLAUDE.md
 
 ## 📄 License
 
@@ -241,6 +463,10 @@ Dit template is vrij te gebruiken voor ESC BC26 projecten.
 
 ---
 
-**Versie:** 1.0.0
+**Versie:** 2.0.0 🎉
 **BC Version:** 26 (SaaS)
 **Laatst bijgewerkt:** 2025-11-07
+
+### Version History
+- **v2.0.0** (2025-11-07): Added hooks, subagents, skills, enhanced commands, CLAUDE.md
+- **v1.0.0** (2025-11-07): Initial release with basic commands and rules
