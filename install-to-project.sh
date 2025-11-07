@@ -21,9 +21,12 @@ TARGET_PROJECT="/home/user/Projects/MyALProject"
 # Your 3-letter project prefix (must be uppercase, e.g., PLY, PAV, ABC)
 PROJECT_PREFIX="PLY"
 
-# (Optional) Git repository URL to pull latest template
-# Leave empty "" to use local template files
-GIT_REPO_URL=""
+# Git repository URL - always pulls latest template from main branch
+# Change this if you forked the repo or want to use a different branch
+GIT_REPO_URL="https://github.com/vanachterjacob/ProjectTemplate.git"
+
+# Git branch to pull from (default: main)
+GIT_BRANCH="main"
 
 # ===========================
 # DO NOT EDIT BELOW THIS LINE
@@ -46,7 +49,10 @@ echo -e "${CYAN}=====================================${NC}"
 echo ""
 echo -e "${YELLOW}Target Project: $TARGET_PROJECT${NC}"
 echo -e "${YELLOW}Project Prefix: $PROJECT_PREFIX${NC}"
-echo -e "${YELLOW}Git Repo: $([ -n "$GIT_REPO_URL" ] && echo "$GIT_REPO_URL" || echo "(using local template)")${NC}"
+echo -e "${YELLOW}Git Repository: $GIT_REPO_URL${NC}"
+echo -e "${YELLOW}Git Branch: $GIT_BRANCH${NC}"
+echo ""
+echo -e "${CYAN}[INFO] Will pull latest template from git repository${NC}"
 echo ""
 
 # Validate configuration
@@ -88,11 +94,8 @@ read -n 1 -s -r
 echo ""
 
 # Run the installation script
-if [ -n "$GIT_REPO_URL" ]; then
-    bash "$INSTALL_SCRIPT_PATH" "$TARGET_PROJECT" "$PROJECT_PREFIX" "$GIT_REPO_URL"
-else
-    bash "$INSTALL_SCRIPT_PATH" "$TARGET_PROJECT" "$PROJECT_PREFIX"
-fi
+# Always use git repository to pull latest template
+bash "$INSTALL_SCRIPT_PATH" "$TARGET_PROJECT" "$PROJECT_PREFIX" "$GIT_REPO_URL" "$GIT_BRANCH"
 
 echo ""
 echo -e "${GREEN}=====================================${NC}"

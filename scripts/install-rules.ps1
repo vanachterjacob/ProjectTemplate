@@ -11,7 +11,10 @@ param(
     [string]$ProjectPrefix,
 
     [Parameter(Mandatory=$false, HelpMessage="Git repository URL to pull latest template")]
-    [string]$RepoUrl = ""
+    [string]$RepoUrl = "",
+
+    [Parameter(Mandatory=$false, HelpMessage="Git branch to clone (default: main)")]
+    [string]$RepoBranch = "main"
 )
 
 $ErrorActionPreference = "Stop"
@@ -51,11 +54,13 @@ Write-Info "Project Prefix: $ProjectPrefix"
 # Step 1: Pull from git if repo URL provided
 if ($RepoUrl) {
     Write-Info "Pulling latest template from repository..."
+    Write-Info "Repository: $RepoUrl"
+    Write-Info "Branch: $RepoBranch"
     $TempCloneDir = Join-Path $env:TEMP "bc26-template-$(Get-Random)"
 
     try {
-        git clone $RepoUrl $TempCloneDir 2>$null
-        Write-Success "Repository cloned successfully"
+        git clone -b $RepoBranch $RepoUrl $TempCloneDir 2>$null
+        Write-Success "Repository cloned successfully (branch: $RepoBranch)"
         $TemplateDir = $TempCloneDir
     } catch {
         Write-Warning "Failed to clone repository. Using local template instead."

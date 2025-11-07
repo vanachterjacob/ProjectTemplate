@@ -26,16 +26,18 @@ print_error() { echo -e "${RED}[ERROR]${NC} $1"; }
 show_usage() {
     echo "BC26 Development Template - Auto Installation"
     echo ""
-    echo "Usage: $0 <target_directory> <project_prefix> [repo_url]"
+    echo "Usage: $0 <target_directory> <project_prefix> [repo_url] [repo_branch]"
     echo ""
     echo "Arguments:"
     echo "  target_directory  : Path to your AL project (e.g., /path/to/MyProject)"
     echo "  project_prefix    : 3-letter customer prefix (e.g., CON for Contoso)"
     echo "  repo_url          : (Optional) Git repository URL to pull latest template"
+    echo "  repo_branch       : (Optional) Git branch to clone (default: main)"
     echo ""
     echo "Examples:"
     echo "  $0 /home/user/MyALProject CON"
     echo "  $0 . ABC https://github.com/yourorg/ProjectTemplate.git"
+    echo "  $0 . ABC https://github.com/yourorg/ProjectTemplate.git develop"
     echo ""
     exit 1
 }
@@ -48,6 +50,7 @@ fi
 TARGET_DIR="$1"
 PROJECT_PREFIX="$2"
 REPO_URL="${3:-}"
+REPO_BRANCH="${4:-main}"
 
 # Validate project prefix (3 letters, uppercase)
 if [[ ! "$PROJECT_PREFIX" =~ ^[A-Z]{3}$ ]]; then
@@ -82,10 +85,12 @@ print_info "Project Prefix: $PROJECT_PREFIX"
 # Step 1: Pull from git if repo URL provided
 if [ -n "$REPO_URL" ]; then
     print_info "Pulling latest template from repository..."
+    print_info "Repository: $REPO_URL"
+    print_info "Branch: $REPO_BRANCH"
     TEMP_CLONE_DIR=$(mktemp -d)
 
-    if git clone "$REPO_URL" "$TEMP_CLONE_DIR" 2>/dev/null; then
-        print_success "Repository cloned successfully"
+    if git clone -b "$REPO_BRANCH" "$REPO_URL" "$TEMP_CLONE_DIR" 2>/dev/null; then
+        print_success "Repository cloned successfully (branch: $REPO_BRANCH)"
         TEMPLATE_DIR="$TEMP_CLONE_DIR"
     else
         print_warning "Failed to clone repository. Using local template instead."

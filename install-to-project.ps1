@@ -19,9 +19,12 @@ $TargetProject = "C:\Projects\Play AV\Play"
 # Your 3-letter project prefix (must be uppercase, e.g., PLY, PAV, ABC)
 $ProjectPrefix = "PLY"
 
-# (Optional) Git repository URL to pull latest template
-# Leave empty "" to use local template files
-$GitRepoUrl = ""
+# Git repository URL - always pulls latest template from main branch
+# Change this if you forked the repo or want to use a different branch
+$GitRepoUrl = "https://github.com/vanachterjacob/ProjectTemplate.git"
+
+# Git branch to pull from (default: main)
+$GitBranch = "main"
 
 # ===========================
 # DO NOT EDIT BELOW THIS LINE
@@ -36,7 +39,10 @@ Write-Host "=====================================" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "Target Project: $TargetProject" -ForegroundColor Yellow
 Write-Host "Project Prefix: $ProjectPrefix" -ForegroundColor Yellow
-Write-Host "Git Repo: $(if ($GitRepoUrl) { $GitRepoUrl } else { '(using local template)' })" -ForegroundColor Yellow
+Write-Host "Git Repository: $GitRepoUrl" -ForegroundColor Yellow
+Write-Host "Git Branch: $GitBranch" -ForegroundColor Yellow
+Write-Host ""
+Write-Host "[INFO] Will pull latest template from git repository" -ForegroundColor Cyan
 Write-Host ""
 
 # Validate configuration
@@ -76,11 +82,8 @@ Write-Host ""
 
 # Run the installation script
 try {
-    if ($GitRepoUrl) {
-        & $InstallScriptPath -TargetDirectory $TargetProject -ProjectPrefix $ProjectPrefix -RepoUrl $GitRepoUrl
-    } else {
-        & $InstallScriptPath -TargetDirectory $TargetProject -ProjectPrefix $ProjectPrefix
-    }
+    # Always use git repository to pull latest template
+    & $InstallScriptPath -TargetDirectory $TargetProject -ProjectPrefix $ProjectPrefix -RepoUrl $GitRepoUrl -RepoBranch $GitBranch
 
     Write-Host ""
     Write-Host "=====================================" -ForegroundColor Green
