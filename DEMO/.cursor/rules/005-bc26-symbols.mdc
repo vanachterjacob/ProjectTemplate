@@ -1,0 +1,61 @@
+---
+alwaysApply: false
+description: BC26 base symbols reference configuration for @-mention when needed
+---
+# BC26 Base Symbols Reference
+
+## Local Symbols Location
+
+**Base Path:** `C:\Temp\BC26Objects` (1.7GB, ~27,220 AL files)
+
+> ⚠️ Always use LOCAL symbols - MCP not trusted
+
+## Available Modules
+
+### Microsoft Base
+- **BaseApp** - Microsoft Base Application (26.3.36158.37931)
+  - Standard tables, pages, codeunits
+  - Core BC functionality
+- **ALAppExtensions** - Microsoft AL App Extensions
+- **BCIntrastatCore** - Microsoft Intrastat Core (26.4.37194.37425)
+- **BC-RS** - BC Reference Symbols
+
+### Continia Modules
+- ContiniaBusinessFoundation
+- ContiniaConnectorApp (26.3.2.359795)
+- ContiniaCore (26.3.3.359418)
+- ContiniaDeliveryNetwork (26.3.1.355345)
+- ContiniaDocumentCapture (26.3.3.360549)
+- ContiniaDocumentOutput (26.3.0.361764)
+- ContiniaSystemApplication (26.3.2.359795)
+
+## Usage for Development
+
+**Use base files for:**
+- Standard object structure reference
+- Field names and property patterns
+- Event subscriber patterns
+- Extension point verification
+- Table/Page ID lookups
+
+## When to Request Additional Modules
+
+If you need modules not listed above:
+- Other Microsoft extensions
+- Third-party apps
+- Specific BC modules
+
+**Request from user BEFORE creating plans**
+
+## Quick Reference Commands
+
+```bash
+# Find standard Customer table
+C:\Temp\BC26Objects\BaseApp\Customer.Table.al
+
+# Find Sales Order page
+C:\Temp\BC26Objects\BaseApp\SalesOrder.Page.al
+
+# Search for specific pattern
+grep -r "OnAfterValidateEvent" C:\Temp\BC26Objects\BaseApp
+```

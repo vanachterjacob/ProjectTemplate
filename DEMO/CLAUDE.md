@@ -4,7 +4,7 @@
 Centralized configuration template for Business Central 26 (SaaS) extension development with Claude Code and Cursor integration.
 
 ## Key Information
-- **Prefix:** ABC (MUST be replaced with 3-letter customer code per project)
+- **Prefix:** CON (MUST be replaced with 3-letter customer code per project)
 - **BC Version:** 26 SaaS
 - **Object ID Range:** 77100-77200 (dummy range, replaced by Object Ninja for production)
 - **Symbols Location:** C:\Temp\BC26Objects\BaseApp
@@ -26,7 +26,7 @@ Centralized configuration template for Business Central 26 (SaaS) extension deve
 - `CLAUDE.md` - AI context documentation
 - `.cursorignore` - File exclusions
 - `~/.cursor/hooks.json` - Hooks configuration
-- All ABC prefixes replaced with your project prefix
+- All CON prefixes replaced with your project prefix
 
 **Git Integration:**
 - Optionally pull latest template from public repo
@@ -42,7 +42,7 @@ Centralized configuration template for Business Central 26 (SaaS) extension deve
 
 ## Critical ESC Standards
 **ALWAYS enforce these rules:**
-- ✅ Use ABC prefix consistently (customer-specific, replace ABC with actual prefix)
+- ✅ Use CON prefix consistently (customer-specific, replace CON with actual prefix)
 - ✅ English-only development (no Dutch in code)
 - ✅ Early exit pattern mandatory (avoid nested if statements)
 - ✅ TryFunction for all error handling
@@ -119,18 +119,18 @@ ProjectTemplate/
 
 ## Object Naming Patterns
 **Tables:**
-- `ABC <Object Name>` (e.g., `ABC Customer Credit`)
-- Extension: `ABC <Base Object Name>` (e.g., `ABC Customer`)
+- `CON <Object Name>` (e.g., `CON Customer Credit`)
+- Extension: `CON <Base Object Name>` (e.g., `CON Customer`)
 
 **Pages:**
-- Card: `ABC <Entity> Card`
-- List: `ABC <Entity> List`
-- Document: `ABC <Doc Type> <Doc Name>` (e.g., `ABC Sales Invoice`)
+- Card: `CON <Entity> Card`
+- List: `CON <Entity> List`
+- Document: `CON <Doc Type> <Doc Name>` (e.g., `CON Sales Invoice`)
 
 **Codeunits:**
-- Business Logic: `ABC <Feature> Mgt.`
-- Event Subscribers: `ABC <Feature> Subscribers`
-- Install/Upgrade: `ABC Install`, `ABC Upgrade`
+- Business Logic: `CON <Feature> Mgt.`
+- Event Subscribers: `CON <Feature> Subscribers`
+- Install/Upgrade: `CON Install`, `CON Upgrade`
 
 **Variables:**
 - Record: `<TableName>` (e.g., `Customer`, `SalesHeader`)
@@ -213,7 +213,7 @@ ProjectTemplate/
 
 ## Template Customization
 **For each new project:**
-1. Replace `ABC` with actual 3-letter customer prefix in 000-project-overview.mdc
+1. Replace `CON` with actual 3-letter customer prefix in 000-project-overview.mdc
 2. Update `[Your Publisher Name]` in 000-project-overview.mdc
 3. Configure app.json with correct ID ranges
 4. Verify BC26 symbols path accessibility
