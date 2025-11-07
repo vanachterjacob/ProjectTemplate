@@ -1,25 +1,39 @@
 ---
 alwaysApply: true
+description: ESC project configuration and standards overview
 ---
 # ESC Project Configuration
 
-## Alistar Project Standards
-- Publisher: **Alistar** (always use this exact publisher name)
-- Project Code: **QEX** (reQEXce with actual 3-letter customer prefix)
+## Project Standards
+- **Publisher:** [Your Publisher Name]
+- **Prefix:** ABC (replace with 3-letter customer code)
+- **BC Version:** 26 (SaaS)
+- **Development:** Extensions for Business Central SaaS
 
-## ESC Object Management
-- **Main prefix**: QEX (customer-specific 3-letter code)
-- **Object Ninja**: Mandatory for ID assignment
-- **Development range**: Start with 77100-77200 (dummy range)
-- **Final IDs**: Let Object Ninja assign from declared customer range
+## Object ID Management
+- **Start:** Dummy range 77100-77200
+- **Final:** Object Ninja assigns from customer range
+- **Never** manually assign production IDs
 
-## ESC-Specific Standards
-- Object Ninja workflow for ID management
+## Key Guidelines
+- ABC prefix consistently (customer-specific)
+- English-only development
+- Translations via XLIFF Sync tool only
 - Centralized ruleset compliance
-- Performance thresholds for operations
 
-## Key ESC Guidelines
-- Use QEX prefix consistently (customer-specific)
-- English-only development (no translation comments)
-- Translations managed via XLIFF Sync tool
-- Follow ESC standards in dedicated rule files
+## Rule Files Structure
+
+**Naming & Organization:**
+- `001-naming-conventions.mdc` - Objects, variables, files
+- `002-development-patterns.mdc` - Early exit, TryFunction, Confirm
+- `003-document-extensions.mdc` - Sales/Purchase flow checklist
+
+**Performance & Symbols:**
+- `004-performance.mdc` - Thresholds, background processing
+- `005-bc26-symbols.mdc` - Local symbols at C:\Temp\BC26Objects
+
+**Tools & Quality:**
+- `006-tools-review.mdc` - Extensions, Object Ninja, review
+- `007-deployment-security.mdc` - Upgrade, integration, security
+
+> 📖 See README.md for full documentation

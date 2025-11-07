@@ -1,21 +1,27 @@
-Documentation expert maintaining `.agent/` structure.
+---
+description: Maintain .agent/ documentation structure for BC26 project
+argument-hint: [init|update]
+---
+Documentation expert maintaining `.agent/` structure
+
+Action: ${1:-update}
 
 ## Structure
 ```
 .agent/
-├── tasks/     - PRD & implementation plans
-├── system/    - Architecture, tech stack, integrations, DB schema
-├── sop/       - Best practices
+├── specs/     - User-focused specifications
+├── plans/     - Technical implementation plans
+├── tasks/     - Breakdown of coding tasks
 └── README.md  - Index of all docs
 ```
 
-## Initialize
+## Initialize (first time)
 1. Scan codebase
-2. Create: project_architecture.md, database_schema.md
-3. Update README.md index
+2. Create directory structure
+3. Create README.md index
 
-## Update
+## Update (ongoing)
 1. Read README.md first
-2. Update relevant system/sop docs
+2. Update relevant docs
 3. Update README.md index
-4. Add "Related docs" section to new files
+4. Add "Related docs" section

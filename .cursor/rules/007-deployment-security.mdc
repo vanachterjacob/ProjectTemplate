@@ -1,0 +1,108 @@
+---
+alwaysApply: true
+description: ESC deployment and security standards for BC26
+---
+# ESC Deployment & Security
+
+## Upgrade Path Testing (Mandatory)
+
+**Always test upgrade paths:**
+- Test with production data volumes (100 records ≠ 100,000 records)
+- Include upgrade codeunits in all releases
+- Test breaking changes with obsolete warnings
+- Validate dependency versions before deployment
+
+### Checklist
+- [ ] Upgrade path tested with previous version
+- [ ] Production-like data volumes used in testing
+- [ ] Upgrade codeunits included and tested
+- [ ] Breaking changes have obsolete warnings
+- [ ] Dependency versions validated
+
+## Environment Synchronization
+
+**Test in prod-like environment:**
+- Sandbox ≠ Production
+- Validate permission sets with actual user permissions
+- Document setup requirements (never assume configuration)
+- Test timezone handling
+
+```al
+// ❌ BAD: Server timezone assumptions
+CurrentDate := Today;  // Server's today, not user's
+
+// ✅ GOOD: User's timezone
+CurrentDate := WorkDate();  // Respects user's work date
+```
+
+### Checklist
+- [ ] Tested in production-like environment
+- [ ] Permission sets validated with actual users
+- [ ] Setup requirements documented
+- [ ] Timezone handling verified (WorkDate vs Today)
+
+## Integration Robustness
+
+**Never assume external calls succeed:**
+
+```al
+procedure CallExternalAPI(RequestData: Text): Boolean
+var
+    HttpClient: HttpClient;
+    HttpResponse: HttpResponseMessage;
+    ResponseText: Text;
+    RetryCount: Integer;
+begin
+    repeat
+        RetryCount += 1;
+
+        if HttpClient.Post(APIEndpoint, RequestData, HttpResponse) then begin
+            HttpResponse.Content.ReadAs(ResponseText);
+
+            // Verify actual content, not just HTTP status
+            if (HttpResponse.HttpStatusCode = 200) and ValidateResponse(ResponseText) then begin
+                LogIntegrationSuccess(RequestData, ResponseText);
+                exit(true);
+            end;
+        end;
+
+        LogIntegrationAttempt(RetryCount, RequestData, GetLastErrorText());
+        Sleep(RetryCount * 1000);  // Exponential backoff
+
+    until RetryCount >= 3;
+
+    LogIntegrationFailure(RequestData);
+    exit(false);
+end;
+```
+
+### Integration Checklist
+- [ ] Retry logic for transient failures
+- [ ] Verify actual results, not just return codes
+- [ ] Log all integration attempts
+- [ ] Exponential backoff implemented
+
+## Security Standards (Zero Tolerance)
+
+### Permission Validation
+```al
+procedure ProcessCustomerData(CustomerNo: Code[20])
+begin
+    // Always validate permissions first
+    if not CustomerPermissions.CanViewCustomer(CustomerNo) then
+        Error('Insufficient permissions');
+
+    // Validate input
+    if CustomerNo = '' then
+        Error('Customer number required');
+
+    ProcessValidatedCustomerData(CustomerNo);
+end;
+```
+
+### Security Checklist
+- [ ] Permission validation in all custom procedures
+- [ ] No sensitive data in logs or error messages
+- [ ] Input validation for all user inputs
+- [ ] SecretText used for sensitive data storage
+- [ ] SQL injection protection verified

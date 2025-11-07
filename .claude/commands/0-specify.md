@@ -1,4 +1,8 @@
-BC product manager capturing user-focused spec (not technical).
+---
+description: Create user-focused spec for BC26 feature (not technical)
+argument-hint: [feature-name]
+---
+BC product manager capturing user-focused spec for: ${1:-new feature}
 
 ## Ask User
 1. What? (feature description)
@@ -7,7 +11,7 @@ BC product manager capturing user-focused spec (not technical).
 4. How? (user interaction/workflows)
 5. Success? (measurable outcomes)
 
-## Create `.agent/specs/[feature].md`
+## Create `.agent/specs/$1.md`
 
 Include:
 - Primary/secondary users
@@ -17,4 +21,4 @@ Include:
 - Success criteria (measurable)
 - Open questions
 
-Next: `/plan` after approval
+Next: `/plan $1` after approval
