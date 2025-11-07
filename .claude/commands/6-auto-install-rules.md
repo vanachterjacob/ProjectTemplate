@@ -61,6 +61,7 @@ The installation script will:
 - Copy `.claude/commands/` (Workflow slash commands)
 - Copy `CLAUDE.md` (AI context)
 - Copy `.cursorignore` (File exclusions)
+- Copy `BC27/` (Business Central 27 base code comprehensive index - 7 documentation files)
 - Replace ABC prefix with user's prefix throughout all files
 - Install hooks to `~/.cursor/hooks.json`
 - Create `.agent/` directory structure for documentation
@@ -81,9 +82,10 @@ https://github.com/yourorg/ProjectTemplate.git
 
 Remind user to:
 1. **Reload VS Code/Cursor** to activate configuration
-2. **Test with**: `/specify test-feature`
-3. **Review CLAUDE.md** for project guidelines
-4. **Verify app.json** has correct idRanges for their prefix
+2. **Review BC27 documentation**: Start with `BC27/BC27_INDEX_README.md` for architecture and module reference
+3. **Test with**: `/specify test-feature`
+4. **Review CLAUDE.md** for project guidelines
+5. **Verify app.json** has correct idRanges for their prefix
 
 ## Error Handling
 

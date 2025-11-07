@@ -94,7 +94,8 @@ $Directories = @(
     ".claude\skills",
     ".agent\specs",
     ".agent\plans",
-    ".agent\tasks"
+    ".agent\tasks",
+    "BC27"
 )
 
 foreach ($Dir in $Directories) {
@@ -158,6 +159,14 @@ $TargetSrcDir = Join-Path $TargetDirectory "src"
 if ((Test-Path $SourceAgentsMd) -and (Test-Path $TargetSrcDir)) {
     Copy-Item -Path $SourceAgentsMd -Destination (Join-Path $TargetDirectory "src\AGENTS.md") -Force
     Write-Success "Copied src\AGENTS.md template"
+}
+
+# Copy BC27 documentation if it exists
+$SourceBC27 = Join-Path $TemplateDir "BC27"
+if (Test-Path $SourceBC27) {
+    Copy-Item -Path "$SourceBC27\*" -Destination (Join-Path $TargetDirectory "BC27") -Force -Recurse
+    $FileCount = (Get-ChildItem $SourceBC27).Count
+    Write-Success "Copied BC27\ documentation ($FileCount files)"
 }
 
 # Step 5: Replace ABC prefix with project prefix
@@ -275,6 +284,7 @@ Write-Host "   • .cursor\hooks\ - Quality & security hooks"
 Write-Host "   • .claude\commands\ - Workflow slash commands"
 Write-Host "   • CLAUDE.md - AI context documentation"
 Write-Host "   • .cursorignore - File exclusions"
+Write-Host "   • BC27\ - Base code comprehensive index (7 documentation files)"
 Write-Host "   • Hooks configured in $HooksDir\hooks.json"
 Write-Host ""
 Write-Host "📝 Project Prefix: $ProjectPrefix" -ForegroundColor Cyan
@@ -292,6 +302,11 @@ Write-Host "   • /tasks [plan-name] [phase] - Break down tasks"
 Write-Host "   • /implement [task-file] [task-id|next] - Implement code"
 Write-Host "   • /review [file-or-folder] - ESC compliance check"
 Write-Host "   • /update_doc [init|update] - Maintain documentation"
+Write-Host ""
+Write-Host "📖 Documentation:" -ForegroundColor Cyan
+Write-Host "   • BC27\ - Business Central 27 base code comprehensive index"
+Write-Host "      Start with: BC27\BC27_INDEX_README.md"
+Write-Host "      Then: BC27_ARCHITECTURE.md → BC27_MODULES_OVERVIEW.md"
 Write-Host ""
 Write-Host "⚡ Hooks active:" -ForegroundColor Blue
 Write-Host "   • after-file-edit.ps1 - ESC validation"

@@ -36,4 +36,8 @@ description: ESC project configuration and standards overview
 - `006-tools-review.mdc` - Extensions, Object Ninja, review
 - `007-deployment-security.mdc` - Upgrade, integration, security
 
+**Base Code Reference:**
+- `008-bc27-base-index.mdc` - BC27 comprehensive base code index (/BC27/ directory)
+
 > 📖 See README.md for full documentation
+> 📊 See /BC27/ directory for BC27 base code comprehensive index (7 documentation files)
