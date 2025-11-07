@@ -157,7 +157,10 @@ Continue? (y/N)
 1. **Reload VS Code/Cursor** - Close and reopen to activate configuration
 2. **Test Installation** - Run `/specify test-feature` to verify setup
 3. **Review Documentation** - Read `CLAUDE.md` for project guidelines
-4. **Verify app.json** - Ensure idRanges match your project prefix
+
+**For existing projects:** You're 100% ready! Your app.json (idRanges, dependencies, publisher) remains unchanged - only AI tooling was added.
+
+**For new projects:** Manually configure app.json with your customer's ID ranges and publisher information.
 
 ## Available Commands After Installation
 

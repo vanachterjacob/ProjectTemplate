@@ -290,4 +290,4 @@ ProjectTemplate/
 **BC Version:** 26 (SaaS)
 **Last Updated:** 2025-11-07
 **Template Purpose:** AI-assisted BC26 development with ESC standards compliance
-**New in 2.1:** Cursor hooks, intelligent rule loading, .cursorignore, AGENTS.md support
+**New in 2.1:** Automated installation system with git integration, Cursor hooks, intelligent rule loading, .cursorignore, AGENTS.md support
