@@ -5,8 +5,8 @@ description: ESC project configuration and standards overview
 # ESC Project Configuration
 
 ## Project Standards
-- **Publisher:** Alistar (always use exact name)
-- **Prefix:** QEX (replace with 3-letter customer code)
+- **Publisher:** [Your Publisher Name]
+- **Prefix:** ABC (replace with 3-letter customer code)
 - **BC Version:** 26 (SaaS)
 - **Development:** Extensions for Business Central SaaS
 
@@ -16,7 +16,7 @@ description: ESC project configuration and standards overview
 - **Never** manually assign production IDs
 
 ## Key Guidelines
-- QEX prefix consistently (customer-specific)
+- ABC prefix consistently (customer-specific)
 - English-only development
 - Translations via XLIFF Sync tool only
 - Centralized ruleset compliance
