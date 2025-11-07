@@ -1,0 +1,49 @@
+---
+alwaysApply: true
+description: ESC document field extension patterns for BC26
+---
+# Document Field Extensions
+
+> ⚠️ **Critical**: When adding fields to documents, extend ALL related tables and pages
+
+## Quick Checklist
+
+### Sales Documents
+- [ ] Sales Header (36)
+- [ ] Sales Line (37)
+- [ ] Sales Shipment Header (110) / Line (111)
+- [ ] Sales Invoice Header (112) / Line (113)
+- [ ] Sales Cr.Memo Header (114) / Line (115)
+- [ ] Return Receipt Header (6660) / Line (6661)
+- [ ] Sales Header Archive (5107) / Line Archive (5108)
+- [ ] All corresponding pages (42, 46, 132, 133, 142, 143, 5158, 5159)
+
+### Purchase Documents
+- [ ] Purchase Header (38)
+- [ ] Purchase Line (39)
+- [ ] Purch. Rcpt. Header (120) / Line (121)
+- [ ] Purch. Inv. Header (122) / Line (123)
+- [ ] Purch. Cr.Memo Header (124) / Line (125)
+- [ ] Return Shipment Header (6650) / Line (6651)
+- [ ] Purchase Header Archive (5109) / Line Archive (5110)
+- [ ] All corresponding pages (50, 54, 120, 121, 138, 139, 5162, 5163)
+
+## Document Flow Mapping
+
+**Sales:** Header → Shipment → Invoice → Cr.Memo → Archive
+**Purchase:** Header → Receipt → Invoice → Cr.Memo → Archive
+
+## TransferFields Coverage
+
+```al
+// Always verify custom fields are transferred
+procedure OnAfterTransferFields(var SalesInvoiceHeader: Record "Sales Invoice Header")
+begin
+    SalesInvoiceHeader."QEX Custom Field" := "QEX Custom Field";
+end;
+```
+
+**Test in:**
+- Posting routines
+- Archive functions
+- Document copying

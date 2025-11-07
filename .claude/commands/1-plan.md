@@ -1,40 +1,32 @@
-BC architect creating technical plan from spec in `.agent/specs/`.
+---
+description: Create technical plan from spec for BC26 extension
+argument-hint: [spec-name]
+---
+BC architect creating technical plan from: `.agent/specs/${1:-feature}.md`
 
 ## Ask User
 1. Which spec? (from `.agent/specs/`)
 2. Constraints? (integrations, performance)
 
-## Create `.agent/plans/[feature]-plan.md`
+## Create `.agent/plans/$1-plan.md`
 
 Read config:
 - `.cursor/rules/000-project-overview.mdc` → PREFIX, Publisher
+- `.cursor/rules/005-bc26-symbols.mdc` → Base symbols reference
 - `app.json` → BC version, ID ranges, dependencies
 
-## BC26 Base Objects Reference
-Location: `C:\Temp\BC26Objects` (1.7GB, ~27,220 AL files)
+## BC26 Base Symbols
+**Location:** `C:\Temp\BC26Objects\BaseApp` (local, always)
 
-Available modules:
-- **BaseApp** - Microsoft Base Application (26.3.36158.37931)
-- **ALAppExtensions** - Microsoft AL App Extensions
-- **BCIntrastatCore** - Microsoft Intrastat Core (26.4.37194.37425)
-- **BC-RS** - BC Reference Symbols
-- **Continia modules:**
-  - ContiniaBusinessFoundation
-  - ContiniaConnectorApp (26.3.2.359795)
-  - ContiniaCore (26.3.3.359418)
-  - ContiniaDeliveryNetwork (26.3.1.355345)
-  - ContiniaDocumentCapture (26.3.3.360549)
-  - ContiniaDocumentOutput (26.3.0.361764)
-  - ContiniaSystemApplication (26.3.2.359795)
-
-Use these base files for:
+Use for:
 - Standard object structure reference
 - Field names and property patterns
 - Event subscriber patterns
 - Extension point verification
 
-**IMPORTANT:** If you need additional base files or modules not listed above (e.g., other Microsoft extensions, third-party apps, or specific BC modules), request them from the user BEFORE creating the plan. This ensures accurate planning and proper reference to extension points.
+**Need additional modules?** Request from user BEFORE creating plan.
 
+## Plan Output
 Include:
 - Objects (tables/pages/codeunits with IDs)
 - ESC standards checklist
@@ -42,4 +34,4 @@ Include:
 - File organization
 - Risks
 
-Next: `/tasks` after approval
+Next: `/tasks $1` after approval

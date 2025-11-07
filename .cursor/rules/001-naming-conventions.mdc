@@ -1,0 +1,105 @@
+---
+alwaysApply: true
+description: ESC AL naming conventions for BC26 development
+---
+# ESC Naming Conventions
+
+## Object Naming (QEX prefix mandatory)
+
+### New Objects
+```al
+table 50000 "QEX Setup"
+page 50002 "QEX Setup Card"
+codeunit 50004 "QEX Process Management"
+```
+
+**File naming:**
+- Pattern: `<ObjectNameShort>.<ObjectType>.al`
+- Example: `QEXSetup.Table.al`, `QEXCustomerCard.Page.al`
+
+### Extension Objects
+```al
+tableextension 50001 "QEX Customer" extends Customer
+pageextension 50003 "QEX Customer Card" extends "Customer Card"
+reportextension 50005 "QEX Customer List" extends "Customer - List"
+enumextension 50007 "QEX Payment Terms" extends "Payment Terms"
+```
+
+**File naming:**
+- Pattern: `<BaseNameShort>.<ObjectTypeShort><BaseId>-Ext.al`
+- Example: `Customer.TableExt18-Ext.al`, `CustomerCard.PageExt21-Ext.al`
+
+### Interface Pattern
+```al
+interface "IQEX Customer Service"
+codeunit 50008 "QEX Customer Service Impl"
+```
+
+## Variable Naming (FBakkensen Pattern)
+
+**Order: Record → Report → Codeunit → Page → Query → Simple types**
+
+```al
+var
+    CustomerRec: Record Customer;              // Avoid table name conflicts
+    TempSalesLine: Record "Sales Line" temporary;  // Temp prefix mandatory
+    CustomerReport: Report "Customer - Top 10 List";
+    SalesPost: Codeunit "Sales-Post";
+    CustomerCardPage: Page "Customer Card";
+    IsProcessed: Boolean;
+    TotalAmount: Decimal;
+    AmountLbl: Label 'Amount';  // Lbl suffix for labels
+```
+
+**Critical rules:**
+- Temp tables: `Temp` prefix mandatory
+- Records: `Rec` suffix to avoid conflicts
+- Labels: `Lbl` suffix
+- English-only names (no Dutch)
+
+## Label Management
+
+```al
+var
+    DeleteQst: Label 'Delete %1?';
+    SuccessMsg: Label 'Process completed successfully';
+    AmountLbl: Label 'Amount';
+```
+
+**Naming suffixes:**
+- `Qst` - Questions/Confirmations
+- `Msg` - Messages
+- `Err` - Errors
+- `Lbl` - Labels
+
+## Procedure Naming
+
+```al
+procedure CalculateAmount(): Decimal
+procedure TryProcessCustomer(CustomerNo: Code[20]): Boolean
+local procedure ValidateCustomerData(Customer: Record Customer)
+```
+
+**Rules:**
+- English verbs: Calculate, Process, Validate, Get, Set
+- Boolean returns: Use `Is`, `Has`, `Can` prefix
+- TryFunctions: `Try` prefix
+
+## File Organization
+
+```
+src/
+├── CustomerCredit/
+│   ├── QEXCreditLimit.Codeunit.al
+│   └── QEXCreditSetup.Table.al
+├── Documents/
+│   ├── SalesHeader.TableExt37-Ext.al
+│   └── SalesOrder.PageExt42-Ext.al
+└── _Permissions/
+    └── QEXPermissions.PermissionSet.al
+```
+
+**Guidelines:**
+- Group by feature/module
+- Permissions in `_Permissions/` folder
+- Use descriptive folder names
