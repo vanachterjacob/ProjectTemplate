@@ -1,0 +1,52 @@
+---
+description: AI development session tracking - current task, progress, decisions
+alwaysApply: true
+---
+
+# AI Development Session
+
+## 🎯 Current Task
+<!-- AI: Update this with the feature/task being developed -->
+**Status:** Not started  
+**Goal:** [Describe the main objective]  
+**Scope:** [Define what's included/excluded]
+
+## 📋 Progress Tracking
+<!-- AI: Use this to track progress through development phases -->
+- [ ] **Analysis** - Understanding requirements and existing code
+- [ ] **Design** - Architecture and approach decisions  
+- [ ] **Implementation** - Writing the code
+- [ ] **Testing** - Validation and error handling
+- [ ] **Documentation** - Code comments and user docs
+- [ ] **Review** - Final review and optimization
+
+## 🧠 Key Decisions Made
+<!-- AI: Document important decisions and reasoning -->
+1. **Decision:** [What was decided]  
+   **Reason:** [Why this approach was chosen]  
+   **Impact:** [How this affects other parts]
+
+## 🔍 Current Context
+<!-- AI: Track current file locations and relevant code -->
+**Working on:** `[file-path]:[line-number]`  
+**Related files:** 
+- `file1.al` - [purpose]
+- `file2.al` - [purpose]
+
+## 📝 Session Notes
+<!-- AI: Working notes, discoveries, issues encountered -->
+
+## 🚧 Blockers & Issues
+<!-- AI: Track problems that need resolution -->
+- [ ] **Issue:** [Description]  
+  **Impact:** [How it affects progress]  
+  **Next step:** [What needs to be done]
+
+## ✅ Completed This Session
+<!-- AI: Track what was accomplished -->
+
+## 🔄 Next Steps
+<!-- AI: QEXn for continuation -->
+1. [Next immediate action]
+2. [Following action] 
+3. [Future consideration]

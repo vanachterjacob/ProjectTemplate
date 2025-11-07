@@ -1,0 +1,25 @@
+---
+alwaysApply: true
+---
+# ESC Project Configuration
+
+## Alistar Project Standards
+- Publisher: **Alistar** (always use this exact publisher name)
+- Project Code: **QEX** (reQEXce with actual 3-letter customer prefix)
+
+## ESC Object Management
+- **Main prefix**: QEX (customer-specific 3-letter code)
+- **Object Ninja**: Mandatory for ID assignment
+- **Development range**: Start with 77100-77200 (dummy range)
+- **Final IDs**: Let Object Ninja assign from declared customer range
+
+## ESC-Specific Standards
+- Object Ninja workflow for ID management
+- Centralized ruleset compliance
+- Performance thresholds for operations
+
+## Key ESC Guidelines
+- Use QEX prefix consistently (customer-specific)
+- English-only development (no translation comments)
+- Translations managed via XLIFF Sync tool
+- Follow ESC standards in dedicated rule files

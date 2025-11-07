@@ -1,0 +1,30 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(unzip:*)",
+      "Read(//tmp/**)",
+      "Bash(cat:*)",
+      "Read(//mnt/c/Projects/Elicio/ELICIO-OudMaatwerk/DevopsRFCs/**)",
+      "WebFetch(domain:github.com)",
+      "WebSearch",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:api.github.com)",
+      "Read(//mnt/c/Temp/BC26Objects/**)",
+      "Read(//mnt/c/Projects/Elicio/ELICIO-OudMaatwerk/BC14/**)",
+      "Bash(curl:*)",
+      "Bash(test:*)",
+      "Bash(dotnet build)",
+      "Read(//mnt/c/Projects/Elicio/ELICIO_Global/**)",
+      "Read(//c/Projects/Elicio/ELICIO-OudMaatwerk/testrondes/testronde7/FEC/**)",
+      "Read(//c/Projects/Elicio/ELICIO_Global/**)",
+      "Bash(wc:*)",
+      "Bash(head:*)",
+      "Bash(iconv:*)",
+      "Read(//c/Projects/Elicio/ELICIO-OudMaatwerk/testrondes/testronde7/AGED ACCOUNTS/**)",
+      "Read(//c/Projects/Elicio/**)",
+      "Bash(python:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

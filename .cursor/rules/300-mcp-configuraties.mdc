@@ -1,0 +1,241 @@
+---
+alwaysApply: true
+---
+# MCP Server Configuraties voor ESC Development
+
+## Overzicht
+Deze gids documenteert de MCP (Model Context Protocol) servers die geconfigureerd zijn voor ESC Business Central development. MCP servers bieden AI assistants toegang tot externe kennisbronnen en tools.
+
+---
+
+## Geconfigureerde MCP Servers
+
+### 1. Microsoft Learn Docs MCP Server (`microsoft.docs.mcp`)
+**Doel**: Toegang tot Microsoft Learn documentatie en technische content
+
+#### Wat het biedt:
+- **microsoft_docs_search**: Zoekt door Microsoft Learn documentatie met semantische search
+- **microsoft_docs_fetch**: Haalt complete documentatie pagina's op en converteert naar markdown
+
+#### Configuratie in je mcp.json:
+```json
+{
+  "microsoft.docs.mcp": {
+    "type": "http",
+    "url": "https://learn.microsoft.com/api/mcp"
+  }
+}
+```
+
+#### Gebruik voor ESC:
+- **AL Language vragen**: "Hoe werkt de AL language feature X?"
+- **Business Central docs**: "Hoe implementeer ik Y in BC?"
+- **Azure integratie**: "Azure service Z documentatie voor BC integratie"
+- **Power QEXtform**: "Dynamics 365/BC integratie met Power Automate"
+
+#### Voorbeelden:
+```javascript
+// Zoek naar AL language features
+microsoft_docs_search("AL language table extensions")
+
+// Haal specifieke BC documentatie op
+microsoft_docs_fetch("https://learn.microsoft.com/en-us/dynamics365/business-central/dev-itpro/developer/devenv-table-ext-object")
+```
+
+#### Best practices:
+- Gebruik voor technische Microsoft vragen
+- Combineer met BC Code Intelligence voor complete oplossingen
+- Geschikt voor Azure en Microsoft 365 integraties
+
+---
+
+### 2. Context7 MCP Server (`context7`)
+**Doel**: Toegang tot gespecialiseerde libraries, frameworks en documentatie via Context7 QEXtform
+
+#### Wat het biedt:
+- **resolve-library-id**: Zoekt en identificeert beschikbare libraries
+- **get-library-docs**: Haalt documentatie en code voorbeelden op uit specifieke libraries
+- **Version-specifieke content**: Altijd up-to-date, versie-specifieke informatie
+
+#### Configuratie in je mcp.json:
+```json
+{
+  "context7": {
+    "url": "https://mcp.context7.com/mcp",
+    "headers": {
+      "CONTEXT7_API_KEY": "ctx7sk-0c99b547-d6de-4e71-bdf5-d0286987370e"
+    }
+  }
+}
+```
+
+#### Gebruik voor ESC:
+- **Framework documentatie**: React, .NET, Node.js etc. voor BC integraties
+- **Database libraries**: SQL Server, PostgreSQL documentatie
+- **API frameworks**: REST, GraphQL voor BC API development
+- **DevOps tools**: Docker, Kubernetes voor BC deployments
+- **Testing frameworks**: Jest, NUnit voor AL/Business Central testing
+
+#### Voorbeelden:
+```javascript
+// Zoek naar een specifieke library
+resolve-library-id("mongodb driver .NET")
+
+// Haal documentatie op
+get-library-docs("/mongodb/mongo-csharp-driver", "connection strings")
+
+// Zoek naar testing frameworks
+resolve-library-id("testing framework C#")
+```
+
+#### Best practices:
+- Gebruik voor third-party libraries en frameworks
+- Altijd versie-specifieke documentatie opvragen
+- Combineer met Microsoft docs voor complete technische stacks
+
+---
+
+## MCP Server Workflow voor ESC Development
+
+### Stapsgewijze aanpak:
+
+#### Stap 1: Probleem Analyse
+```javascript
+// Start altijd met BC Code Intelligence
+mcp_bc_knowledge_analyze_al_code("jouw probleem code")
+// Of AL Symbol Intelligence voor technische analyse
+"zoek naar [object type] in mijn project"
+```
+
+#### Stap 2: Microsoft Context (indien relevant)
+```javascript
+// Voor Microsoft technologieën
+microsoft_docs_search("Dynamics 365 Business Central [onderwerp]")
+microsoft_docs_fetch("specifieke learn url")
+```
+
+#### Stap 3: Third-party Libraries (indien nodig)
+```javascript
+// Voor externe libraries/frameworks
+resolve-library-id("[framework/library naam]")
+get-library-docs("/org/project", "[specifiek onderwerp]")
+```
+
+#### Stap 4: Specialisten Consultatie
+```javascript
+// Voor complexe problemen
+mcp_bc_knowledge_get_specialist_advice({
+  "specialist_id": "alex-architect",
+  "message": "Architectuur advies gebaseerd op bovenstaande analyse"
+})
+```
+
+---
+
+## MCP Server Vergelijking
+
+| Aspect | BC Code Intelligence | AL Symbol Intelligence | Microsoft Docs MCP | Context7 MCP |
+|--------|---------------------|------------------------|-------------------|--------------|
+| **Focus** | BC Domain Expertise | AL Technical Symbols | Microsoft Learn | Libraries/Frameworks |
+| **Type** | Domain Specialists | Symbol Analysis | Documentation Search | Library Docs |
+| **Gebruik** | Business Logic | Code Structure | MS Technology | Third-party Tools |
+| **Voorbeelden** | Posting Routines | Object Dependencies | BC APIs | MongoDB Driver |
+
+---
+
+## Troubleshooting MCP Servers
+
+### Microsoft Learn Docs MCP
+**Probleem**: "Server not responding"
+**Oplossing**: Controleer internet verbinding, endpoint is publiek beschikbaar
+
+**Probleem**: "No results found"
+**Oplossing**: Verfijn zoekterm, gebruik specifieke Microsoft product termen
+
+### Context7 MCP
+**Probleem**: "API Key invalid"
+**Oplossing**: Controleer CONTEXT7_API_KEY in mcp.json configuratie
+
+**Probleem**: "Library not found"
+**Oplossing**: Gebruik resolve-library-id eerst om beschikbare libraries te vinden
+
+### Algemene MCP Issues
+**Probleem**: "MCP server timeout"
+**Oplossing**: Controleer netwerk connectiviteit en server status
+
+**Probleem**: "Configuration error"
+**Oplossing**: Valideer mcp.json syntax en paden
+
+---
+
+## ESC MCP Best Practices
+
+### 1. Juiste Server Selectie
+- **BC specifieke vragen** → BC Code Intelligence
+- **AL symbolen/structuur** → AL Symbol Intelligence
+- **Microsoft technologie** → Microsoft Learn Docs
+- **Third-party libraries** → Context7
+
+### 2. Efficiënt Gebruik
+- Start altijd met BC Code Intelligence voor domein expertise
+- Gebruik AL Symbol Intelligence voor technische dependency analyse
+- Reserveer Microsoft Docs voor specifieke MS technology vragen
+- Gebruik Context7 voor framework/library research
+
+### 3. Context Combinatie
+```javascript
+// Voorbeeld workflow voor API integratie
+1. BC Code Intelligence: "Hoe maak ik API calls in AL?"
+2. Microsoft Docs: "Azure Function integration patterns"
+3. Context7: "HTTP client library .NET"
+4. BC Specialist: "Review complete integratie architectuur"
+```
+
+### 4. Documentation
+- Document MCP responses in code comments
+- Noteer welke MCP server gebruikt werd voor welke vraag
+- Update documentatie met geleerde patronen
+
+---
+
+## MCP Server Updates & Onderhoud
+
+### Microsoft Learn Docs
+- **Updates**: Automatisch, dagelijks content refresh
+- **Onderhoud**: Geen actie vereist, publiek endpoint
+- **Documentatie**: [Microsoft Learn MCP Server](https://learn.microsoft.com/en-us/training/support/mcp)
+
+### Context7
+- **API Key**: Regelmatig vernieuwen indien nodig
+- **Updates**: Automatisch, nieuwe libraries worden toegevoegd
+- **Documentatie**: Via Context7 QEXtform
+
+### BC & AL Servers
+- **Updates**: Controleer GitHub repositories voor nieuwe releases
+- **Configuratie**: Update npx packages indien nodig
+- **Documentatie**: Zie MCP Tools gids
+
+---
+
+## Integratie met ESC Development Process
+
+### Pre-Development Phase
+1. **BC Analysis**: BC Code Intelligence voor requirements
+2. **Technical Research**: Microsoft Docs voor MS technologie
+3. **Library Research**: Context7 voor third-party tools
+4. **Architecture Design**: BC specialists voor complete design
+
+### Development Phase
+1. **Symbol Intelligence**: AL Symbol Intelligence voor code structure
+2. **Implementation**: BC Code Intelligence voor AL development
+3. **Integration**: Microsoft Docs voor API patterns
+4. **Testing**: Framework docs via Context7
+
+### Deployment Phase
+1. **Documentation**: Microsoft Learn voor deployment guides
+2. **Monitoring**: Framework docs voor observability tools
+3. **Maintenance**: BC specialists voor ongoing support
+
+---
+
+*Deze configuratie geeft ESC ontwikkelaars toegang tot een compleet ecosysteem van AI-gedreven development tools, van domein-specifieke BC expertise tot algemene technische documentatie.*

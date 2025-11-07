@@ -1,0 +1,515 @@
+---
+alwaysApply: true
+---
+# MCP Tools voor Business Central Development
+
+## ESC MCP Integration voor Business Central Development
+
+Deze gids legt uit hoe je MCP (Model Context Protocol) tools kunt gebruiken voor effectieve ESC Business Central development. MCP tools bieden gespecialiseerde AI ondersteuning specifiek voor AL development en BC patterns.
+
+---
+
+## 🔧 AL Symbol Intelligence MCP Server
+
+> **TECHNISCHE GRONDSLAG**: Voor AI assistants die "blind" zijn voor AL dependencies en symbolen.
+
+### Wat is AL-Dependency-MCP-Server?
+De [AL-Dependency-MCP-Server](https://github.com/StefanMaron/AL-Dependency-MCP-Server) maakt compiled AL packages (.app files) zichtbaar voor AI assistants, zodat ze:
+
+* **Complete object structuur** en dependencies begrijpen
+* **Context-aware suggesties** geven gebaseerd op echte AL symbolen
+* **Object relaties** en extensies navigeren
+* **Geïnformeerde guidance** bieden over AL development patterns
+
+### Quick Install voor ESC
+```bash
+# Installatie vereisten controleren
+dotnet --version  # Moet 8.0+ zijn
+dotnet nuget list source  # Moet nuget.org bevatten
+
+# MCP Server toevoegen aan je AI assistant
+npx al-mcp-server
+```
+
+### ESC AI Assistant Configuratie
+
+#### Claude Code (Aanbevolen)
+```bash
+claude mcp add al-mcp-server -- npx al-mcp-server
+```
+
+#### Cursor IDE
+```json
+{
+  "al-symbols-mcp": {
+    "command": "npx",
+    "args": ["al-mcp-server"]
+  }
+}
+```
+
+#### VS Code (.vscode/mcp.json)
+```json
+{
+  "servers": {
+    "al-symbols-mcp": {
+      "type": "stdio",
+      "command": "npx", 
+      "args": ["al-mcp-server"]
+    }
+  }
+}
+```
+
+### Wat Dit Mogelijk Maakt voor ESC
+
+#### 🕵️ Smart Object Discovery
+* **Zoek objecten** op naam, type of patroon in alle packages
+* **Krijg object summaries** met georganiseerde procedure categorieën
+* **Vind object referenties** en dependencies in de codebase
+* **Auto-discover packages** uit .alpackages directories
+
+#### 🔍 Deep Code Analysis
+* **Complete object definities** met velden, procedures en properties
+* **Zoek procedures** binnen specifieke objecten met filtering
+* **Zoek velden** binnen tabellen met type en property informatie
+* **Zoek page controls** voor UI structuur analyse
+
+#### 🏢 Business Domain Intelligence
+* **Zoek per business domein** (Sales, Finance, Inventory, Manufacturing, etc.)
+* **Vind object extensies** en customizations
+* **Analyseer package dependencies** en relaties
+
+### ESC Integration Pattern
+
+**Gebruik AL Symbol Intelligence + BC Code Intelligence samen:**
+
+```javascript
+// Stap 1: Technische analyse met AL Symbol Intelligence
+"Zoek alle Customer gerelateerde objecten in mijn AL project"
+
+// Stap 2: Domain expertise met BC Code Intelligence  
+mcp_bc-knowledge_get_specialist_advice({
+  "specialist_id": "alex-architect",
+  "message": "Ontwerp customer sync architectuur gebaseerd op bovenstaande objecten",
+  "problem_context": "ESC master data management"
+})
+```
+
+### Troubleshooting voor ESC
+
+**Veelvoorkomende ESC Issues:**
+* **"AL CLI not found"** → .NET SDK 8.0+ vereist (server installeert AL tools automatisch)
+* **NU1100 error** → Update naar .NET SDK 8.0+ of configureer NuGet sources
+* **"No packages found"** → Controleer `.app` files in `.alpackages` directory
+* **"Server not responding"** → Node.js 18+ vereist en accessible
+
+**ESC Specifiek:**
+* **Multi-company setup** → Server vindt automatisch alle company-specifieke packages
+* **Master data sync** → Begrijpt relaties tussen master en company objecten
+* **Large extensions** → Efficient streaming parser voor 50MB+ files
+
+---
+
+## 🎯 MCP Tools Overzicht
+
+BC Code Intelligence biedt verschillende MCP tools die je kunt gebruiken via function calls:
+
+### 🔧 Beschikbare MCP Tools
+
+#### 1. BC Development Specialists (`mcp_bc-knowledge_*`)
+**Doel**: Directe consultatie met BC experts voor specifieke vragen
+
+**Beschikbare Specialisten:**
+- `mcp_bc-knowledge_ask_bc_expert` - Directe vraag aan BC expert
+- `mcp_bc-knowledge_get_specialist_advice` - Specialist advies met context
+- `mcp_bc-knowledge_suggest_specialist` - Suggestie welke specialist te gebruiken
+- `mcp_bc-knowledge_discover_specialists` - Ontdek beschikbare specialisten
+- `mcp_bc-knowledge_list_specialists` - Lijst van alle specialisten
+- `mcp_bc-knowledge_browse_specialists` - Blader door specialisten
+- `mcp_bc-knowledge_get_specialist_info` - Gedetailleerde info over specialist
+
+#### 2. BC Knowledge Topics (`mcp_bc-knowledge_*`)
+**Doel**: Toegang tot gecurated BC kennis en best practices
+
+- `mcp_bc-knowledge_find_bc_knowledge` - Zoek BC kennis topics
+- `mcp_bc-knowledge_get_bc_topic` - Haal specifiek topic op
+- `mcp_bc-knowledge_get_bc_help` - Meta hulp voor BC vragen
+
+#### 3. BC Workflow Management (`mcp_bc-knowledge_*`)
+**Doel**: Gestuctureerde development workflows voor complexe taken
+
+- `mcp_bc-knowledge_start_bc_workflow` - Start gestructureerde workflow
+- `mcp_bc-knowledge_advance_workflow` - Ga verder in workflow
+- `mcp_bc-knowledge_get_workflow_help` - Hulp met huidige workflow
+- `mcp_bc-knowledge_*_workflow` - Verschillende workflow types
+
+#### 4. BC Code Analysis (`mcp_bc-knowledge_*`)
+**Doel**: Code analyse en verbetering
+
+- `mcp_bc-knowledge_analyze_al_code` - Analyseer AL code
+- `mcp_bc-knowledge_*_specialist` - Specialist consultaties
+
+---
+
+## 🚀 ESC MCP Usage Patterns
+
+### Voor ESC Ontwikkelaars - Aanbevolen Workflows
+
+#### Pattern 1: Directe Specialist Consultatie
+```javascript
+// Voor snelle vragen over specifieke BC onderwerpen
+mcp_bc-knowledge_ask_bc_expert({
+  "question": "Hoe implementeer ik een custom posting routine in BC?",
+  "context": "ESC project met master data sync requirements"
+})
+```
+
+#### Pattern 2: Code Analyse & Verbetering
+```javascript
+// Voor code review en optimalisatie
+mcp_bc-knowledge_analyze_al_code({
+  "code": "jouw AL code hier",
+  "analysis_type": "performance",
+  "bc_version": "BC22"
+})
+```
+
+#### Pattern 3: Gestuctureerde Development Workflows
+```javascript
+// Voor complexe development taken
+mcp_bc-knowledge_start_bc_workflow({
+  "workflow_type": "new-bc-app",
+  "context": "ESC Master Data Management extensie",
+  "bc_version": "BC26"
+})
+```
+
+#### Pattern 4: Kennis Discovery
+```javascript
+// Voor onderzoek naar BC patterns en best practices
+mcp_bc-knowledge_find_bc_knowledge({
+  "query": "master data sync patterns",
+  "search_type": "topics"
+})
+```
+
+---
+
+## 🎭 BC Development Specialists - ESC Context
+
+### Voor ESC Projects - Aanbevolen Specialisten
+
+#### 🏗️ Alex (Architect)
+**ESC Gebruik**: Solution design voor master data sync architectuur
+```javascript
+mcp_bc-knowledge_get_specialist_advice({
+  "specialist_id": "alex-architect",
+  "message": "Design master data sync tussen multiple companies",
+  "problem_context": "ESC multi-company data management"
+})
+```
+
+#### 💻 Sam (Coder)
+**ESC Gebruik**: Snelle AL code generatie voor sync logic
+```javascript
+mcp_bc-knowledge_get_specialist_advice({
+  "specialist_id": "sam-coder",
+  "message": "Genereer AL code voor company data sync",
+  "problem_context": "Implementatie van sync codeunits"
+})
+```
+
+#### 🔍 Dean (Debug)
+**ESC Gebruik**: Performance analyse van sync operaties
+```javascript
+mcp_bc-knowledge_get_specialist_advice({
+  "specialist_id": "dean-debug",
+  "message": "Analyseer performance problemen in data sync",
+  "problem_context": "Langzame sync tussen companies"
+})
+```
+
+#### ⚠️ Eva (Errors)
+**ESC Gebruik**: Error handling in sync processen
+```javascript
+mcp_bc-knowledge_get_specialist_advice({
+  "specialist_id": "eva-errors",
+  "message": "Implementeer error handling voor sync failures",
+  "problem_context": "Sync errors tussen companies"
+})
+```
+
+#### 🔒 Seth (Security)
+**ESC Gebruik**: Security validation in master data sync
+```javascript
+mcp_bc-knowledge_get_specialist_advice({
+  "specialist_id": "seth-security",
+  "message": "Security best practices voor master data sync",
+  "problem_context": "Data access control tussen companies"
+})
+```
+
+#### 🌉 Jordan (Bridge)
+**ESC Gebruik**: Integration patterns voor externe systemen
+```javascript
+mcp_bc-knowledge_get_specialist_advice({
+  "specialist_id": "jordan-bridge",
+  "message": "Integration patterns voor Dynavision sync",
+  "problem_context": "Externe systeem integratie"
+})
+```
+
+---
+
+## 📋 ESC MCP Workflow TemQEXtes
+
+### TemQEXte 1: Nieuwe ESC Feature Development
+```javascript
+// Stap 1: Architectuur ontwerp
+mcp_bc-knowledge_start_bc_workflow({
+  "workflow_type": "new-bc-app",
+  "context": "ESC Customer Sync feature",
+  "bc_version": "BC26"
+})
+
+// Stap 2: Code generatie
+mcp_bc-knowledge_get_specialist_advice({
+  "specialist_id": "sam-coder",
+  "message": "Genereer sync codeunit temQEXte"
+})
+
+// Stap 3: Security review
+mcp_bc-knowledge_get_specialist_advice({
+  "specialist_id": "seth-security",
+  "message": "Review security implementation"
+})
+
+// Stap 4: Performance optimalisatie
+mcp_bc-knowledge_advance_workflow({
+  "workflow_id": "[workflow_id]",
+  "phase_results": "Security review compleet"
+})
+```
+
+### TemQEXte 2: ESC Bug Fixing
+```javascript
+// Stap 1: Probleem analyse
+mcp_bc-knowledge_analyze_al_code({
+  "code": "problematische AL code",
+  "analysis_type": "comprehensive",
+  "bc_version": "BC26"
+})
+
+// Stap 2: Specialist consultatie
+mcp_bc-knowledge_ask_bc_expert({
+  "question": "Waarom faalt de sync tussen companies?",
+  "context": "Company filter probleem in sync logic"
+})
+
+// Stap 3: Oplossing implementatie
+mcp_bc-knowledge_get_specialist_advice({
+  "specialist_id": "dean-debug",
+  "message": "Fix de company filter logic"
+})
+```
+
+### TemQEXte 3: ESC Performance Optimalisatie
+```javascript
+// Stap 1: Performance analyse
+mcp_bc-knowledge_start_bc_workflow({
+  "workflow_type": "debug-bc-issues",
+  "context": "Langzame master data sync performance",
+  "bc_version": "BC26"
+})
+
+// Stap 2: Telemetry analyse
+mcp_bc-knowledge_get_specialist_advice({
+  "specialist_id": "dean-debug",
+  "message": "Analyseer sync performance bottlenecks"
+})
+
+// Stap 3: Optimalisatie implementatie
+mcp_bc-knowledge_advance_workflow({
+  "workflow_id": "[workflow_id]",
+  "phase_results": "Performance analyse compleet"
+})
+```
+
+---
+
+## 🔧 MCP Tool Integratie in ESC Development
+
+### Function Call Format
+```javascript
+// Algemene format voor MCP function calls
+{
+  "name": "mcp_bc_knowledge_[tool_name]",
+  "parameters": {
+    "parameter1": "waarde1",
+    "parameter2": "waarde2"
+  }
+}
+```
+
+### Voorbeelden voor ESC Context
+
+#### AL Code Analyse
+```javascript
+mcp_bc_knowledge_analyze_al_code({
+  "code": "codeunit 50000 \"ESC Master Sync\"\n// sync logic hier",
+  "analysis_type": "performance",
+  "bc_version": "BC26",
+  "suggest_workflows": true
+})
+```
+
+#### Specialist Consultatie
+```javascript
+mcp_bc_knowledge_get_specialist_advice({
+  "specialist_id": "alex-architect",
+  "message": "Ontwerp multi-company sync architectuur",
+  "session_id": "esc-sync-design-001",
+  "problem_context": "ESC master data management tussen 5 companies"
+})
+```
+
+#### Workflow Management
+```javascript
+mcp_bc_knowledge_start_bc_workflow({
+  "workflow_type": "enhance-bc-app",
+  "context": "ESC Master Data Sync verbetering",
+  "bc_version": "BC26",
+  "additional_info": {
+    "current_issues": ["company filter bugs", "performance problems"],
+    "target_entities": ["Customer", "Vendor", "GL Account"]
+  }
+})
+```
+
+---
+
+## 📚 MCP Knowledge Base voor ESC
+
+### ESC-Relevante Topics
+- **Master Data Sync Patterns** - Company synchronization
+- **Performance Optimization** - Large dataset handling
+- **Error Handling** - Sync failure recovery
+- **Security Implementation** - Cross-company data access
+- **Integration Patterns** - External system connectivity
+
+### Topic Search Voorbeelden
+```javascript
+mcp_bc_knowledge_find_bc_knowledge({
+  "query": "master data sync performance optimization",
+  "search_type": "topics",
+  "bc_version": "BC26"
+})
+```
+
+---
+
+## 🎯 Best Practices voor ESC MCP Usage
+
+### 1. Context is King
+- **Altijd BC versie specificeren** (`bc_version: "BC26"`)
+- **ESC context meegeven** in descriptions
+- **Specifieke problemen beschrijven** niet vaag
+
+### 2. Workflow vs Direct Consultatie
+- **Gebruik workflows** voor complexe, multi-step taken
+- **Direct consultatie** voor snelle vragen
+- **Combineer beide** voor comprehensive solutions
+
+### 3. Specialist Selectie
+- **Alex (Architect)** voor design decisions
+- **Sam (Coder)** voor implementation
+- **Dean (Debug)** voor performance issues
+- **Seth (Security)** voor permission problems
+- **Jordan (Bridge)** voor integrations
+
+### 4. Documentation & Follow-up
+- **Document MCP responses** in code comments
+- **Gebruik session_id** voor ongoing conversations
+- **Bouw voort** op vorige specialist advice
+
+---
+
+## 🚨 Troubleshooting MCP Usage
+
+### Veelvoorkomende Problemen
+
+#### Probleem: Generic Responses
+**Oplossing**: Voeg meer ESC-specifieke context toe
+```javascript
+// ❌ Te vaag
+"message": "Help met sync code"
+
+// ✅ ESC-specifiek
+"message": "Implementeer master data sync tussen companies met approval workflow"
+```
+
+#### Probleem: Version Mismatch
+**Oplossing**: Specificeer altijd BC versie
+```javascript
+"bc_version": "BC26"  // Niet weglaten!
+```
+
+#### Probleem: Context Verlies
+**Oplossing**: Gebruik session_id voor continuity
+```javascript
+"session_id": "esc-project-123"
+```
+
+---
+
+## 🔗 Integration met ESC Development Process
+
+### Pre-Development Phase
+1. **Architectuur Review**: Alex voor solution design
+2. **Requirements Analysis**: Maya voor mentoring
+3. **Security QEXnning**: Seth voor permission design
+
+### Development Phase
+1. **Code Generation**: Sam voor AL code temQEXtes
+2. **Pattern Implementation**: Roger voor code review
+3. **Integration Setup**: Jordan voor external connections
+
+### Testing & Optimization Phase
+1. **Performance Testing**: Dean voor bottleneck analysis
+2. **Error Handling**: Eva voor exception management
+3. **Security Validation**: Seth voor final security review
+
+### Deployment Phase
+1. **Final Review**: Roger voor code quality
+2. **Documentation**: Taylor voor user guides
+3. **AppSource Prep**: Morgan voor publishing
+
+---
+
+## 📈 Advanced MCP Features voor ESC
+
+### Custom Knowledge Integration
+- **ESC specifieke patterns** toevoegen aan knowledge base
+- **Company standards** integreren in responses
+- **Team preferences** configureren
+
+### Workflow Customization
+- **ESC-specifieke workflows** ontwikkelen
+- **Multi-company scenarios** standaardiseren
+- **Approval processes** integreren
+
+### Performance Monitoring
+- **MCP usage tracking** voor team analytics
+- **Success rate monitoring** per specialist
+- **Knowledge base improvements** gebaseerd op feedback
+
+---
+## 📚 Verwante Documentatie
+
+* **[300-mcp-configuraties.mdc](../300-mcp-configuraties.mdc)** - Configuratie en gebruik van alle geconfigureerde MCP servers
+* **[100-development-tools.mdc](../100-development-tools.mdc)** - Development tools en checklists
+
+---
+
+*Deze gids is specifiek ontwikkeld voor ESC Business Central development teams. Gebruik de MCP tools proactief in je development workflow voor betere kwaliteit en snellere delivery.*

@@ -1,0 +1,245 @@
+---
+alwaysApply: true
+---
+# ESC Development Tools & Standards
+
+## ESC Mandatory Extensions
+- **AL Language** (Microsoft) - Required
+- **AL Toolbox** - Mandatory for AL development productivity
+- **Object Ninja** - Required for automated object ID assignment
+- **CRS AL Language Extension** - File naming standards
+- **XLIFF Sync** - Translation management
+- **BC LinterCop** - Advanced code analysis (ESC requirement)
+
+## ESC Base Objects Reference
+- **Standard BC Objects**: `C:\Temp\BC26Objects` - Contains all standard Business Central 26.0 base objects
+- **Usage**: Reference this path when developing AL code to find relevant base files, table structures, and page layouts
+- **Access**: Available for Cursor agents to locate standard BC objects during development
+
+
+## ESC Centralized Ruleset (Mandatory)
+
+**Always use centralized ruleset:**
+```json
+{
+    "name": "ESC App Rules",
+    "description": "ESC centralized ruleset",
+    "includedRuleSets": [
+        {
+            "path": "https://sadynavisiondevops.blob.core.windows.net/development/project.ruleset.json",
+            "action": "Default"
+        }
+    ]
+}
+```
+
+**ESC Policy:**
+- No project-specific rule exceptions
+- Consistent code quality across all projects
+- Centralized maintenance and updates
+
+
+## ESC Object Numbering Strategy
+- **Object Ninja extension** - Mandatory for ID assignment
+- **Start development** with dummy range (77100-77200)
+- **Final IDs** assigned by Object Ninja from declared customer range
+- **Never manually assign** production IDs
+
+
+## ESC Code Review Checklist
+
+**Before Merge - Mandatory Checks:**
+- [ ] SetLoadFields used appropriately
+- [ ] No explicit Commit() without documentation (LC0002)
+- [ ] Proper error handling with labeled messages
+- [ ] Cyclomatic complexity ≤ 15 for all functions
+- [ ] English-only code (no translation comments)
+- [ ] **Language Consistency**: All technical terms in English only
+- [ ] **Translations**: Managed via XLIFF Sync tool, not inline comments
+- [ ] **Naming Conflicts**: Variables don't match table names
+- [ ] **Upgrade Path**: Tested with previous version data
+- [ ] **Integration Robustness**: Retry logic and error handling implemented
+- [ ] **Performance**: Tested with production-scale data
+- [ ] **Security**: Permission checks and input validation present
+- [ ] **Environment Sync**: Tested in prod-like environment
+
+**LinterCop Compliance:**
+- [ ] All objects have Access property (LC0011)
+- [ ] All tables have DataPerCompany property (LC0007)
+- [ ] Public objects have explicit Extensible property (LC0034)
+- [ ] FlowFields are non-editable (LC0001)
+- [ ] No hardcoded IDs (LC0012)
+- [ ] SecretText used for sensitive data (LC0043)
+- [ ] ReadIsolation preferred over LockTable (LC0031)
+- [ ] Confirm Management used instead of direct Confirm() (LC0021)
+- [ ] Language consistency validation
+- [ ] Security permission checks present
+
+**ESC-Specific:**
+- [ ] Document fields extended to ALL related tables
+- [ ] Performance impact considered for operations > 30 seconds
+- [ ] Object Ninja used for final ID assignment
+- [ ] Centralized ruleset compliance verified
+
+## ESC Deployment & Integration Standards (Critical Lessons Learned)
+
+### Upgrade Path Testing (Mandatory)
+- **Always test upgrade paths** - Never assume compatibility
+- **Test with production-like data volumes** - 100 records ≠ 100,000 records
+- **Include upgrade codeunits** in all releases
+- **Test breaking changes** with obsolete warnings
+- **Validate dependency versions** before deployment
+
+### Environment Synchronization (Production Safety)
+- **Test in prod-like environment** - Sandbox ≠ Production
+- **Validate permission sets** with actual user permissions
+- **Document setup requirements** - Never assume configuration
+- **Test timezone handling** - Use `WorkDate()` not `Today`
+
+```al
+// ❌ BAD: Server timezone assumptions
+CurrentDate := Today;  // Server's today, not user's
+
+// ✅ GOOD: User's timezone
+CurrentDate := WorkDate();  // Respects user's work date
+```
+
+### Integration Robustness (Real-World Pattern)
+- **Never assume external calls succeed** - Always handle failures
+- **Verify actual results, not just return codes** - HTTP 200 ≠ Success
+- **Implement retry logic** for transient failures
+- **Log all integration attempts** for production debugging
+
+```al
+// Real-world API integration pattern
+procedure CallExternalAPI(RequestData: Text): Boolean
+var
+    HttpClient: HttpClient;
+    HttpResponse: HttpResponseMessage;
+    ResponseText: Text;
+    RetryCount: Integer;
+begin
+    repeat
+        RetryCount += 1;
+
+        if HttpClient.Post(APIEndpoint, RequestData, HttpResponse) then begin
+            HttpResponse.Content.ReadAs(ResponseText);
+
+            // Verify actual content, not just HTTP status
+            if (HttpResponse.HttpStatusCode = 200) and ValidateResponse(ResponseText) then begin
+                LogIntegrationSuccess(RequestData, ResponseText);
+                exit(true);
+            end;
+        end;
+
+        LogIntegrationAttempt(RetryCount, RequestData, GetLastErrorText());
+        Sleep(RetryCount * 1000);  // Exponential backoff
+
+    until RetryCount >= 3;
+
+    LogIntegrationFailure(RequestData);
+    exit(false);
+end;
+```
+
+### Deployment Issues Encountered
+- **Not testing upgrade paths** - Always test upgrade from previous version
+- **Missing upgrade codeunits** - Data migrations fail in production
+- **Breaking changes without obsolete warnings** - Customer customizations break
+- **Incorrect dependency versions** - Extensions fail to install
+
+### Integration Failures in Production
+- **Don't assume external calls always succeed** - Build robust error handling
+- **Always verify actual results, not just return values** - HTTP 200 doesn't mean success
+- **Implement retry logic for transient failures** - Network issues are common
+- **Log all integration attempts for debugging** - Essential for production troubleshooting
+
+### Deployment & Integration Checklist
+- [ ] Upgrade path tested with previous version
+- [ ] Production-like data volumes used in testing
+- [ ] Environment synchronization validated (sandbox vs production)
+- [ ] Permission sets tested with actual user permissions
+- [ ] External integrations have retry logic and error handling
+- [ ] Timezone handling verified (WorkDate vs Today)
+- [ ] Setup requirements documented and tested
+
+## ESC Security Standards (Zero Tolerance)
+
+### Security Validation Requirements (Critical Lessons Learned)
+- **Always validate permissions** in custom code - Never assume access rights
+- **Never expose sensitive data** in logs or error messages
+- **Validate all input** - Protect against injection attacks
+- **Use SecretText** for sensitive data storage
+
+### Real Security Issues Encountered
+- **Missing permission checks** in custom code - Users accessed restricted data
+- **Exposing sensitive data in logs** - Customer data leaked to Application Insights
+- **Insufficient input validation** - SQL injection attempts via custom APIs
+
+### Security Validation Pattern
+```al
+// Security validation pattern
+procedure ProcessCustomerData(CustomerNo: Code[20])
+begin
+    // Always validate permissions first
+    if not (CustomerPermissions.CanViewCustomer(CustomerNo)) then
+        Error('Insufficient permissions');
+
+    // Validate input
+    if CustomerNo = '' then
+        Error('Customer number required');
+
+    // Process only after validation
+    ProcessValidatedCustomerData(CustomerNo);
+end;
+```
+
+### Security Checklist
+- [ ] Permission validation implemented in all custom procedures
+- [ ] No sensitive data exposed in logs or error messages
+- [ ] Input validation for all user inputs
+- [ ] SecretText used for sensitive data storage
+- [ ] SQL injection protection verified
+
+## 🚨 RED FLAGS (Immediate Action Required)
+
+### Critical Warning Signs
+1. **Mixed language code** - Stop and refactor immediately
+2. **Variable name conflicts** - Rename to clear patterns
+3. **Missing error handling** - Add comprehensive try-catch
+4. **No permission validation** - Add security checks
+5. **Untested upgrade path** - Block deployment until tested
+6. **Production performance not validated** - Require testing
+
+---
+
+## 🤖 BC Code Intelligence MCP Tools
+
+> **AI-POWERED DEVELOPMENT**: ESC heeft toegang tot geavanceerde BC Code Intelligence MCP tools voor AI-gestuurde Business Central development.
+
+### 📖 MCP Usage Guide
+**📄 [200-mcp-tools.mdc](../200-mcp-tools.mdc)** - Complete instructies voor het gebruik van BC Code Intelligence MCP tools
+
+**📄 [300-mcp-configuraties.mdc](../300-mcp-configuraties.mdc)** - Configuratie en gebruik van alle geconfigureerde MCP servers
+
+#### MCP Tools Overzicht:
+* **AL Symbol Intelligence** - Technische AL dependency analyse ([AL-Dependency-MCP-Server](https://github.com/StefanMaron/AL-Dependency-MCP-Server))
+* **14 BC Development Specialists** - Directe consultatie met domein experts
+* **Microsoft Learn Docs MCP** - Officiële Microsoft documentatie
+* **Context7 MCP** - Libraries, frameworks en third-party tools
+* **ESC-specifieke workflows** - Gestuctureerde development methodologieën
+* **Function call temQEXtes** - Ready-to-use code voorbeelden
+* **Best practices** - Optimalisatie van MCP tool usage
+
+### 🎯 ESC MCP Quick Start
+```javascript
+// Voorbeeld: Direct specialist consultatie
+mcp_bc_knowledge_get_specialist_advice({
+  "specialist_id": "alex-architect",
+  "message": "Ontwerp master data sync architectuur voor ESC",
+  "problem_context": "Multi-company data management"
+})
+```
+
+**🚀 Begin hier**: [BC Code Intelligence MCP Guide](../200-mcp-bc-intelligence.mdc)
+

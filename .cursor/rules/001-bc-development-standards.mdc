@@ -1,0 +1,255 @@
+---
+alwaysApply: true
+---
+# ESC AL Development Standards
+
+<version>4.0.0</version>
+
+## ESC Naming Conventions
+
+### Object Naming
+```al
+// QEX prefix mandatory (customer-specific 3-letter code)
+table 50000 "QEX Setup"
+page 50002 "QEX Setup Card"
+codeunit 50004 "QEX Process Management"
+
+// Extension objects: QEX prefix + descriptive name
+tableextension 50001 "QEX Customer" extends Customer
+pageextension 50003 "QEX Customer Card" extends "Customer Card"
+reportextension 50005 "QEX Customer List" extends "Customer - List"
+enumextension 50007 "QEX Payment Terms" extends "Payment Terms"
+
+**New Objects:**
+- Pattern: `<ObjectNameShort>.<ObjectType>.al`
+- Example: `QEXSetup.Table.al`, `QEXCustomerCard.Page.al`
+
+**Extensions:**
+- Pattern: `<BaseNameShort>.<ObjectTypeShort><BaseId>-Ext.al`
+- Example: `Customer.TableExt18-Ext.al`, `CustomerCard.PageExt21-Ext.al`
+
+// ESC Interface pattern: I prefix + Impl suffix
+interface "IQEX Customer Service"
+codeunit 50008 "QEX Customer Service Impl"
+```
+
+### Variable Naming (FBakkensen Pattern)
+```al
+// ESC Order: Record → Report → Codeunit → Page → Query → Simple types
+var
+    CustomerRec: Record Customer;  // Avoid table name conflicts
+    TempSalesLine: Record "Sales Line" temporary;  // Temp prefix mandatory
+    CustomerReport: Report "Customer - Top 10 List";
+    SalesPost: Codeunit "Sales-Post";
+    CustomerCardPage: Page "Customer Card";
+    IsProcessed: Boolean;
+    TotalAmount: Decimal;
+```
+
+
+## Key Development Patterns
+
+### Early Exit Pattern (ESC Mandatory)
+```al
+procedure ProcessCustomer(Customer: Record Customer; Amount: Decimal)
+begin
+    if Customer."Credit Limit (LCY)" <= 0 then
+        exit;
+    if Customer.Blocked <> Customer.Blocked::" " then
+        exit;
+    if Amount <= Customer."Credit Limit (LCY)" then
+        exit;
+        
+    ProcessValidCustomer(Customer, Amount);
+end;
+```
+
+### Clean Conditionals (FBakkensen Pattern)
+```al
+// Use CASE over IF chains
+procedure GetPriorityText(Status: Enum "QEX Document Status"): Text
+var
+    OpenLbl: Label 'Open';
+    ApprovedLbl: Label 'Approved';
+begin
+    case Status of
+        Status::Open:
+            exit(OpenLbl);
+        Status::Approved:
+            exit(ApprovedLbl);
+        else
+            exit('');
+    end;
+end;
+```
+
+
+### English-Only Development (ESC Mandatory)
+- **All code in English** - no Dutch in code
+- **No translation comments** - translations managed via XLIFF Sync tool
+- Variable/procedure names: English only
+
+```al
+// ❌ BAD: Dutch in code
+procedure BerekenBedrag(): Decimal
+
+// ✅ GOOD: English only
+procedure CalculateAmount(): Decimal
+var
+    AmountLbl: Label 'Amount';
+```
+
+### TryFunction Pattern
+```al
+[TryFunction]
+procedure TryProcessCustomer(CustomerNo: Code[20]): Boolean
+var
+    Customer: Record Customer;
+begin
+    if CustomerNo = '' then
+        exit(false);
+    if not Customer.Get(CustomerNo) then
+        exit(false);
+    if Customer.Blocked <> Customer.Blocked::" " then
+        exit(false);
+        
+    ProcessCustomerData(Customer);
+    exit(true);
+end;
+```
+
+### Confirm Dialogs (ESC Pattern)
+```al
+// Always use ConfirmManagement, never direct Confirm()
+var
+    ConfirmManagement: Codeunit "Confirm Management";
+    DeleteQst: Label 'Delete %1?';
+begin
+    if not ConfirmManagement.GetResponse(StrSubstNo(DeleteQst, Description), false) then
+        exit;
+end;
+```
+
+### Transaction Management (ESC Critical Rule)
+```al
+// NEVER use Commit() without documentation
+Commit(); // Required: Starting background session for async processing
+```
+
+
+## Performance Critical Rules
+
+1. **SetLoadFields**: Only for read-only with known fields
+2. **Avoid nested loops**: Use Query objects instead
+3. **Bulk operations**: Use ModifyAll(true, true)
+4. **Aggregations**: CalcSums() not manual loops
+5. **Cyclomatic complexity**: Keep ≤ 15
+
+
+
+## ESC Ruleset Overrides
+
+### Disabled Rules (Legacy Code)
+- **AA0005**: Only use BEGIN..END to enclose compound statements - too restrictive for clean code
+- **AA0072**: Variable naming suffix - flexible naming
+- **AA0205**: Variable initialization - case-by-case
+- **LC0026**: ToolTip period - legacy code
+- **LC0036**: ToolTip "Specifies" - legacy code
+- **LC0066**: ToolTip duplication between page field and table field - acceptable for consistency and clarity
+- **LC0078**: Temp table triggers - legacy compatibility
+
+### Promoted to Warning (Critical)
+- **AW0006**: UsageCategory/ApplicationArea
+- **AS0094**: Use PermissionSet objects
+- **LC0028**: Event subscriber syntax
+- **LC0088**: Prefer Enums over Options
+
+## Field Extension Patterns
+
+### Document Field Extensions
+> ⚠️ **Critical**: When adding fields to documents, extend ALL related tables and pages
+
+#### 📋 Quick Reference Checklist
+When extending Sales/Purchase documents, check ALL boxes:
+
+**Sales Documents:**
+- [ ] Sales Header
+- [ ] Sales Line  
+- [ ] Sales Shipment Header/Line
+- [ ] Sales Invoice Header/Line
+- [ ] Sales Cr.Memo Header/Line
+- [ ] Return Receipt Header/Line
+- [ ] Sales Header/Line Archive
+- [ ] All corresponding pages
+
+**Purchase Documents:**
+- [ ] Purchase Header
+- [ ] Purchase Line
+- [ ] Purch. Rcpt. Header/Line
+- [ ] Purch. Inv. Header/Line  
+- [ ] Purch. Cr.Memo Header/Line
+- [ ] Return Shipment Header/Line
+- [ ] Purchase Header/Line Archive
+- [ ] All corresponding pages
+
+#### 📊 Complete Document Flow Mapping
+
+| **Sales Flow**     | **Header Tables**     | **Line Tables**     |
+| ------------------ | --------------------- | ------------------- |
+| **Source**         | Sales Header          | Sales Line          |
+| **Shipment**       | Sales Shipment Header | Sales Shipment Line |
+| **Invoice**        | Sales Invoice Header  | Sales Invoice Line  |
+| **Credit Memo**    | Sales Cr.Memo Header  | Sales Cr.Memo Line  |
+| **Return Receipt** | Return Receipt Header | Return Receipt Line |
+| **Archive**        | Sales Header Archive  | Sales Line Archive  |
+
+| **Purchase Flow**   | **Header Tables**       | **Line Tables**       |
+| ------------------- | ----------------------- | --------------------- |
+| **Source**          | Purchase Header         | Purchase Line         |
+| **Receipt**         | Purch. Rcpt. Header     | Purch. Rcpt. Line     |
+| **Invoice**         | Purch. Inv. Header      | Purch. Inv. Line      |
+| **Credit Memo**     | Purch. Cr.Memo Header   | Purch. Cr.Memo Line   |
+| **Return Shipment** | Return Shipment Header  | Return Shipment Line  |
+| **Archive**         | Purchase Header Archive | Purchase Line Archive |
+
+#### 📄 Corresponding Pages to Extend
+
+**Sales Order Pages:**
+| **Page Type** | **Page ID** | **Page Name**               |
+| ------------- | ----------- | --------------------------- |
+| Source        | 42          | Sales Order                 |
+| Source        | 46          | Sales Order Subform         |
+| Posted        | 142         | Sales Shipment              |
+| Posted        | 143         | Sales Shipment Subform      |
+| Posted        | 132         | Posted Sales Invoice        |
+| Posted        | 133         | Sales Invoice Subform       |
+| Archive       | 5158        | Sales Order Archive         |
+| Archive       | 5159        | Sales Order Archive Subform |
+
+**Purchase Order Pages:**
+| **Page Type** | **Page ID** | **Page Name**                |
+| ------------- | ----------- | ---------------------------- |
+| Source        | 50          | Purchase Order               |
+| Source        | 54          | Purchase Order Subform       |
+| Posted        | 120         | Purch. Receipt               |
+| Posted        | 121         | Purch. Receipt Subform       |
+| Posted        | 138         | Posted Purch. Invoice        |
+| Posted        | 139         | Purch. Invoice Subform       |
+| Archive       | 5162        | Purchase Order Archive       |
+| Archive       | 5163        | Purch. Order Archive Subform |
+
+### TransferFields Coverage
+- Always verify TransferFields includes your custom fields
+- Test field transfer in posting routines
+- Consider field transfer in archiving functions
+
+
+
+## File Organization by Feature (ESC Standard)
+```
+src/
+├── CustomerCredit/
+│   ├── QEXCreditLimit.codeunit.al
+│   └── QEXCreditSetup.table.al
+├── _Permissions/
+```
