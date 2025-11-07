@@ -10,6 +10,28 @@ Centralized configuration template for Business Central 26 (SaaS) extension deve
 - **Symbols Location:** C:\Temp\BC26Objects\BaseApp
 - **Publisher:** [Your Publisher Name] (replace in 000-project-overview.mdc)
 
+## Quick Start - Installing Template into AL Project
+
+**New Project Setup:**
+1. `/auto-install-rules` - Interactive installer (asks for target dir + prefix)
+   - OR run directly: `bash scripts/install-rules.sh <target_dir> <prefix> [repo_url]`
+   - OR Windows: `powershell scripts/install-rules.ps1 -TargetDirectory <path> -ProjectPrefix <prefix>`
+2. Reload VS Code/Cursor to activate configuration
+3. Test with `/specify test-feature`
+
+**What Gets Installed:**
+- `.cursor/rules/` - ESC standards (auto-loaded by file patterns)
+- `.cursor/hooks/` - Quality & security hooks
+- `.claude/commands/` - Workflow slash commands
+- `CLAUDE.md` - AI context documentation
+- `.cursorignore` - File exclusions
+- `~/.cursor/hooks.json` - Hooks configuration
+- All ABC prefixes replaced with your project prefix
+
+**Git Integration:**
+- Optionally pull latest template from public repo
+- Script warns before overwriting existing files
+
 ## Development Workflow
 1. `/specify [feature-name]` - Create user-focused specification
 2. `/plan [spec-name]` - Create technical architecture plan
