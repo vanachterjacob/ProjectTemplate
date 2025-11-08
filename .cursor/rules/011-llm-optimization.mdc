@@ -1,0 +1,214 @@
+# LLM Context Optimization Guide
+<!-- Priority: HIGH | Auto-load: Always | Token Budget: <100 lines -->
+
+**Purpose**: Guide AI assistants in efficiently using project context to minimize token usage while maximizing effectiveness.
+
+---
+
+## Token Budget Management
+
+### Context Loading Strategy
+
+**Tier 1 - Always Load (Auto-loaded by Cursor/Claude):**
+- `CLAUDE.md` - Project overview (high-level only)
+- `000-project-overview.mdc` - Core configuration
+- `011-llm-optimization.mdc` - This file
+
+**Tier 2 - Load on Demand (File pattern triggers):**
+- Writing AL code (`*.al`) → Load relevant naming/pattern rules
+- Working with documents → Load `003-document-extensions.mdc`
+- Performance concerns → Load `004-performance.mdc`
+- Event discovery → Load `010-event-discovery.mdc`
+
+**Tier 3 - Manual Load (Use only when needed):**
+- BC27 reference docs → Start with `BC27/BC27_LLM_QUICKREF.md`
+- Detailed architecture → Load `BC27/BC27_ARCHITECTURE.md` only if needed
+- Event catalogs → Load specific catalog, not all
+
+### File Loading Priorities
+
+| File | Lines | Load When | Token Priority |
+|------|-------|-----------|----------------|
+| 000-project-overview.mdc | 44 | Always | CRITICAL |
+| 011-llm-optimization.mdc | ~80 | Always | CRITICAL |
+| 001-naming-conventions.mdc | 108 | `*.al` files | HIGH |
+| 002-development-patterns.mdc | 126 | `*.al` files | HIGH |
+| 003-document-extensions.mdc | 57 | Sales/Purchase docs | MEDIUM |
+| 004-performance.mdc | 96 | Performance reviews | MEDIUM |
+| 010-event-discovery.mdc | 348 | Event questions | HIGH (but large) |
+| BC27_LLM_QUICKREF.md | ~450 | BC27 questions | HIGH |
+| BC27 full docs | 11k+ | Detailed research | LOW (use Task tool) |
+
+---
+
+## Query-Based Loading Recommendations
+
+### "Find event for [X]"
+```
+Load: BC27/BC27_LLM_QUICKREF.md (quick lookup table)
+  ↓ If not found
+Load: BC27/BC27_EVENT_INDEX.md (keyword search)
+  ↓ If still not found
+Load: 010-event-discovery.mdc (full workflow)
+  ↓ If need details
+Load: Specific event catalog
+```
+
+### "Create new table/page/codeunit"
+```
+Load: 001-naming-conventions.mdc (naming rules)
+  ↓ Simultaneously
+Load: 002-development-patterns.mdc (coding patterns)
+  ↓ If performance-critical
+Load: 004-performance.mdc
+```
+
+### "Extend Sales/Purchase document"
+```
+Load: 003-document-extensions.mdc (complete workflow)
+  ↓ If need events
+Load: BC27/BC27_LLM_QUICKREF.md (event quick lookup)
+```
+
+### "Architecture question"
+```
+Load: BC27/BC27_LLM_QUICKREF.md (layer summary)
+  ↓ If need more detail
+Load: BC27/BC27_ARCHITECTURE.md
+```
+
+---
+
+## Token Efficiency Patterns
+
+### ✅ DO: Use Layered Approach
+1. Start with quick reference
+2. Load detailed docs only if needed
+3. Use Task tool for complex multi-file research
+
+### ✅ DO: Use Specific Event Catalogs
+```
+User asks about manufacturing → Load BC27_EVENTS_MANUFACTURING.md
+User asks about service → Load BC27_EVENTS_SERVICE.md
+NOT: Load all event catalogs at once
+```
+
+### ✅ DO: Cache Frequently Used Files
+If a conversation involves multiple AL file changes:
+- Load naming/pattern rules once, keep in context
+- Reuse across multiple file edits
+
+### ❌ DON'T: Load Full BC27 Docs Immediately
+- BC27 total: ~11,400 lines, 350KB
+- Use BC27_LLM_QUICKREF.md first (450 lines)
+- Load specific files only when quick ref insufficient
+
+### ❌ DON'T: Load Multiple Event Catalogs
+Each catalog is 10-30KB. Load one at a time based on module:
+- Sales/Purchase/G/L → BC27_EVENT_CATALOG.md
+- Manufacturing → BC27_EVENTS_MANUFACTURING.md
+- Service → BC27_EVENTS_SERVICE.md
+- Jobs → BC27_EVENTS_JOBS.md
+- Fixed Assets → BC27_EVENTS_FIXEDASSETS.md
+- Warehouse → BC27_EVENTS_WAREHOUSE.md
+- Assembly → BC27_EVENTS_ASSEMBLY.md
+- API/Integration → BC27_EVENTS_API.md
+
+---
+
+## Context Pruning Strategies
+
+### When Context Gets Large (>100k tokens)
+
+**1. Summarize completed work**
+- After implementing a feature, summarize the approach
+- Remove detailed implementation from active context
+- Keep only: "Implemented [feature] using [approach]"
+
+**2. Unload unused documentation**
+- Finished with events? Remove event catalogs from context
+- Finished with architecture design? Remove architecture docs
+
+**3. Use file references instead of content**
+- Instead of: "The event is defined as [paste entire event]"
+- Use: "The event OnBeforePostSalesDoc in BC27_EVENT_CATALOG.md:45"
+
+---
+
+## Special Case: Large Files
+
+### 010-event-discovery.mdc (348 lines)
+- Load only when user explicitly asks to "find an event"
+- Skip if user provides specific event name
+- Alternatives:
+  - Use BC27_LLM_QUICKREF.md event lookup table first
+  - Use BC27_EVENT_INDEX.md for keyword search
+
+### BC27_MODULES_OVERVIEW.md (43KB, 1000+ lines)
+- Never load entire file
+- Use BC27_LLM_QUICKREF.md module summary instead
+- Load specific module section only if needed
+
+---
+
+## Prompt Caching Optimization
+
+Files that should be cached (frequently reused):
+1. `001-naming-conventions.mdc` (used in every AL file)
+2. `002-development-patterns.mdc` (used in every AL file)
+3. `BC27_LLM_QUICKREF.md` (used for most BC27 questions)
+
+Files that shouldn't be cached (rarely reused):
+1. Specific event catalogs (single-use queries)
+2. Detailed architecture docs (reference only)
+3. Generated files in `.agent/` directory
+
+---
+
+## Task Tool Usage (For Large Context Needs)
+
+Use Task tool with `subagent_type=Explore` when:
+- Need to search multiple BC27 docs
+- Researching unfamiliar module
+- Finding specific pattern across codebase
+- Initial codebase exploration
+
+**Example:**
+```
+User: "How does BC27 handle inventory valuation?"
+→ Use Task tool to explore BC27 docs
+→ Task returns summary with file references
+→ Load specific files only if user needs details
+```
+
+---
+
+## File Exclusion (.claudeignore / .cursorignore)
+
+Already excluded from context (see `.claudeignore`):
+- Build artifacts (`.alpackages/`, `*.app`)
+- Symbols (`symbols/`, `.alcache/`)
+- Generated files (`.agent/`, `rad.json`)
+- Translations (`Translations/`, `*.xlf`)
+- Logs, temp files, backups
+- Sensitive files (`*.env`, `*.key`, `launch.json`)
+
+---
+
+## Success Metrics
+
+**Good token usage:**
+- Simple AL question: <2k tokens context
+- Event discovery: <5k tokens context
+- Complex feature: <20k tokens context
+
+**Poor token usage:**
+- Loading all BC27 docs immediately
+- Loading multiple event catalogs when only need one
+- Keeping completed code in context
+
+---
+
+**Version:** 1.0
+**Last Updated:** 2025-11-08
+**Maintenance:** Update when new large files added to project

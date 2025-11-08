@@ -35,8 +35,10 @@ Auto-loaded AI context based on file patterns:
 | `007-deployment-security.mdc` | `*Install*`, `*Upgrade*`, `*Permission*` | Security, upgrades | 113 |
 | `008-bc27-quick-reference.mdc` | `*.al`, `app.json` | BC27 modules quick ref | 107 |
 | `009-bc27-architecture.mdc` | @-mention | BC27 architecture details | 201 |
+| `010-event-discovery.mdc` | Event queries | Find BC27 events workflow | 348 |
+| `011-llm-optimization.mdc` | Always | Token efficiency, context loading | 100 |
 
-**Total:** ~887 lines of AI context rules
+**Total:** ~1,335 lines of AI context rules
 
 ###Claude Commands (`.claude/commands/`)
 Workflow automation via slash commands:
@@ -52,7 +54,10 @@ Workflow automation via slash commands:
 | `/auto-install-rules` | Install template to project | haiku |
 
 ### BC27 Base Code Index (`/BC27/`)
-Complete reference documentation (360 KB, 17 files):
+Complete reference documentation (360 KB, 18 files):
+
+**⚡ START HERE (Token-Optimized):**
+0. **BC27_LLM_QUICKREF.md** - ⭐ Quick reference for LLMs (450 lines vs. 11k+ full docs)
 
 **Core Documentation**:
 1. **BC27_INDEX_README.md** - Navigation guide
@@ -76,6 +81,8 @@ Complete reference documentation (360 KB, 17 files):
 15. **BC27_EVENTS_FIXEDASSETS.md** - 15+ depreciation, acquisition, disposal events
 16. **BC27_EVENTS_WAREHOUSE.md** - 18+ picks, put-aways, bins, movements
 17. **BC27_EVENTS_ASSEMBLY.md** - 12+ assembly orders, ATO, BOM events
+
+**💡 LLM Usage Tip:** Always start with BC27_LLM_QUICKREF.md for 80-90% token savings on BC27 queries. Load detailed docs only when quick ref is insufficient.
 
 ## Development Workflow
 
@@ -110,6 +117,42 @@ Complete reference documentation (360 KB, 17 files):
    → Output: ESC compliance report with file:line references
    → Check: ALL standards (naming, patterns, performance, security)
 \`\`\`
+
+---
+
+## LLM Optimization (Token Efficiency)
+
+### Context Loading Strategy
+
+**Always loaded:**
+- This file (CLAUDE.md) - Project overview
+- `000-project-overview.mdc` - Configuration
+- `011-llm-optimization.mdc` - Loading strategies
+
+**Load on demand:**
+- BC27 queries → Start with `BC27_LLM_QUICKREF.md` (450 lines) NOT full docs (11k+ lines)
+- Event discovery → Use `010-event-discovery.mdc` workflow + specific event catalog
+- Coding tasks → Load `001-naming-conventions.mdc` + `002-development-patterns.mdc`
+
+### Token Savings
+
+| Approach | Token Usage | Savings |
+|----------|-------------|---------|
+| Old: Load all BC27 docs | ~50k tokens | 0% |
+| New: Use BC27_LLM_QUICKREF.md first | ~2k tokens | 96% ⭐ |
+| Old: Load all event catalogs | ~20k tokens | 0% |
+| New: Load specific catalog only | ~6k tokens | 70% ⭐ |
+
+### Exclusion Files
+
+- **`.claudeignore`** - Claude Code context exclusions (build artifacts, symbols, logs)
+- **`.cursorignore`** - Cursor AI context exclusions (same as .claudeignore)
+
+**Excluded:** Build artifacts, symbols, generated files, translations, logs, sensitive data (~40-60% token reduction)
+
+### Full Optimization Guide
+
+**See:** `LLM_OPTIMIZATION_GUIDE.md` for complete recommendations, patterns, and best practices.
 
 ---
 
