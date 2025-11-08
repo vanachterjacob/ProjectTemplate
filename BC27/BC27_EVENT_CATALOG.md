@@ -8,6 +8,45 @@ Complete reference for event subscribers and publishers in Business Central 27. 
 
 ---
 
+## 📊 Coverage Scope
+
+This catalog provides **core posting and document events** most commonly used in BC27 extensions. For specialized events, see module-specific catalogs.
+
+### ✅ Fully Documented (This File)
+
+**BaseApp Core Events** (~50 events):
+- ✅ Sales & Purchase posting events
+- ✅ Inventory & warehouse posting events
+- ✅ G/L posting & bank account events
+- ✅ Core manufacturing events (production orders, capacity)
+- ✅ Core service management events
+- ✅ Master data validation events
+
+### 📁 Module-Specific Catalogs
+
+For detailed coverage of specialized modules, see:
+- **[Manufacturing Events](./events/BC27_EVENTS_MANUFACTURING.md)** - 30+ production, BOM, routing events
+- **[Service Management Events](./events/BC27_EVENTS_SERVICE.md)** - 20+ service order, contract events
+- **[Jobs & Projects Events](./events/BC27_EVENTS_JOBS.md)** - 15+ job planning, WIP events
+- **[API & Integration Events](./events/BC27_EVENTS_API.md)** - 25+ REST API, webhook events
+
+### 🔍 Finding Undocumented Events
+
+**If event not found in catalogs**:
+1. Use search strategies in ["Finding Events in Source Code"](#finding-events-in-source-code) section below
+2. Search BC27 source: [Stefan Maron's Repository](https://github.com/StefanMaron/MSDyn365BC.Code.History/tree/be-27)
+3. Check the **[Event Index](./BC27_EVENT_INDEX.md)** for keyword search across all events
+
+### ⚠️ Out of Scope
+
+**Not covered** (internal/deprecated):
+- ❌ Internal events (marked with `local` or `internal`)
+- ❌ Obsolete events (marked with `Obsolete` tag)
+- ❌ Test codeunit events
+- ❌ Legacy upgrade events
+
+---
+
 ## Table of Contents
 
 1. [Event Pattern Guide](#event-pattern-guide)
@@ -437,50 +476,183 @@ end;
 
 ## Finding Events in Source Code
 
+### Quick Reference: Search Workflow
+
+**Recommended approach when event not in catalog**:
+1. ✅ **Check Event Index first**: [BC27_EVENT_INDEX.md](./BC27_EVENT_INDEX.md) - Keyword search across all events
+2. ✅ **Use AL Language tools**: VS Code "Go to Definition" (F12) on codeunit names
+3. ✅ **Search BC27 source**: GitHub repository or local BC symbols
+4. ✅ **Use Cursor rule**: See `.cursor/rules/010-event-discovery.mdc` for LLM-assisted discovery
+
+---
+
 ### Search Strategies
 
-#### 1. **By Event Name Pattern**
+#### 1. **By Event Name Pattern (Grep/Ripgrep)**
 
 ```bash
 # Find all OnBefore sales posting events
-grep -r "OnBefore.*Sales.*Post" --include="*.al"
+grep -r "OnBefore.*Sales.*Post" --include="*.al" -A 5
 
 # Find all event publishers in a codeunit
 grep -r "\[IntegrationEvent\|BusinessEvent\]" SalesPost.Codeunit.al -A 3
 
 # Find all subscribers to a specific event
 grep -r "EventSubscriber.*OnBeforePostSalesDoc" --include="*.al"
+
+# Find events with "Handled" parameter (cancellable events)
+grep -r "IntegrationEvent.*var.*Handled.*Boolean" --include="*.al"
+
+# Find all validation events
+grep -r "OnValidate.*Event" --include="*.al" -B 2 -A 5
+
+# Search with ripgrep (faster for large codebases)
+rg "IntegrationEvent" --type al -A 5 | rg "OnBefore.*Post"
 ```
 
-#### 2. **By Object Type**
+#### 2. **By Object/Module**
 
 ```bash
-# Find all events published by Sales-Post codeunit
-grep -r "IntegrationEvent" BaseApp/Sales/Posting/SalesPost.Codeunit.al
+# Find ALL events in Sales-Post codeunit (list complete event catalog)
+grep -E "^\s+(local )?procedure On(Before|After)" SalesPost.Codeunit.al
 
-# Find all table trigger events on Sales Header
-grep -r "OnAfter.*Event\|OnBefore.*Event" BaseApp/Sales/Document/SalesHeader.Table.al
+# Find events in specific module/folder
+grep -r "IntegrationEvent" BaseApp/Sales/ --include="*.al" | grep "procedure On"
+
+# Find table trigger events (OnAfter/OnBefore Insert/Modify/Delete/Validate)
+grep -r "On(After|Before)(Insert|Modify|Delete)Event" --include="*.al"
+
+# Find all events in a namespace/module
+grep -r "IntegrationEvent" BaseApp/Manufacturing/ --include="*.al" -l | xargs -I {} basename {}
 ```
 
-#### 3. **Using BC27 Source Repository**
+#### 3. **By Business Operation**
+
+```bash
+# Find events related to posting operations
+grep -r "IntegrationEvent.*Post" --include="*.al" | grep "procedure"
+
+# Find events related to validation
+grep -r "IntegrationEvent.*Validate" --include="*.al" | grep "procedure"
+
+# Find events related to calculation
+grep -r "IntegrationEvent.*Calculate" --include="*.al" | grep "procedure"
+
+# Find events related to specific document types
+grep -r "IntegrationEvent.*(Sales|Purchase|Transfer)" --include="*.al" | grep "procedure"
+```
+
+#### 4. **Using VS Code/Cursor (AL Language Extension)**
+
+**Fastest method for finding events**:
+
+1. **Go to Definition** (F12):
+   - Open any AL file
+   - Type codeunit name: `Codeunit::"Sales-Post"`
+   - Press F12 → Opens codeunit definition
+   - Search within file for `[IntegrationEvent]`
+
+2. **Find All References** (Shift+F12):
+   - Place cursor on event name
+   - Press Shift+F12 → Shows all subscribers
+
+3. **Symbol Search** (Ctrl+T):
+   - Press Ctrl+T
+   - Type: `OnBeforePostSalesDoc`
+   - Shows definition + all subscribers
+
+4. **Workspace Search** (Ctrl+Shift+F):
+   ```
+   Search: \[IntegrationEvent.*\]
+   Files to include: **/*.al
+   ```
+
+#### 5. **Using BC27 Source Repository**
 
 **Repository**: [MSDyn365BC.Code.History](https://github.com/StefanMaron/MSDyn365BC.Code.History)
 **Branch**: `be-27` (Belgium localization, BC v27)
 
 **GitHub Search Examples**:
 ```
+# Find specific event
 repo:StefanMaron/MSDyn365BC.Code.History IntegrationEvent OnBeforePostSalesDoc
-repo:StefanMaron/MSDyn365BC.Code.History EventSubscriber "Sales-Post"
+
+# Find all events in a codeunit
+repo:StefanMaron/MSDyn365BC.Code.History "Sales-Post" IntegrationEvent
+
+# Find subscribers to an event
+repo:StefanMaron/MSDyn365BC.Code.History EventSubscriber "OnBeforePostSalesDoc"
+
+# Find events by module
+repo:StefanMaron/MSDyn365BC.Code.History path:Manufacturing IntegrationEvent
 ```
 
-#### 4. **Event Discovery Workflow**
+**Advanced GitHub Code Search**:
+```
+# Find cancellable events (with Handled parameter)
+repo:StefanMaron/MSDyn365BC.Code.History "IntegrationEvent" "var Handled"
 
-1. **Identify Operation**: What base functionality do you want to extend? (e.g., "sales posting")
-2. **Find Publisher Object**: Locate the codeunit/table that handles it (e.g., Codeunit 80 "Sales-Post")
+# Find events added/modified in BC27
+repo:StefanMaron/MSDyn365BC.Code.History IntegrationEvent is:modified
+
+# Find events in specific file type
+repo:StefanMaron/MSDyn365BC.Code.History IntegrationEvent extension:al
+```
+
+#### 6. **Event Discovery Workflow**
+
+**Step-by-step approach**:
+
+1. **Identify Operation**: What base functionality do you want to extend?
+   - Example: "I want to validate sales orders before posting"
+
+2. **Find Publisher Object**: Locate the codeunit/table that handles it
+   - Sales posting → Codeunit 80 "Sales-Post"
+   - Item posting → Codeunit 22 "Item Jnl.-Post Line"
+   - Use [BC27_ARCHITECTURE.md](./BC27_ARCHITECTURE.md) to identify objects
+
 3. **Search for Events**: Look for `[IntegrationEvent]` attributes
+   ```bash
+   grep -A 10 "\[IntegrationEvent\]" SalesPost.Codeunit.al
+   ```
+
 4. **Check Parameters**: Verify event signature matches your needs
+   - Need to modify header? → Check for `var SalesHeader` parameter
+   - Need to cancel operation? → Check for `var Handled` parameter
+
 5. **Look for Handled Pattern**: Check if event supports cancellation
+   ```bash
+   grep -B 2 -A 5 "OnBeforePostSalesDoc" | grep "Handled"
+   ```
+
 6. **Find Examples**: Search for existing subscribers to see usage patterns
+   ```bash
+   grep -r "EventSubscriber.*OnBeforePostSalesDoc" --include="*.al" -A 10
+   ```
+
+#### 7. **Finding Events by Category**
+
+**Common event categories**:
+
+```bash
+# Posting events
+grep -r "IntegrationEvent.*Post" --include="*.al" | grep "procedure On"
+
+# Validation events
+grep -r "OnValidate.*Event" --include="*.al"
+
+# Document lifecycle
+grep -r "On(Before|After)(Insert|Modify|Delete)" --include="*.al"
+
+# Calculation events
+grep -r "OnAfterCalculate" --include="*.al"
+
+# Report events
+grep -r "OnBefore.*Report|OnAfter.*Report" --include="*.al"
+
+# Job Queue events
+grep -r "OnBeforeJobQueueScheduleTask" --include="*.al"
+```
 
 ### Common Publisher Objects
 

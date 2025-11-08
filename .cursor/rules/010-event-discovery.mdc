@@ -1,0 +1,348 @@
+# Event Discovery - Finding BC27 Events
+
+**Purpose**: Guide AI assistants in discovering BC27 event subscribers when user requests event-based extensions.
+
+**When**: User asks to find an event, add event subscriber, or extend base functionality
+
+---
+
+## Discovery Workflow
+
+When user asks questions like:
+- "How do I validate before sales posting?"
+- "Find the event for item quantity changes"
+- "I need to extend purchase order creation"
+
+Follow this workflow:
+
+### Step 1: Check Event Catalogs First
+
+**Always start here** - Most common events are documented:
+
+1. **Main Catalog**: Check `BC27/BC27_EVENT_CATALOG.md`
+   - Core posting events (Sales, Purchase, Inventory, G/L)
+   - Master data validation events
+   - Search by operation name
+
+2. **Module-Specific Catalogs**: If main catalog doesn't have it:
+   - Manufacturing: `BC27/events/BC27_EVENTS_MANUFACTURING.md`
+   - Service: `BC27/events/BC27_EVENTS_SERVICE.md`
+   - Jobs: `BC27/events/BC27_EVENTS_JOBS.md`
+   - APIs: `BC27/events/BC27_EVENTS_API.md`
+
+3. **Event Index**: For keyword search across ALL events:
+   - Check `BC27/BC27_EVENT_INDEX.md`
+   - Search by keyword (e.g., "validate", "calculate", "post")
+
+### Step 2: Identify Publisher Object
+
+If event not found in catalogs, identify the BC27 object that handles the operation:
+
+**Common patterns**:
+```
+Operation → Object
+-----------------
+Sales posting → Codeunit 80 "Sales-Post"
+Purchase posting → Codeunit 90 "Purch.-Post"
+Item posting → Codeunit 22 "Item Jnl.-Post Line"
+G/L posting → Codeunit 12 "Gen. Jnl.-Post Line"
+Production orders → Codeunit 5406 "Prod. Order Status Mgmt."
+Service orders → Codeunit 5980 "Service-Post"
+```
+
+**Use BC27 architecture docs** to find objects:
+- `BC27/BC27_ARCHITECTURE.md` - Layer structure
+- `BC27/BC27_MODULES_OVERVIEW.md` - Module details
+
+### Step 3: Search for Events
+
+Once you know the object, use these search strategies:
+
+#### A. GitHub Search (Fastest)
+
+```
+repo:StefanMaron/MSDyn365BC.Code.History IntegrationEvent [ObjectName]
+```
+
+Example:
+```
+repo:StefanMaron/MSDyn365BC.Code.History IntegrationEvent "Sales-Post"
+```
+
+#### B. Grep/Ripgrep (If codebase available)
+
+```bash
+# Find all events in a codeunit
+grep -A 10 "\[IntegrationEvent\]" SalesPost.Codeunit.al
+
+# Find events by pattern
+grep -r "OnBefore.*Sales.*Post" --include="*.al" -A 5
+
+# Find cancellable events (with Handled parameter)
+grep -r "IntegrationEvent.*var.*Handled" --include="*.al"
+```
+
+### Step 4: Present Event Details
+
+When you find an event, **always provide**:
+
+1. **Event name**: e.g., `OnBeforePostSalesDoc`
+2. **Publisher**: Object type and ID (e.g., "Codeunit 80 'Sales-Post'")
+3. **When it fires**: Brief description
+4. **Parameters**: List with types (especially note `var` parameters)
+5. **Cancellable**: Whether it has `Handled` parameter
+6. **Common use cases**: 2-3 examples
+7. **Code template**: Complete EventSubscriber example
+8. **Source link**: GitHub URL if available
+
+**Template**:
+```markdown
+### [EventName]
+- **Publisher**: [Object]
+- **When**: [Description]
+- **Parameters**:
+  - `var [RecordName]`: Can modify record
+  - `var Handled`: Set to true to cancel operation
+- **Cancellable**: Yes/No
+- **Common Uses**:
+  - [Use case 1]
+  - [Use case 2]
+- **Source**: [GitHub link]
+
+**Example**:
+\`\`\`al
+[EventSubscriber(ObjectType::Codeunit, Codeunit::"[CodeunitName]", '[EventName]', '', false, false)]
+local procedure [ProcedureName]([Parameters])
+begin
+    // Your code here
+end;
+\`\`\`
+```
+
+---
+
+## Event Naming Patterns
+
+Understanding these helps predict event names:
+
+| Pattern | When Fired | Typical Parameters |
+|---------|------------|-------------------|
+| `OnBefore[Action]` | Before operation | `var Record`, `var Handled` |
+| `OnAfter[Action]` | After operation | `Record` (often readonly) |
+| `OnValidate[Field]` | Field validation | `var Rec`, `var xRec`, `CurrFieldNo` |
+| `On[Document]Insert/Modify/Delete` | Table triggers | `var Rec`, `RunTrigger` |
+| `OnAfterCalculate[Field]` | After calculation | `var Record` |
+| `OnBeforeCheck[Condition]` | Before validation | `var Record`, `var Handled` |
+
+---
+
+## Common User Questions → Event Mapping
+
+| User Request | Likely Event | Publisher Object |
+|--------------|--------------|------------------|
+| "Validate before posting sales" | `OnBeforePostSalesDoc` | Codeunit 80 "Sales-Post" |
+| "Modify sales line when quantity changes" | `OnAfterValidateEvent (Quantity)` | Table 37 "Sales Line" |
+| "Add custom field to G/L entry" | `OnBeforePostGenJnlLine` | Codeunit 12 "Gen. Jnl.-Post Line" |
+| "Check inventory before posting" | `OnBeforePostItemJnlLine` | Codeunit 22 "Item Jnl.-Post Line" |
+| "Update external system after posting" | `OnAfterPost[Document]Doc` | Posting codeunits |
+| "Prevent document deletion" | `OnBeforeDeleteEvent` | Document tables |
+| "Custom price calculation" | `OnAfterValidateEvent (Unit Price)` | Line tables |
+| "Modify production order" | `OnBeforePostProdOrder` | Codeunit 5406 |
+
+---
+
+## Handling "Event Not Found"
+
+If you cannot find the event after checking:
+1. ✅ Event catalogs (main + module-specific)
+2. ✅ Event index
+3. ✅ GitHub search
+4. ✅ Grep in BC27 source
+
+**Tell the user**:
+1. Explain what you searched and where
+2. Suggest the closest events you found
+3. Recommend alternative approaches:
+   - Table extensions with trigger overrides
+   - Page extensions with field modifications
+   - Custom codeunits with direct calls
+4. Ask if they want to search for related events in nearby functionality
+
+**Example response**:
+```
+I searched for events related to [operation] in:
+- BC27_EVENT_CATALOG.md (core events)
+- BC27_EVENTS_[MODULE].md (module events)
+- BC27_EVENT_INDEX.md (keyword search)
+- GitHub: StefanMaron/MSDyn365BC.Code.History
+
+I couldn't find a specific event for [exact operation], but found these alternatives:
+1. [Event A] - Fires [when], allows [what]
+2. [Event B] - Similar functionality for [related operation]
+
+Alternative approaches:
+- Extend Table X with custom field + validation
+- Create custom codeunit that [operation] calls
+
+Would you like to:
+- Try one of the alternative events?
+- Implement using table extension?
+- Search for events in a related area?
+```
+
+---
+
+## Performance Considerations
+
+When recommending events:
+
+### ⚠️ High-Frequency Events (Use carefully)
+These fire very often - keep subscribers FAST:
+- `OnAfterValidateEvent` on commonly edited fields
+- Table trigger events (Insert/Modify/Delete)
+- Calculation events in loops
+
+**Recommendation**:
+```al
+// Keep fast - under 50ms ideal
+[EventSubscriber(...)]
+local procedure QuickOperation(var Rec: Record)
+begin
+    // Fast validation only
+    if Rec."Field" = '' then
+        Error('Required');
+end;
+```
+
+### ✅ Lower-Frequency Events (Safe for heavier logic)
+- Document posting events (OnBeforePost, OnAfterPost)
+- Status change events
+- Report generation events
+
+**Recommendation**:
+```al
+// Can do heavier processing
+[EventSubscriber(...)]
+local procedure IntegrationOperation(var Rec: Record)
+begin
+    // External API calls OK here
+    CallExternalSystem(Rec);
+end;
+```
+
+---
+
+## Error Handling Pattern
+
+Always include error handling in event subscribers:
+
+```al
+[EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", 'OnBeforePostSalesDoc', '', false, false)]
+local procedure ValidateBeforePost(var SalesHeader: Record "Sales Header"; var Handled: Boolean)
+var
+    CustomValidation: Codeunit "ABC Custom Validation";
+begin
+    // Clear, specific error messages
+    if not CustomValidation.ValidateDocument(SalesHeader) then begin
+        Error('Sales order %1 failed custom validation: %2', SalesHeader."No.", CustomValidation.GetLastError());
+        Handled := true; // Cancel posting
+    end;
+end;
+```
+
+---
+
+## Examples for Common Scenarios
+
+### Scenario 1: "Validate custom field before posting"
+```al
+[EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", 'OnBeforePostSalesDoc', '', false, false)]
+local procedure ValidateCustomField(var SalesHeader: Record "Sales Header"; var Handled: Boolean)
+begin
+    if SalesHeader."ABC Custom Field" = '' then begin
+        Error('ABC Custom Field must be filled before posting');
+        Handled := true;
+    end;
+end;
+```
+
+### Scenario 2: "Update external system after posting"
+```al
+[EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", 'OnAfterPostSalesDoc', '', false, false)]
+local procedure SendToExternalSystem(var SalesHeader: Record "Sales Header"; SalesInvNo: Code[20])
+var
+    ABCIntegration: Codeunit "ABC Integration";
+begin
+    if SalesInvNo <> '' then
+        ABCIntegration.SendInvoice(SalesHeader, SalesInvNo);
+end;
+```
+
+### Scenario 3: "Calculate custom pricing when quantity changes"
+```al
+[EventSubscriber(ObjectType::Table, Database::"Sales Line", 'OnAfterValidateEvent', 'Quantity', false, false)]
+local procedure CalculateCustomPrice(var Rec: Record "Sales Line"; var xRec: Record "Sales Line")
+var
+    ABCPricing: Codeunit "ABC Custom Pricing";
+begin
+    if Rec.Quantity <> xRec.Quantity then
+        ABCPricing.ApplyVolumeDiscount(Rec);
+end;
+```
+
+---
+
+## Integration with Development Workflow
+
+After finding event, guide user through:
+
+1. **Event Subscriber Codeunit**:
+   ```al
+   codeunit 77100 "ABC Event Subscribers"
+   {
+       // Group related subscribers by area
+       // Sales, Purchase, Inventory, etc.
+   }
+   ```
+
+2. **Testing**:
+   - Create test codeunit
+   - Verify event fires when expected
+   - Test cancellation (if Handled parameter)
+
+3. **Documentation**:
+   - Add comment explaining WHY subscriber exists
+   - Document expected behavior
+   - Note any dependencies
+
+4. **Review** (optional):
+   - Use `/review` command for ESC compliance
+   - Check naming conventions (ABC prefix)
+   - Verify error handling
+
+---
+
+## Key Reminders
+
+✅ **Always check event catalogs FIRST** before searching GitHub
+✅ **Provide complete code examples** with actual event names and objects
+✅ **Explain WHEN event fires** and what can be done
+✅ **Note cancellation capability** (Handled parameter)
+✅ **Warn about high-frequency events** (performance)
+✅ **Include error handling** in all examples
+✅ **Link to source** (GitHub) when possible
+
+❌ **Don't guess** event names - search or say "not found"
+❌ **Don't recommend obsolete** events
+❌ **Don't forget to mention** if event is in module-specific catalog
+❌ **Don't use internal events** (not meant for extensions)
+
+---
+
+## References
+
+- **Event Catalogs**: `BC27/BC27_EVENT_CATALOG.md` and `BC27/events/*.md`
+- **Event Index**: `BC27/BC27_EVENT_INDEX.md`
+- **Architecture**: `BC27/BC27_ARCHITECTURE.md`
+- **Extension Patterns**: `BC27/BC27_EXTENSION_POINTS.md`
+- **Source Code**: [BC27 GitHub](https://github.com/StefanMaron/MSDyn365BC.Code.History/tree/be-27)
