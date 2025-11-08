@@ -53,6 +53,30 @@ Workflow automation via slash commands:
 | `/update_doc` | Maintain documentation | sonnet |
 | `/auto-install-rules` | Install template to project | haiku |
 
+### Context Presets (`.claude/skills/context-presets/`)
+⚡ **Quick context loading** - Load complete domain context with a single skill invocation:
+
+| Preset | Purpose | Time Saved |
+|--------|---------|------------|
+| `sales-context` | Sales & customer context (docs, events, patterns) | 10-15 min |
+| `posting-context` | G/L posting & ledger context | 10-15 min |
+| `api-context` | API & integration context | 10-15 min |
+| `warehouse-context` | Warehouse & inventory context | 10-15 min |
+| `manufacturing-context` | Production & BOM context | 10-15 min |
+| `performance-context` | Performance optimization & ESC rules | 10-15 min |
+
+**Usage:**
+- **Cursor AI:** `@sales-context` then ask your question
+- **Claude Code:** Use the skill, then describe your task
+
+**Benefits:**
+- ✅ Complete domain context loaded instantly
+- ✅ No manual file searching (2-5 min saved)
+- ✅ Never forget required ESC rules
+- ✅ Pattern examples included automatically
+
+**See:** `.claude/skills/context-presets/README.md` for details
+
 ### BC27 Base Code Index (`/BC27/`)
 Complete reference documentation (360 KB, 18 files):
 
@@ -133,6 +157,7 @@ Complete reference documentation (360 KB, 18 files):
 - BC27 queries → Start with `BC27_LLM_QUICKREF.md` (450 lines) NOT full docs (11k+ lines)
 - Event discovery → Use `010-event-discovery.mdc` workflow + specific event catalog
 - Coding tasks → Load `001-naming-conventions.mdc` + `002-development-patterns.mdc`
+- **Domain tasks → Use context presets** (`@sales-context`, `@api-context`, etc.) **⭐ NEW**
 
 ### Token Savings
 
@@ -142,6 +167,8 @@ Complete reference documentation (360 KB, 18 files):
 | New: Use BC27_LLM_QUICKREF.md first | ~2k tokens | 96% ⭐ |
 | Old: Load all event catalogs | ~20k tokens | 0% |
 | New: Load specific catalog only | ~6k tokens | 70% ⭐ |
+| Old: Manually load domain files (5-8 files) | ~8k tokens | 0% |
+| New: Use context preset (1 skill) | ~3k tokens | 62% ⭐ |
 
 ### Exclusion Files
 
