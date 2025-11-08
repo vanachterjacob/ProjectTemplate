@@ -14,6 +14,17 @@ This index consists of multiple markdown files organized by topic for easy navig
 - **[BC27_FEATURES_INDEX.md](./BC27_FEATURES_INDEX.md)** - Complete feature index and capabilities
 - **[BC27_INTEGRATION_GUIDE.md](./BC27_INTEGRATION_GUIDE.md)** - External integrations and cloud services
 
+### Source Code Integration
+- **[BC27_EVENT_CATALOG.md](./BC27_EVENT_CATALOG.md)** - Core posting & document events (~50 events)
+- **[BC27_EVENT_INDEX.md](./BC27_EVENT_INDEX.md)** - Keyword search across ALL events (~175 events)
+- **[BC27_EXTENSION_POINTS.md](./BC27_EXTENSION_POINTS.md)** - Table and page extension patterns with field placement guidelines
+
+### Module-Specific Event Catalogs
+- **[Manufacturing Events](./events/BC27_EVENTS_MANUFACTURING.md)** - 30+ production, BOM, routing, capacity events
+- **[Service Events](./events/BC27_EVENTS_SERVICE.md)** - 20+ service order, contract, resource events
+- **[Jobs Events](./events/BC27_EVENTS_JOBS.md)** - 15+ job planning, WIP, budget events
+- **[API Events](./events/BC27_EVENTS_API.md)** - 25+ REST API, webhook, integration events
+
 ## 🎯 Quick Navigation
 
 ### By Use Case
@@ -30,7 +41,7 @@ This index consists of multiple markdown files organized by topic for easy navig
 - **Email** → See [Email & Communications](./BC27_MODULES_BY_CATEGORY.md#email--communications-modules-7)
 
 ### By Role
-- **Extension Developer** → Start with [Architecture](./BC27_ARCHITECTURE.md) then [Dependency Reference](./BC27_DEPENDENCY_REFERENCE.md)
+- **Extension Developer** → Start with [Event Catalog](./BC27_EVENT_CATALOG.md) and [Extension Points](./BC27_EXTENSION_POINTS.md), then review [Architecture](./BC27_ARCHITECTURE.md)
 - **Architect** → Review [Architecture](./BC27_ARCHITECTURE.md) and [Integration Guide](./BC27_INTEGRATION_GUIDE.md)
 - **Consultant** → Browse [Features Index](./BC27_FEATURES_INDEX.md) and [Modules by Category](./BC27_MODULES_BY_CATEGORY.md)
 - **System Admin** → See [Integration Guide](./BC27_INTEGRATION_GUIDE.md) and [Admin Configuration](./BC27_MODULES_BY_CATEGORY.md#admin--configuration-modules-6)
@@ -83,20 +94,20 @@ BusinessFoundation (Shared Logic)
 
 ## 📖 How to Use This Index
 
-### Step 1: Understand the Big Picture
-Start with [BC27_ARCHITECTURE.md](./BC27_ARCHITECTURE.md) to understand how BC27 is organized.
+### For Extension Development
 
-### Step 2: Find Relevant Modules
-Use [BC27_MODULES_BY_CATEGORY.md](./BC27_MODULES_BY_CATEGORY.md) to find modules related to your needs.
+1. **Find Extension Points** - Use [BC27_EVENT_CATALOG.md](./BC27_EVENT_CATALOG.md) to find event subscribers for your needs
+2. **Extend Tables/Pages** - Consult [BC27_EXTENSION_POINTS.md](./BC27_EXTENSION_POINTS.md) for table and page extension patterns
+3. **Understand Architecture** - Review [BC27_ARCHITECTURE.md](./BC27_ARCHITECTURE.md) to understand BC27 layering
+4. **Check Dependencies** - Verify module dependencies in [BC27_DEPENDENCY_REFERENCE.md](./BC27_DEPENDENCY_REFERENCE.md)
 
-### Step 3: Get Detailed Information
-Go to [BC27_MODULES_OVERVIEW.md](./BC27_MODULES_OVERVIEW.md) for detailed descriptions of specific modules.
+### For Architecture & Planning
 
-### Step 4: Understand Dependencies
-Consult [BC27_DEPENDENCY_REFERENCE.md](./BC27_DEPENDENCY_REFERENCE.md) to see how modules relate to each other.
-
-### Step 5: Plan Integrations
-Review [BC27_INTEGRATION_GUIDE.md](./BC27_INTEGRATION_GUIDE.md) for external system connections.
+1. **Understand the Big Picture** - Start with [BC27_ARCHITECTURE.md](./BC27_ARCHITECTURE.md) to understand how BC27 is organized
+2. **Find Relevant Modules** - Use [BC27_MODULES_BY_CATEGORY.md](./BC27_MODULES_BY_CATEGORY.md) to find modules related to your needs
+3. **Get Detailed Information** - Go to [BC27_MODULES_OVERVIEW.md](./BC27_MODULES_OVERVIEW.md) for detailed descriptions of specific modules
+4. **Understand Dependencies** - Consult [BC27_DEPENDENCY_REFERENCE.md](./BC27_DEPENDENCY_REFERENCE.md) to see how modules relate to each other
+5. **Plan Integrations** - Review [BC27_INTEGRATION_GUIDE.md](./BC27_INTEGRATION_GUIDE.md) for external system connections
 
 ## 🔗 Important Links
 
@@ -115,6 +126,13 @@ Review [BC27_INTEGRATION_GUIDE.md](./BC27_INTEGRATION_GUIDE.md) for external sys
 | **BC27_DEPENDENCY_REFERENCE.md** | Module relationships | Dependency chains |
 | **BC27_FEATURES_INDEX.md** | Capability reference | All features |
 | **BC27_INTEGRATION_GUIDE.md** | External integrations | 15+ services |
+| **BC27_EVENT_CATALOG.md** | Core posting & document events | ~50 events |
+| **BC27_EVENT_INDEX.md** | Keyword search across all events | ~175 events |
+| **BC27_EXTENSION_POINTS.md** | Table and page extensions | Common extension scenarios |
+| **events/BC27_EVENTS_MANUFACTURING.md** | Manufacturing events | 30+ events |
+| **events/BC27_EVENTS_SERVICE.md** | Service management events | 20+ events |
+| **events/BC27_EVENTS_JOBS.md** | Jobs & projects events | 15+ events |
+| **events/BC27_EVENTS_API.md** | API & integration events | 25+ events |
 
 ---
 

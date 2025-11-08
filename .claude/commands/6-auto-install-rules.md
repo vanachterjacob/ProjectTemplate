@@ -61,7 +61,7 @@ The installation script will:
 - Copy `.claude/commands/` (Workflow slash commands)
 - Copy `CLAUDE.md` (AI context)
 - Copy `.cursorignore` (File exclusions)
-- Copy `BC27/` (Business Central 27 base code comprehensive index - 7 documentation files)
+- Copy `BC27/` (Business Central 27 base code comprehensive index - 14 files including events/)
 - Replace ABC prefix with user's prefix throughout all files
 - Install hooks to `~/.cursor/hooks.json`
 - Create `.agent/` directory structure for documentation
