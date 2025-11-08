@@ -6,6 +6,12 @@ Welcome to the comprehensive index of Microsoft Dynamics 365 Business Central ve
 
 This index consists of multiple markdown files organized by topic for easy navigation:
 
+### ⚡ Quick Start (For LLMs & Developers)
+- **[BC27_LLM_QUICKREF.md](./BC27_LLM_QUICKREF.md)** - ⭐ **START HERE** - Token-optimized quick reference (450 lines vs. 11k+ full docs)
+  - Top 20 modules, event lookup tables, common patterns
+  - 80-90% faster for LLMs, great for quick human reference too
+  - Load detailed docs only when quick ref is insufficient
+
 ### Core Documentation
 - **[BC27_MODULES_OVERVIEW.md](./BC27_MODULES_OVERVIEW.md)** - Complete inventory of all 73 modules with detailed descriptions
 - **[BC27_ARCHITECTURE.md](./BC27_ARCHITECTURE.md)** - System architecture, layering, and design patterns
@@ -121,24 +127,25 @@ BusinessFoundation (Shared Logic)
 
 ## 📝 Document Versions
 
-| Document | Purpose | Scope |
-|----------|---------|-------|
-| **BC27_MODULES_OVERVIEW.md** | Complete module listing with details | All 73 modules |
-| **BC27_ARCHITECTURE.md** | System design and layering | Core architecture |
-| **BC27_MODULES_BY_CATEGORY.md** | Functional organization | 22 categories |
-| **BC27_DEPENDENCY_REFERENCE.md** | Module relationships | Dependency chains |
-| **BC27_FEATURES_INDEX.md** | Capability reference | All features |
-| **BC27_INTEGRATION_GUIDE.md** | External integrations | 15+ services |
-| **BC27_EVENT_CATALOG.md** | Core posting & document events | ~50 events |
-| **BC27_EVENT_INDEX.md** | Keyword search across all events | ~210 events |
-| **BC27_EXTENSION_POINTS.md** | Table and page extensions | Common extension scenarios |
-| **events/BC27_EVENTS_MANUFACTURING.md** | Manufacturing events | 30+ events |
-| **events/BC27_EVENTS_SERVICE.md** | Service management events | 20+ events |
-| **events/BC27_EVENTS_JOBS.md** | Jobs & projects events | 15+ events |
-| **events/BC27_EVENTS_API.md** | API & integration events | 25+ events |
-| **events/BC27_EVENTS_FIXEDASSETS.md** | Fixed assets events | 15+ events |
-| **events/BC27_EVENTS_WAREHOUSE.md** | Advanced warehouse events | 18+ events |
-| **events/BC27_EVENTS_ASSEMBLY.md** | Assembly events | 12+ events |
+| Document | Purpose | Scope | Priority |
+|----------|---------|-------|----------|
+| **BC27_LLM_QUICKREF.md** | ⚡ Quick reference for LLMs | Summary of all docs | ⭐ START |
+| **BC27_MODULES_OVERVIEW.md** | Complete module listing with details | All 73 modules | Detail |
+| **BC27_ARCHITECTURE.md** | System design and layering | Core architecture | Detail |
+| **BC27_MODULES_BY_CATEGORY.md** | Functional organization | 22 categories | Detail |
+| **BC27_DEPENDENCY_REFERENCE.md** | Module relationships | Dependency chains | Detail |
+| **BC27_FEATURES_INDEX.md** | Capability reference | All features | Detail |
+| **BC27_INTEGRATION_GUIDE.md** | External integrations | 15+ services | Detail |
+| **BC27_EVENT_CATALOG.md** | Core posting & document events | ~50 events | High |
+| **BC27_EVENT_INDEX.md** | Keyword search across all events | ~210 events | High |
+| **BC27_EXTENSION_POINTS.md** | Table and page extensions | Common extension scenarios | High |
+| **events/BC27_EVENTS_MANUFACTURING.md** | Manufacturing events | 30+ events | Module |
+| **events/BC27_EVENTS_SERVICE.md** | Service management events | 20+ events | Module |
+| **events/BC27_EVENTS_JOBS.md** | Jobs & projects events | 15+ events | Module |
+| **events/BC27_EVENTS_API.md** | API & integration events | 25+ events | Module |
+| **events/BC27_EVENTS_FIXEDASSETS.md** | Fixed assets events | 15+ events | Module |
+| **events/BC27_EVENTS_WAREHOUSE.md** | Advanced warehouse events | 18+ events | Module |
+| **events/BC27_EVENTS_ASSEMBLY.md** | Assembly events | 12+ events | Module |
 
 ---
 

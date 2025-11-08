@@ -7,6 +7,7 @@ Centralized configuration template for Business Central 27 (SaaS) extension deve
 This template provides BC27 extension developers with:
 - **ESC Standards Compliance** - Automated enforcement of development standards
 - **AI Context Files** - Cursor rules (.mdc) and Claude commands for intelligent assistance
+- **LLM Optimization** - 60-96% token savings for AI code assistants (Cursor AI, Claude Code)
 - **BC27 Base Code Index** - Complete documentation of all 73 BC27 modules
 - **Event Discovery** - 210+ events across 10 modules with keyword search and LLM guidance
 - **Development Workflows** - Structured process from specification to implementation
@@ -42,7 +43,8 @@ cd ProjectTemplate
 cp -r .cursor/rules/ /path/to/your-project/.cursor/rules/
 cp -r .claude/commands/ /path/to/your-project/.claude/commands/
 cp -r BC27/ /path/to/your-project/BC27/
-cp CLAUDE.md .cursorignore /path/to/your-project/
+cp CLAUDE.md .cursorignore .claudeignore /path/to/your-project/
+cp LLM_OPTIMIZATION_GUIDE.md /path/to/your-project/
 
 # Update prefix in all files (replace ABC with your prefix)
 find /path/to/your-project/.cursor -type f -exec sed -i 's/ABC/YOUR_PREFIX/g' {} \;
@@ -61,6 +63,7 @@ After installation:
 2. **Verify Prefix** - Check `.cursor/rules/000-project-overview.mdc` has your prefix
 3. **Check app.json** - Ensure object ID ranges are configured
 4. **Test Workflow** - Run `/specify test-feature` to verify installation
+5. **Review LLM Optimization** - See `LLM_OPTIMIZATION_GUIDE.md` for AI assistant best practices
 
 ## 🚀 Development Workflow
 
@@ -104,7 +107,11 @@ git commit -m "feat: add customer credit limit feature"
 ProjectTemplate/
 ├── README.md                          # This file (human-readable guide)
 ├── CLAUDE.md                          # AI context (for LLMs only)
+├── LLM_OPTIMIZATION_GUIDE.md          # ⚡ NEW: Token efficiency guide
 ├── QUICKSTART.md                      # 5-minute quick start guide
+│
+├── .cursorignore                      # Context exclusions for Cursor AI
+├── .claudeignore                      # ⚡ NEW: Context exclusions for Claude Code
 │
 ├── .cursor/                           # Cursor IDE configuration
 │   ├── rules/                         # MDC rules (auto-loaded by AI)
@@ -117,7 +124,9 @@ ProjectTemplate/
 │   │   ├── 006-tools-review.mdc      # @-mention only
 │   │   ├── 007-deployment-security.mdc # For *Install*, *Upgrade*
 │   │   ├── 008-bc27-quick-reference.mdc # Auto-loads for *.al
-│   │   └── 009-bc27-architecture.mdc  # @-mention only
+│   │   ├── 009-bc27-architecture.mdc  # @-mention only
+│   │   ├── 010-event-discovery.mdc    # Event queries
+│   │   └── 011-llm-optimization.mdc   # ⚡ NEW: Token efficiency strategies
 │   │
 │   └── hooks/                         # Quality & security automation
 │       ├── after-file-edit.ps1       # ESC validation
@@ -130,8 +139,9 @@ ProjectTemplate/
 │   ├── settings.json                  # Team-shared configuration
 │   └── settings.local.example.json    # Personal overrides template
 │
-├── BC27/                              # Complete BC27 base code index (17 files)
-│   ├── BC27_INDEX_README.md          # Navigation guide (start here)
+├── BC27/                              # Complete BC27 base code index (18 files)
+│   ├── BC27_LLM_QUICKREF.md          # ⚡ NEW: Token-optimized quick reference (START HERE)
+│   ├── BC27_INDEX_README.md          # Navigation guide
 │   ├── BC27_ARCHITECTURE.md          # System design & patterns
 │   ├── BC27_MODULES_OVERVIEW.md      # All 73 modules detailed
 │   ├── BC27_MODULES_BY_CATEGORY.md   # Organized by function
@@ -159,11 +169,18 @@ ProjectTemplate/
 
 ## 🎓 Learning Resources
 
+### ⚡ LLM Optimization (NEW)
+- **Quick Reference:** `BC27/BC27_LLM_QUICKREF.md` - ⭐ **START HERE** for BC27 queries (80-90% token savings)
+- **Complete Guide:** `LLM_OPTIMIZATION_GUIDE.md` - Token efficiency patterns and best practices
+- **Loading Strategy:** `.cursor/rules/011-llm-optimization.mdc` - Teaches AI efficient context loading
+- **Context Exclusions:** `.claudeignore` / `.cursorignore` - Files excluded from AI context
+
 ### BC27 Documentation
-- **Quick Start:** `BC27/BC27_INDEX_README.md` - Navigation guide
-- **Architecture:** `BC27/BC27_ARCHITECTURE.md` - System design
-- **Modules:** `BC27/BC27_MODULES_OVERVIEW.md` - All 73 modules
-- **Features:** `BC27/BC27_FEATURES_INDEX.md` - Complete feature matrix
+- **Navigation:** `BC27/BC27_INDEX_README.md` - Complete index with priorities
+- **Quick Reference:** `BC27/BC27_LLM_QUICKREF.md` - Token-optimized (use this first!)
+- **Architecture:** `BC27/BC27_ARCHITECTURE.md` - System design (load when needed)
+- **Modules:** `BC27/BC27_MODULES_OVERVIEW.md` - All 73 modules (load when needed)
+- **Features:** `BC27/BC27_FEATURES_INDEX.md` - Complete feature matrix (load when needed)
 
 ### Event Discovery (Extension Points)
 - **Event Index:** `BC27/BC27_EVENT_INDEX.md` - Search 210+ events by keyword
@@ -179,9 +196,20 @@ ProjectTemplate/
 - **Security:** `.cursor/rules/007-deployment-security.mdc`
 
 ### Development Context
-- **AI Context:** `CLAUDE.md` - Complete guide for AI assistants
+- **AI Context:** `CLAUDE.md` - Complete guide for AI assistants (with LLM optimization section)
+- **LLM Optimization:** `LLM_OPTIMIZATION_GUIDE.md` - Token efficiency guide
 - **Quick Start:** `QUICKSTART.md` - 5-minute setup guide
 - **Hooks:** `.cursor/hooks/README.md` - Automation setup
+
+### Token Efficiency Tips
+
+**For AI code assistants (Cursor, Claude Code):**
+1. **Always start with:** `BC27_LLM_QUICKREF.md` instead of full BC27 docs (96% token savings)
+2. **Load specific catalogs:** Load only the event catalog you need (70% token savings)
+3. **Use layered approach:** Quick ref → Specific file → Detailed docs (only if needed)
+4. **Context exclusions:** `.claudeignore` and `.cursorignore` automatically exclude ~50% of files
+
+See `LLM_OPTIMIZATION_GUIDE.md` for complete recommendations.
 
 ## ✅ ESC Standards Checklist
 
@@ -311,6 +339,13 @@ This template is free to use for Business Central development projects.
 **Focus:** BC27 with forward compatibility
 
 ### Version History
+- **v3.2.0** (2025-11-08): LLM integration optimization - 60-96% token savings
+  - Added `.claudeignore` for Claude Code context exclusions
+  - Added `BC27_LLM_QUICKREF.md` - token-optimized quick reference (450 lines vs. 11k+)
+  - Added `.cursor/rules/011-llm-optimization.mdc` - teaches AI efficient loading
+  - Added `LLM_OPTIMIZATION_GUIDE.md` - complete optimization guide
+  - Updated `CLAUDE.md` with LLM optimization section
+  - Based on 2025 web research of LLM best practices
 - **v3.1.0** (2025-11-08): BC27 event catalog expansion - 210+ events across 10 modules
   - Added 3 module-specific event catalogs (Fixed Assets, Warehouse, Assembly)
   - Enhanced event discovery with keyword search index

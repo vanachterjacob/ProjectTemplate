@@ -1,0 +1,121 @@
+# Claude Code Ignore File
+# Exclude files/folders from Claude Code's context and indexing
+# Syntax: same as .gitignore (glob patterns)
+
+# ============================================================================
+# BUILD ARTIFACTS & COMPILED CODE
+# ============================================================================
+.alpackages/
+*.app
+*.bak
+*.dll
+*.zip
+
+# ============================================================================
+# CACHE & TEMPORARY FILES
+# ============================================================================
+.vs/
+.vscode/.ropeproject/
+*.cache
+.temp/
+*.tmp
+.DS_Store
+Thumbs.db
+
+# ============================================================================
+# BC26/BC27 SYMBOLS (Too large for LLM context - use local references)
+# ============================================================================
+symbols/
+.alcache/
+.netpackages/
+
+# ============================================================================
+# GENERATED FILES (Exclude from AI context to focus on source)
+# ============================================================================
+.agent/
+*.g.xlf
+rad.json
+
+# ============================================================================
+# LARGE DATA FILES (Not useful for code assistance)
+# ============================================================================
+*.csv
+*.xlsx
+*.xls
+*.log
+*.txt
+
+# ============================================================================
+# TRANSLATIONS (Managed by XLIFF Sync tool, not relevant for coding)
+# ============================================================================
+Translations/
+*.xlf
+
+# ============================================================================
+# DOCUMENTATION (Selectively exclude - keep only AI-relevant docs)
+# ============================================================================
+*.pdf
+docs/generated/
+
+# ============================================================================
+# LOGS & REPORTS (Not useful for LLM context)
+# ============================================================================
+logs/
+reports/
+
+# ============================================================================
+# SENSITIVE FILES (CRITICAL: Never expose to AI)
+# ============================================================================
+*.env
+*.env.local
+credentials.json
+secrets.json
+*.key
+*.pem
+launch.json
+
+# ============================================================================
+# NODE MODULES (If using any JS tooling)
+# ============================================================================
+node_modules/
+package-lock.json
+yarn.lock
+
+# ============================================================================
+# BACKUP FILES (Not useful for development assistance)
+# ============================================================================
+*.backup
+*~
+
+# ============================================================================
+# GIT METADATA (Not needed in AI context)
+# ============================================================================
+.git/
+.github/
+
+# ============================================================================
+# IDE-SPECIFIC FILES (Not relevant for code assistance)
+# ============================================================================
+.idea/
+*.swp
+*.swo
+
+# ============================================================================
+# TEST ARTIFACTS (Exclude large test outputs, keep test code)
+# ============================================================================
+TestResults/
+coverage/
+*.trx
+
+# ============================================================================
+# OPTIMIZATION: Exclude duplicate/redundant documentation
+# ============================================================================
+# Keep BC27/ for reference, but exclude if too large in practice
+# Uncomment the following if context windows become constrained:
+# BC27/BC27_MODULES_OVERVIEW.md
+# BC27/BC27_FEATURES_INDEX.md
+
+# ============================================================================
+# CURSOR-SPECIFIC (Not needed for Claude Code)
+# ============================================================================
+.cursor/

@@ -168,6 +168,18 @@ if [ -f "$TEMPLATE_DIR/.cursorignore" ]; then
     print_success "Copied .cursorignore"
 fi
 
+# Copy .claudeignore
+if [ -f "$TEMPLATE_DIR/.claudeignore" ]; then
+    cp "$TEMPLATE_DIR/.claudeignore" "$TARGET_DIR/.claudeignore"
+    print_success "Copied .claudeignore"
+fi
+
+# Copy LLM_OPTIMIZATION_GUIDE.md
+if [ -f "$TEMPLATE_DIR/LLM_OPTIMIZATION_GUIDE.md" ]; then
+    cp "$TEMPLATE_DIR/LLM_OPTIMIZATION_GUIDE.md" "$TARGET_DIR/LLM_OPTIMIZATION_GUIDE.md"
+    print_success "Copied LLM_OPTIMIZATION_GUIDE.md"
+fi
+
 # Copy src/AGENTS.md template if it exists and src/ folder exists
 if [ -f "$TEMPLATE_DIR/src/AGENTS.md" ] && [ -d "$TARGET_DIR/src" ]; then
     cp "$TEMPLATE_DIR/src/AGENTS.md" "$TARGET_DIR/src/AGENTS.md"
@@ -279,12 +291,15 @@ print_success "BC26 Development Template installation complete!"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
 echo "✅ Installed components:"
-echo "   • .cursor/rules/ - ESC standard rules (auto-loaded)"
+echo "   • .cursor/rules/ - ESC standard rules (auto-loaded) + LLM optimization"
 echo "   • .cursor/hooks/ - Quality & security hooks"
 echo "   • .claude/commands/ - Workflow slash commands"
-echo "   • CLAUDE.md - AI context documentation"
-echo "   • .cursorignore - File exclusions"
-echo "   • BC27/ - Base code comprehensive index (17 files: 10 core + 7 module-specific)"
+echo "   • CLAUDE.md - AI context documentation (with LLM optimization)"
+echo "   • .cursorignore - Context exclusions for Cursor AI"
+echo "   • .claudeignore - Context exclusions for Claude Code"
+echo "   • LLM_OPTIMIZATION_GUIDE.md - Token efficiency guide"
+echo "   • BC27/ - Base code index (18 files: 11 core + 7 module-specific)"
+echo "      - BC27_LLM_QUICKREF.md ⭐ Token-optimized quick reference"
 echo "   • Hooks configured in $HOOKS_DIR/hooks.json"
 echo ""
 echo "📝 Project Prefix: $PROJECT_PREFIX"
@@ -304,11 +319,18 @@ echo "   • /review [file-or-folder] - ESC compliance check"
 echo "   • /update_doc [init|update] - Maintain documentation"
 echo ""
 echo "📖 Documentation:"
-echo "   • BC27/ - Business Central 27 base code comprehensive index (17 files)"
-echo "      Start with: BC27/BC27_INDEX_README.md"
+echo "   • BC27/ - Business Central 27 base code index (18 files)"
+echo "      ⚡ Start with: BC27/BC27_LLM_QUICKREF.md (token-optimized, 80-90% savings)"
+echo "      Navigation: BC27/BC27_INDEX_README.md"
 echo "      Event search: BC27_EVENT_INDEX.md (210+ events)"
 echo "      For extensions: BC27_EVENT_CATALOG.md → events/BC27_EVENTS_[MODULE].md"
 echo "      For architecture: BC27_ARCHITECTURE.md → BC27_MODULES_OVERVIEW.md"
+echo ""
+echo "⚡ LLM Optimization:"
+echo "   • LLM_OPTIMIZATION_GUIDE.md - Complete token efficiency guide"
+echo "   • .cursor/rules/011-llm-optimization.mdc - Context loading strategies"
+echo "   • .claudeignore / .cursorignore - Exclude ~50% of files from AI context"
+echo "   • Token savings: 60-96% for typical AI code assistant queries"
 echo ""
 echo "⚡ Hooks active:"
 echo "   • after-file-edit.ps1 - ESC validation"
