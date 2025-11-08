@@ -153,6 +153,20 @@ if (Test-Path $SourceIgnore) {
     Write-Success "Copied .cursorignore"
 }
 
+# Copy .claudeignore
+$SourceClaudeIgnore = Join-Path $TemplateDir ".claudeignore"
+if (Test-Path $SourceClaudeIgnore) {
+    Copy-Item -Path $SourceClaudeIgnore -Destination (Join-Path $TargetDirectory ".claudeignore") -Force
+    Write-Success "Copied .claudeignore"
+}
+
+# Copy LLM_OPTIMIZATION_GUIDE.md
+$SourceLLMGuide = Join-Path $TemplateDir "LLM_OPTIMIZATION_GUIDE.md"
+if (Test-Path $SourceLLMGuide) {
+    Copy-Item -Path $SourceLLMGuide -Destination (Join-Path $TargetDirectory "LLM_OPTIMIZATION_GUIDE.md") -Force
+    Write-Success "Copied LLM_OPTIMIZATION_GUIDE.md"
+}
+
 # Copy src/AGENTS.md template if it exists and src/ folder exists
 $SourceAgentsMd = Join-Path $TemplateDir "src\AGENTS.md"
 $TargetSrcDir = Join-Path $TargetDirectory "src"
@@ -279,12 +293,15 @@ Write-Success "BC26 Development Template installation complete!"
 Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Gray
 Write-Host ""
 Write-Host "✅ Installed components:" -ForegroundColor Green
-Write-Host "   • .cursor\rules\ - ESC standard rules (auto-loaded)"
+Write-Host "   • .cursor\rules\ - ESC standard rules (auto-loaded) + LLM optimization"
 Write-Host "   • .cursor\hooks\ - Quality & security hooks"
 Write-Host "   • .claude\commands\ - Workflow slash commands"
-Write-Host "   • CLAUDE.md - AI context documentation"
-Write-Host "   • .cursorignore - File exclusions"
-Write-Host "   • BC27\ - Base code comprehensive index (17 files: 10 core + 7 module-specific)"
+Write-Host "   • CLAUDE.md - AI context documentation (with LLM optimization)"
+Write-Host "   • .cursorignore - Context exclusions for Cursor AI"
+Write-Host "   • .claudeignore - Context exclusions for Claude Code"
+Write-Host "   • LLM_OPTIMIZATION_GUIDE.md - Token efficiency guide"
+Write-Host "   • BC27\ - Base code index (18 files: 11 core + 7 module-specific)"
+Write-Host "      - BC27_LLM_QUICKREF.md ⭐ Token-optimized quick reference"
 Write-Host "   • Hooks configured in $HooksDir\hooks.json"
 Write-Host ""
 Write-Host "📝 Project Prefix: $ProjectPrefix" -ForegroundColor Cyan
@@ -304,11 +321,18 @@ Write-Host "   • /review [file-or-folder] - ESC compliance check"
 Write-Host "   • /update_doc [init|update] - Maintain documentation"
 Write-Host ""
 Write-Host "📖 Documentation:" -ForegroundColor Cyan
-Write-Host "   • BC27\ - Business Central 27 base code comprehensive index (17 files)"
-Write-Host "      Start with: BC27\BC27_INDEX_README.md"
+Write-Host "   • BC27\ - Business Central 27 base code index (18 files)"
+Write-Host "      ⚡ Start with: BC27\BC27_LLM_QUICKREF.md (token-optimized, 80-90% savings)"
+Write-Host "      Navigation: BC27\BC27_INDEX_README.md"
 Write-Host "      Event search: BC27_EVENT_INDEX.md (210+ events)"
 Write-Host "      For extensions: BC27_EVENT_CATALOG.md → events\BC27_EVENTS_[MODULE].md"
 Write-Host "      For architecture: BC27_ARCHITECTURE.md → BC27_MODULES_OVERVIEW.md"
+Write-Host ""
+Write-Host "⚡ LLM Optimization:" -ForegroundColor Yellow
+Write-Host "   • LLM_OPTIMIZATION_GUIDE.md - Complete token efficiency guide"
+Write-Host "   • .cursor\rules\011-llm-optimization.mdc - Context loading strategies"
+Write-Host "   • .claudeignore / .cursorignore - Exclude ~50% of files from AI context"
+Write-Host "   • Token savings: 60-96% for typical AI code assistant queries"
 Write-Host ""
 Write-Host "⚡ Hooks active:" -ForegroundColor Blue
 Write-Host "   • after-file-edit.ps1 - ESC validation"
