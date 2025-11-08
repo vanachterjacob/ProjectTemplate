@@ -29,6 +29,9 @@ For detailed coverage of specialized modules, see:
 - **[Service Management Events](./events/BC27_EVENTS_SERVICE.md)** - 20+ service order, contract events
 - **[Jobs & Projects Events](./events/BC27_EVENTS_JOBS.md)** - 15+ job planning, WIP events
 - **[API & Integration Events](./events/BC27_EVENTS_API.md)** - 25+ REST API, webhook events
+- **[Fixed Assets Events](./events/BC27_EVENTS_FIXEDASSETS.md)** - 15+ depreciation, acquisition, disposal events
+- **[Warehouse Events](./events/BC27_EVENTS_WAREHOUSE.md)** - 18+ picks, put-aways, bins, movements
+- **[Assembly Events](./events/BC27_EVENTS_ASSEMBLY.md)** - 12+ assembly orders, ATO, BOM events
 
 ### 🔍 Finding Undocumented Events
 

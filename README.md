@@ -8,6 +8,7 @@ This template provides BC27 extension developers with:
 - **ESC Standards Compliance** - Automated enforcement of development standards
 - **AI Context Files** - Cursor rules (.mdc) and Claude commands for intelligent assistance
 - **BC27 Base Code Index** - Complete documentation of all 73 BC27 modules
+- **Event Discovery** - 210+ events across 10 modules with keyword search and LLM guidance
 - **Development Workflows** - Structured process from specification to implementation
 - **Quality Automation** - Hooks for validation, security, and compliance checks
 
@@ -129,14 +130,25 @@ ProjectTemplate/
 │   ├── settings.json                  # Team-shared configuration
 │   └── settings.local.example.json    # Personal overrides template
 │
-├── BC27/                              # Complete BC27 base code index
+├── BC27/                              # Complete BC27 base code index (17 files)
 │   ├── BC27_INDEX_README.md          # Navigation guide (start here)
 │   ├── BC27_ARCHITECTURE.md          # System design & patterns
 │   ├── BC27_MODULES_OVERVIEW.md      # All 73 modules detailed
 │   ├── BC27_MODULES_BY_CATEGORY.md   # Organized by function
 │   ├── BC27_DEPENDENCY_REFERENCE.md  # Module relationships
 │   ├── BC27_FEATURES_INDEX.md        # 200+ features matrix
-│   └── BC27_INTEGRATION_GUIDE.md     # External integrations
+│   ├── BC27_INTEGRATION_GUIDE.md     # External integrations
+│   ├── BC27_EVENT_CATALOG.md         # Core posting & document events (~50)
+│   ├── BC27_EVENT_INDEX.md           # Master keyword index (210+ events)
+│   ├── BC27_EXTENSION_POINTS.md      # Table/page extension patterns
+│   └── events/                        # Module-specific event catalogs (7 files)
+│       ├── BC27_EVENTS_MANUFACTURING.md  # 30+ production events
+│       ├── BC27_EVENTS_SERVICE.md        # 20+ service events
+│       ├── BC27_EVENTS_JOBS.md           # 15+ jobs events
+│       ├── BC27_EVENTS_API.md            # 25+ API events
+│       ├── BC27_EVENTS_FIXEDASSETS.md    # 15+ FA events
+│       ├── BC27_EVENTS_WAREHOUSE.md      # 18+ warehouse events
+│       └── BC27_EVENTS_ASSEMBLY.md       # 12+ assembly events
 │
 └── src/                               # Your AL source code (when present)
     ├── AGENTS.md                      # Auto-loaded context
@@ -152,6 +164,13 @@ ProjectTemplate/
 - **Architecture:** `BC27/BC27_ARCHITECTURE.md` - System design
 - **Modules:** `BC27/BC27_MODULES_OVERVIEW.md` - All 73 modules
 - **Features:** `BC27/BC27_FEATURES_INDEX.md` - Complete feature matrix
+
+### Event Discovery (Extension Points)
+- **Event Index:** `BC27/BC27_EVENT_INDEX.md` - Search 210+ events by keyword
+- **Core Events:** `BC27/BC27_EVENT_CATALOG.md` - Posting & document events
+- **Extension Points:** `BC27/BC27_EXTENSION_POINTS.md` - Table/page patterns
+- **Module Events:** `BC27/events/BC27_EVENTS_*.md` - 7 module-specific catalogs
+- **Discovery Guide:** `.cursor/rules/010-event-discovery.mdc` - How to find any event
 
 ### ESC Standards
 - **Naming:** `.cursor/rules/001-naming-conventions.mdc`
@@ -286,13 +305,19 @@ This template is free to use for Business Central development projects.
 
 ---
 
-**Version:** 3.0.0
+**Version:** 3.1.0
 **BC Version:** 27 (SaaS) - Compatible with BC26+
-**Last Updated:** 2025-11-07
+**Last Updated:** 2025-11-08
 **Focus:** BC27 with forward compatibility
 
 ### Version History
+- **v3.1.0** (2025-11-08): BC27 event catalog expansion - 210+ events across 10 modules
+  - Added 3 module-specific event catalogs (Fixed Assets, Warehouse, Assembly)
+  - Enhanced event discovery with keyword search index
+  - Added LLM guidance for finding undocumented events
 - **v3.0.0** (2025-11-07): Major refactor - BC27 focus, English docs, improved structure
+  - Added initial event catalogs (Manufacturing, Service, Jobs, API)
+  - Added BC27_EVENT_CATALOG.md and BC27_EXTENSION_POINTS.md
 - **v2.2.0** (2025-11-07): BC27 comprehensive base code index (73 modules)
 - **v2.1.0** (2025-11-07): Automated installation system
 - **v2.0.0** (2025-11-07): Hooks, subagents, skills

@@ -24,6 +24,9 @@ This index consists of multiple markdown files organized by topic for easy navig
 - **[Service Events](./events/BC27_EVENTS_SERVICE.md)** - 20+ service order, contract, resource events
 - **[Jobs Events](./events/BC27_EVENTS_JOBS.md)** - 15+ job planning, WIP, budget events
 - **[API Events](./events/BC27_EVENTS_API.md)** - 25+ REST API, webhook, integration events
+- **[Fixed Assets Events](./events/BC27_EVENTS_FIXEDASSETS.md)** - 15+ depreciation, acquisition, disposal events
+- **[Warehouse Events](./events/BC27_EVENTS_WAREHOUSE.md)** - 18+ picks, put-aways, bins, movements
+- **[Assembly Events](./events/BC27_EVENTS_ASSEMBLY.md)** - 12+ assembly orders, ATO, BOM events
 
 ## 🎯 Quick Navigation
 
@@ -127,12 +130,15 @@ BusinessFoundation (Shared Logic)
 | **BC27_FEATURES_INDEX.md** | Capability reference | All features |
 | **BC27_INTEGRATION_GUIDE.md** | External integrations | 15+ services |
 | **BC27_EVENT_CATALOG.md** | Core posting & document events | ~50 events |
-| **BC27_EVENT_INDEX.md** | Keyword search across all events | ~175 events |
+| **BC27_EVENT_INDEX.md** | Keyword search across all events | ~210 events |
 | **BC27_EXTENSION_POINTS.md** | Table and page extensions | Common extension scenarios |
 | **events/BC27_EVENTS_MANUFACTURING.md** | Manufacturing events | 30+ events |
 | **events/BC27_EVENTS_SERVICE.md** | Service management events | 20+ events |
 | **events/BC27_EVENTS_JOBS.md** | Jobs & projects events | 15+ events |
 | **events/BC27_EVENTS_API.md** | API & integration events | 25+ events |
+| **events/BC27_EVENTS_FIXEDASSETS.md** | Fixed assets events | 15+ events |
+| **events/BC27_EVENTS_WAREHOUSE.md** | Advanced warehouse events | 18+ events |
+| **events/BC27_EVENTS_ASSEMBLY.md** | Assembly events | 12+ events |
 
 ---
 
