@@ -124,6 +124,7 @@ mkdir -p "$TARGET_DIR/.cursor/hooks"
 mkdir -p "$TARGET_DIR/.claude/commands"
 mkdir -p "$TARGET_DIR/.claude/subagents"
 mkdir -p "$TARGET_DIR/.claude/skills"
+mkdir -p "$TARGET_DIR/.claude/memories/templates"
 mkdir -p "$TARGET_DIR/.agent/specs"
 mkdir -p "$TARGET_DIR/.agent/plans"
 mkdir -p "$TARGET_DIR/.agent/tasks"
@@ -154,6 +155,20 @@ fi
 if [ -f "$TEMPLATE_DIR/.claude/settings.json" ]; then
     cp "$TEMPLATE_DIR/.claude/settings.json" "$TARGET_DIR/.claude/settings.json"
     print_success "Copied .claude/settings.json"
+fi
+
+# Copy .claude/memories templates
+if [ -d "$TEMPLATE_DIR/.claude/memories" ]; then
+    cp -r "$TEMPLATE_DIR/.claude/memories"/* "$TARGET_DIR/.claude/memories/"
+    MEMORY_COUNT=$(find "$TEMPLATE_DIR/.claude/memories/templates" -name "*.md" | wc -l)
+    print_success "Copied .claude/memories/ (${GREEN}${MEMORY_COUNT}${NC} templates)"
+fi
+
+# Copy .claude/skills (context presets)
+if [ -d "$TEMPLATE_DIR/.claude/skills" ]; then
+    cp -r "$TEMPLATE_DIR/.claude/skills"/* "$TARGET_DIR/.claude/skills/"
+    SKILL_COUNT=$(find "$TEMPLATE_DIR/.claude/skills/context-presets" -name "*.md" ! -name "README.md" | wc -l)
+    print_success "Copied .claude/skills/ (${GREEN}${SKILL_COUNT}${NC} context presets)"
 fi
 
 # Copy CLAUDE.md
@@ -284,6 +299,19 @@ EOF
     print_success "Created .agent/README.md"
 fi
 
+# Step 9: Setup Claude Code memories
+print_info "Setting up Claude Code memory system..."
+
+MEMORY_SETUP_SCRIPT="$SCRIPT_DIR/setup-memories.sh"
+if [ -f "$MEMORY_SETUP_SCRIPT" ]; then
+    chmod +x "$MEMORY_SETUP_SCRIPT"
+    # Run memory setup in interactive mode (will ask user for project type)
+    bash "$MEMORY_SETUP_SCRIPT" "$TARGET_DIR" "$PROJECT_PREFIX"
+else
+    print_warning "Memory setup script not found. Skipping memory configuration."
+    print_info "You can run it manually later: scripts/setup-memories.sh"
+fi
+
 # Final success message
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -294,6 +322,8 @@ echo "✅ Installed components:"
 echo "   • .cursor/rules/ - ESC standard rules (auto-loaded) + LLM optimization"
 echo "   • .cursor/hooks/ - Quality & security hooks"
 echo "   • .claude/commands/ - Workflow slash commands"
+echo "   • .claude/memories/ - Memory templates (7 templates)"
+echo "   • .claude/skills/context-presets/ - Quick context loading (6 presets)"
 echo "   • CLAUDE.md - AI context documentation (with LLM optimization)"
 echo "   • .cursorignore - Context exclusions for Cursor AI"
 echo "   • .claudeignore - Context exclusions for Claude Code"
@@ -337,5 +367,11 @@ echo "   • after-file-edit.ps1 - ESC validation"
 echo "   • before-read-file.ps1 - Security (blocks sensitive files)"
 echo "   • before-shell-execution.ps1 - Safety (prevents dangerous commands)"
 echo "   • after-agent-response.ps1 - Usage analytics"
+echo ""
+echo "🧠 Claude Code Memory:"
+echo "   • Project memory: .claude/CLAUDE.md (auto-loaded)"
+echo "   • Quick add: ${CYAN}# your instruction${NC}"
+echo "   • Edit memories: ${CYAN}/memory${NC}"
+echo "   • Context presets: ${CYAN}@sales-context${NC}, ${CYAN}@api-context${NC}, etc."
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

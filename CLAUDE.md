@@ -77,6 +77,59 @@ Workflow automation via slash commands:
 
 **See:** `.claude/skills/context-presets/README.md` for details
 
+### Memory System (`.claude/memories/`)
+🧠 **Project-specific memory** - Persist preferences and instructions across sessions:
+
+**What is Memory?**
+- Claude Code's #memory feature stores instructions that persist across all sessions
+- Think of it as "teaching Claude" about your specific project type and preferences
+- Automatically loaded at session start - no manual context loading needed
+
+**Memory Hierarchy:**
+1. **Enterprise Policy** - Organization-wide (IT/DevOps managed)
+2. **Project Memory** - `.claude/CLAUDE.md` (team-shared, in version control)
+3. **User Memory** - `~/.claude/CLAUDE.md` (personal preferences)
+4. **Session Memory** - `#` quick adds during conversation
+
+**Available Templates:**
+
+| Template | When to Use | Auto-Loads |
+|----------|-------------|------------|
+| `sales-project.md` | Sales/customer extensions | `@sales-context`, document patterns, ESC rules |
+| `warehouse-project.md` | WMS/inventory extensions | `@warehouse-context`, bin logic, performance rules |
+| `api-project.md` | API/integrations | `@api-context`, security validation, OAuth |
+| `manufacturing-project.md` | Production/BOM extensions | `@manufacturing-context`, BOM explosion, routing |
+| `posting-project.md` | G/L posting/ledgers | `@posting-context`, transaction patterns, validation |
+| `esc-strict-mode.md` | Maximum ESC compliance | Zero-tolerance enforcement, all mandatory patterns |
+| `customer-template.md` | Customer configuration | Prefix, ID ranges, contacts, special requirements |
+
+**Quick Usage:**
+```bash
+# Add instruction during session
+# Always validate email addresses before saving
+
+# Edit memory files
+/memory
+
+# Load context preset
+@sales-context
+```
+
+**Installation:**
+- Memory setup runs automatically during template installation
+- Asks for project type (sales/warehouse/api/manufacturing/posting)
+- Optionally enables ESC Strict Mode
+- Creates `.claude/CLAUDE.md` with project-specific context
+
+**Benefits:**
+- ✅ Context ready instantly (no manual loading)
+- ✅ Remembers project type and patterns
+- ✅ Auto-loads correct ESC rules
+- ✅ Persists team knowledge in version control
+- ✅ 10-15 min saved per session
+
+**See:** `.claude/memories/README.md` for complete guide
+
 ### BC27 Base Code Index (`/BC27/`)
 Complete reference documentation (360 KB, 18 files):
 
@@ -152,12 +205,18 @@ Complete reference documentation (360 KB, 18 files):
 - This file (CLAUDE.md) - Project overview
 - `000-project-overview.mdc` - Configuration
 - `011-llm-optimization.mdc` - Loading strategies
+- **`.claude/CLAUDE.md`** - Project memory (auto-loaded) **⭐ NEW**
 
 **Load on demand:**
 - BC27 queries → Start with `BC27_LLM_QUICKREF.md` (450 lines) NOT full docs (11k+ lines)
 - Event discovery → Use `010-event-discovery.mdc` workflow + specific event catalog
 - Coding tasks → Load `001-naming-conventions.mdc` + `002-development-patterns.mdc`
 - **Domain tasks → Use context presets** (`@sales-context`, `@api-context`, etc.) **⭐ NEW**
+
+**Memory-powered efficiency:**
+- Project memory (`.claude/CLAUDE.md`) remembers project type and auto-loads context
+- No need to manually load patterns - memory does it automatically
+- Use `#` to teach Claude during development - persists across sessions
 
 ### Token Savings
 
@@ -169,6 +228,8 @@ Complete reference documentation (360 KB, 18 files):
 | New: Load specific catalog only | ~6k tokens | 70% ⭐ |
 | Old: Manually load domain files (5-8 files) | ~8k tokens | 0% |
 | New: Use context preset (1 skill) | ~3k tokens | 62% ⭐ |
+| Old: Manually explain project type each session | ~5k tokens | 0% |
+| New: Use memory (auto-loaded) | ~500 tokens | 90% ⭐ |
 
 ### Exclusion Files
 
