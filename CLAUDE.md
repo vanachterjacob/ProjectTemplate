@@ -52,7 +52,7 @@ Workflow automation via slash commands:
 | `/auto-install-rules` | Install template to project | haiku |
 
 ### BC27 Base Code Index (`/BC27/`)
-Complete reference documentation (306 KB, 14 files):
+Complete reference documentation (360 KB, 17 files):
 
 **Core Documentation**:
 1. **BC27_INDEX_README.md** - Navigation guide
@@ -65,7 +65,7 @@ Complete reference documentation (306 KB, 14 files):
 
 **Source Code Integration**:
 8. **BC27_EVENT_CATALOG.md** - Core posting & document events (~50 events)
-9. **BC27_EVENT_INDEX.md** - Keyword search across ALL events (~175 events)
+9. **BC27_EVENT_INDEX.md** - Keyword search across ALL events (~210 events)
 10. **BC27_EXTENSION_POINTS.md** - Table/page extension patterns and guidelines
 
 **Module Event Catalogs** (`/BC27/events/`):
@@ -73,6 +73,9 @@ Complete reference documentation (306 KB, 14 files):
 12. **BC27_EVENTS_SERVICE.md** - 20+ service order, contract events
 13. **BC27_EVENTS_JOBS.md** - 15+ job planning, WIP events
 14. **BC27_EVENTS_API.md** - 25+ REST API, webhook events
+15. **BC27_EVENTS_FIXEDASSETS.md** - 15+ depreciation, acquisition, disposal events
+16. **BC27_EVENTS_WAREHOUSE.md** - 18+ picks, put-aways, bins, movements
+17. **BC27_EVENTS_ASSEMBLY.md** - 12+ assembly orders, ATO, BOM events
 
 ## Development Workflow
 

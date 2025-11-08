@@ -4,7 +4,7 @@ Master index for searching BC27 events by keyword, operation, or use case. Use t
 
 **Version**: 1.0
 **BC Version**: 27
-**Coverage**: 140+ events across all modules
+**Coverage**: 210+ events across all modules
 **Last Updated**: 2025-11-08
 
 ---
@@ -104,6 +104,44 @@ Master index for searching BC27 events by keyword, operation, or use case. Use t
 | **OnBeforeAPIAuthentication** | Before API authentication | API auth handlers | API | [API](./events/BC27_EVENTS_API.md#onbeforeapiauth) |
 | **OnBeforeImportDataExchange** | Before data import | Codeunit 1220 | API | [API](./events/BC27_EVENTS_API.md#onbeforeimportdataexchange) |
 
+### Fixed Assets Events
+
+| Event Name | When | Publisher | Module | Catalog |
+|------------|------|-----------|--------|---------|
+| **OnBeforePostFixedAssetDepreciation** | Before depreciation posting | Codeunit 5610 "FA Jnl.-Post Line" | Fixed Assets | [Fixed Assets](./events/BC27_EVENTS_FIXEDASSETS.md#onbeforepostfixedassetdepreciation) |
+| **OnAfterPostFixedAssetDepreciation** | After depreciation posted | Codeunit 5610 "FA Jnl.-Post Line" | Fixed Assets | [Fixed Assets](./events/BC27_EVENTS_FIXEDASSETS.md#onafterpostfixedassetdepreciation) |
+| **OnBeforePostAcquisition** | Before FA acquisition | Codeunit 5610 "FA Jnl.-Post Line" | Fixed Assets | [Fixed Assets](./events/BC27_EVENTS_FIXEDASSETS.md#onbeforepostacquisition) |
+| **OnAfterPostAcquisition** | After FA acquisition | Codeunit 5610 "FA Jnl.-Post Line" | Fixed Assets | [Fixed Assets](./events/BC27_EVENTS_FIXEDASSETS.md#onafterpostacquisition) |
+| **OnBeforePostDisposal** | Before FA disposal | Codeunit 5610 "FA Jnl.-Post Line" | Fixed Assets | [Fixed Assets](./events/BC27_EVENTS_FIXEDASSETS.md#onbeforepostdisposal) |
+| **OnAfterPostDisposal** | After FA disposal | Codeunit 5610 "FA Jnl.-Post Line" | Fixed Assets | [Fixed Assets](./events/BC27_EVENTS_FIXEDASSETS.md#onafterpostdisposal) |
+| **OnBeforeCalculateDepreciation** | Before depreciation calc | Codeunit 5610 "FA Jnl.-Post Line" | Fixed Assets | [Fixed Assets](./events/BC27_EVENTS_FIXEDASSETS.md#onbeforecalculatedepreciation) |
+| **OnAfterCalculateDepreciation** | After depreciation calc | Codeunit 5610 "FA Jnl.-Post Line" | Fixed Assets | [Fixed Assets](./events/BC27_EVENTS_FIXEDASSETS.md#onaftercalculatedepreciation) |
+
+### Warehouse Events
+
+| Event Name | When | Publisher | Module | Catalog |
+|------------|------|-----------|--------|---------|
+| **OnBeforeCreatePick** | Before warehouse pick creation | Codeunit 7312 "Whse.-Create Pick" | Warehouse | [Warehouse](./events/BC27_EVENTS_WAREHOUSE.md#onbeforecreatepick) |
+| **OnAfterCreatePick** | After pick created | Codeunit 7312 "Whse.-Create Pick" | Warehouse | [Warehouse](./events/BC27_EVENTS_WAREHOUSE.md#onaftercreatepick) |
+| **OnBeforeCreatePutAway** | Before put-away creation | Codeunit 7314 "Whse.-Create Put-away" | Warehouse | [Warehouse](./events/BC27_EVENTS_WAREHOUSE.md#onbeforcreateputaway) |
+| **OnAfterCreatePutAway** | After put-away created | Codeunit 7314 "Whse.-Create Put-away" | Warehouse | [Warehouse](./events/BC27_EVENTS_WAREHOUSE.md#onaftercreatputaway) |
+| **OnBeforeFindBinForPutAway** | Before bin selection | Codeunit 7314 "Whse.-Create Put-away" | Warehouse | [Warehouse](./events/BC27_EVENTS_WAREHOUSE.md#onbeforefindbinforputaway) |
+| **OnAfterRegisterWhseActivity** | After activity registration | Codeunit 7315 "Whse.-Activity-Register" | Warehouse | [Warehouse](./events/BC27_EVENTS_WAREHOUSE.md#onafterregisterwhseactivity) |
+| **OnBeforePostWhseJnlLine** | Before warehouse posting | Codeunit 7300 "Whse. Jnl.-Register Line" | Warehouse | [Warehouse](./events/BC27_EVENTS_WAREHOUSE.md#onbeforepostwhsejnlline) |
+| **OnAfterPostWhseJnlLine** | After warehouse posting | Codeunit 7300 "Whse. Jnl.-Register Line" | Warehouse | [Warehouse](./events/BC27_EVENTS_WAREHOUSE.md#onafterpostwhsejnlline) |
+
+### Assembly Events
+
+| Event Name | When | Publisher | Module | Catalog |
+|------------|------|-----------|--------|---------|
+| **OnBeforePostAssemblyOrder** | Before assembly posting | Codeunit 900 "Assembly-Post" | Assembly | [Assembly](./events/BC27_EVENTS_ASSEMBLY.md#onbeforepostassemblyorder) |
+| **OnAfterPostAssemblyOrder** | After assembly posted | Codeunit 900 "Assembly-Post" | Assembly | [Assembly](./events/BC27_EVENTS_ASSEMBLY.md#onafterpostassemblyorder) |
+| **OnBeforeExplodeAssemblyBOM** | Before BOM explosion | Codeunit 900 "Assembly-Post" | Assembly | [Assembly](./events/BC27_EVENTS_ASSEMBLY.md#onbeforeexplodeassemblybom) |
+| **OnAfterExplodeAssemblyBOM** | After BOM exploded | Codeunit 900 "Assembly-Post" | Assembly | [Assembly](./events/BC27_EVENTS_ASSEMBLY.md#onafterexplodeassemblybom) |
+| **OnBeforeCreateATO** | Before assemble-to-order | Codeunit 901 "Assembly Header Management" | Assembly | [Assembly](./events/BC27_EVENTS_ASSEMBLY.md#onbeforecreateato) |
+| **OnAfterCreateATO** | After ATO created | Codeunit 901 "Assembly Header Management" | Assembly | [Assembly](./events/BC27_EVENTS_ASSEMBLY.md#onaftercreateato) |
+| **OnBeforeUpdateAssemblyAvailability** | Before availability check | Codeunit 901 "Assembly Header Management" | Assembly | [Assembly](./events/BC27_EVENTS_ASSEMBLY.md#onbeforeupdateassemblyavailability) |
+
 ---
 
 ## Search by Common Use Case
@@ -122,6 +160,12 @@ Master index for searching BC27 events by keyword, operation, or use case. Use t
 | Calculate WIP for projects | `OnBeforeCalculateWIP` | [Jobs](./events/BC27_EVENTS_JOBS.md) |
 | Sync API operations | `OnAfterAPIRecordInsert` | [API](./events/BC27_EVENTS_API.md) |
 | Validate webhook endpoints | `OnBeforeRegisterWebhook` | [API](./events/BC27_EVENTS_API.md) |
+| Calculate custom depreciation | `OnBeforeCalculateDepreciation` | [Fixed Assets](./events/BC27_EVENTS_FIXEDASSETS.md) |
+| Validate asset disposal | `OnBeforePostDisposal` | [Fixed Assets](./events/BC27_EVENTS_FIXEDASSETS.md) |
+| Apply custom bin selection logic | `OnBeforeFindBinForPutAway` | [Warehouse](./events/BC27_EVENTS_WAREHOUSE.md) |
+| Validate warehouse picks | `OnBeforeCreatePick` | [Warehouse](./events/BC27_EVENTS_WAREHOUSE.md) |
+| Validate assembly orders | `OnBeforePostAssemblyOrder` | [Assembly](./events/BC27_EVENTS_ASSEMBLY.md) |
+| Handle assemble-to-order creation | `OnBeforeCreateATO` | [Assembly](./events/BC27_EVENTS_ASSEMBLY.md) |
 
 ---
 
@@ -139,7 +183,14 @@ Master index for searching BC27 events by keyword, operation, or use case. Use t
 | 5510 "Capacity Jnl.-Post Line" | 5+ capacity events | Manufacturing | [Manufacturing](./events/BC27_EVENTS_MANUFACTURING.md) |
 | 5940 "ServContractManagement" | 12+ contract events | Service | [Service](./events/BC27_EVENTS_SERVICE.md) |
 | 5980 "Service-Post" | 10+ service events | Service | [Service](./events/BC27_EVENTS_SERVICE.md) |
+| 900 "Assembly-Post" | 8+ assembly events | Assembly | [Assembly](./events/BC27_EVENTS_ASSEMBLY.md) |
+| 901 "Assembly Header Management" | 6+ assembly mgmt events | Assembly | [Assembly](./events/BC27_EVENTS_ASSEMBLY.md) |
+| 5610 "FA Jnl.-Post Line" | 15+ fixed asset events | Fixed Assets | [Fixed Assets](./events/BC27_EVENTS_FIXEDASSETS.md) |
 | 6155 "Webhook Management" | 6+ webhook events | API | [API](./events/BC27_EVENTS_API.md) |
+| 7300 "Whse. Jnl.-Register Line" | 4+ warehouse posting | Warehouse | [Warehouse](./events/BC27_EVENTS_WAREHOUSE.md) |
+| 7312 "Whse.-Create Pick" | 4+ pick events | Warehouse | [Warehouse](./events/BC27_EVENTS_WAREHOUSE.md) |
+| 7314 "Whse.-Create Put-away" | 5+ put-away events | Warehouse | [Warehouse](./events/BC27_EVENTS_WAREHOUSE.md) |
+| 7315 "Whse.-Activity-Register" | 3+ activity events | Warehouse | [Warehouse](./events/BC27_EVENTS_WAREHOUSE.md) |
 | 99000773 "Prod. Order Status Mgmt." | 15+ production events | Manufacturing | [Manufacturing](./events/BC27_EVENTS_MANUFACTURING.md) |
 | 99000770 "BOM Explode BOM" | 4+ BOM events | Manufacturing | [Manufacturing](./events/BC27_EVENTS_MANUFACTURING.md) |
 
@@ -168,7 +219,10 @@ Master index for searching BC27 events by keyword, operation, or use case. Use t
 | **Service Management** | 20+ | [events/BC27_EVENTS_SERVICE.md](./events/BC27_EVENTS_SERVICE.md) |
 | **Jobs & Projects** | 15+ | [events/BC27_EVENTS_JOBS.md](./events/BC27_EVENTS_JOBS.md) |
 | **API & Integration** | 25+ | [events/BC27_EVENTS_API.md](./events/BC27_EVENTS_API.md) |
-| **TOTAL** | **~175 events** | - |
+| **Fixed Assets** | 15+ | [events/BC27_EVENTS_FIXEDASSETS.md](./events/BC27_EVENTS_FIXEDASSETS.md) |
+| **Advanced Warehouse** | 18+ | [events/BC27_EVENTS_WAREHOUSE.md](./events/BC27_EVENTS_WAREHOUSE.md) |
+| **Assembly** | 12+ | [events/BC27_EVENTS_ASSEMBLY.md](./events/BC27_EVENTS_ASSEMBLY.md) |
+| **TOTAL** | **~210 events** | - |
 
 ---
 
@@ -180,6 +234,9 @@ Master index for searching BC27 events by keyword, operation, or use case. Use t
   - [BC27_EVENTS_SERVICE.md](./events/BC27_EVENTS_SERVICE.md) - Service & contract events
   - [BC27_EVENTS_JOBS.md](./events/BC27_EVENTS_JOBS.md) - Job & project events
   - [BC27_EVENTS_API.md](./events/BC27_EVENTS_API.md) - API & integration events
+  - [BC27_EVENTS_FIXEDASSETS.md](./events/BC27_EVENTS_FIXEDASSETS.md) - Fixed asset events
+  - [BC27_EVENTS_WAREHOUSE.md](./events/BC27_EVENTS_WAREHOUSE.md) - Advanced warehouse events
+  - [BC27_EVENTS_ASSEMBLY.md](./events/BC27_EVENTS_ASSEMBLY.md) - Assembly & ATO events
 
 - **Extension Points**: [BC27_EXTENSION_POINTS.md](./BC27_EXTENSION_POINTS.md)
 - **Cursor Rule**: `.cursor/rules/010-event-discovery.mdc`
@@ -189,4 +246,4 @@ Master index for searching BC27 events by keyword, operation, or use case. Use t
 
 **Version**: 1.0
 **Last Updated**: 2025-11-08
-**Total Events Indexed**: ~175 across all modules
+**Total Events Indexed**: ~210 across all modules
