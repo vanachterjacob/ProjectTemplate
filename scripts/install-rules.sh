@@ -26,18 +26,20 @@ print_error() { echo -e "${RED}[ERROR]${NC} $1"; }
 show_usage() {
     echo "BC26 Development Template - Auto Installation"
     echo ""
-    echo "Usage: $0 <target_directory> <project_prefix> [repo_url] [repo_branch]"
+    echo "Usage: $0 <target_directory> <project_prefix> [repo_url] [repo_branch] [--with-mcp]"
     echo ""
     echo "Arguments:"
     echo "  target_directory  : Path to your AL project (e.g., /path/to/MyProject)"
     echo "  project_prefix    : 3-letter customer prefix (e.g., CON for Contoso)"
     echo "  repo_url          : (Optional) Git repository URL to pull latest template"
     echo "  repo_branch       : (Optional) Git branch to clone (default: main)"
+    echo "  --with-mcp        : (Optional) Also setup MCP servers (GitHub, Filesystem)"
     echo ""
     echo "Examples:"
     echo "  $0 /home/user/MyALProject CON"
     echo "  $0 . ABC https://github.com/yourorg/ProjectTemplate.git"
     echo "  $0 . ABC https://github.com/yourorg/ProjectTemplate.git develop"
+    echo "  $0 . ABC --with-mcp"
     echo ""
     exit 1
 }
@@ -49,8 +51,28 @@ fi
 
 TARGET_DIR="$1"
 PROJECT_PREFIX="$2"
-REPO_URL="${3:-}"
-REPO_BRANCH="${4:-main}"
+REPO_URL=""
+REPO_BRANCH="main"
+SETUP_MCP=false
+
+# Parse optional arguments
+shift 2
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --with-mcp)
+            SETUP_MCP=true
+            shift
+            ;;
+        *)
+            if [ -z "$REPO_URL" ]; then
+                REPO_URL="$1"
+            elif [ "$REPO_BRANCH" = "main" ]; then
+                REPO_BRANCH="$1"
+            fi
+            shift
+            ;;
+    esac
+done
 
 # Validate project prefix (3 letters, uppercase)
 if [[ ! "$PROJECT_PREFIX" =~ ^[A-Z]{3}$ ]]; then
@@ -286,6 +308,17 @@ fi
 
 # Final success message
 echo ""
+# Step 9: Optional MCP setup
+if [ "$SETUP_MCP" = true ]; then
+    print_info "Setting up MCP servers..."
+    if [ -f "$SCRIPT_DIR/setup-mcp.sh" ]; then
+        bash "$SCRIPT_DIR/setup-mcp.sh" "$TARGET_DIR" --github --filesystem
+    else
+        print_warning "MCP setup script not found. Run manually: bash scripts/setup-mcp.sh"
+    fi
+fi
+
+echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 print_success "BC26 Development Template installation complete!"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -338,4 +371,15 @@ echo "   • before-read-file.ps1 - Security (blocks sensitive files)"
 echo "   • before-shell-execution.ps1 - Safety (prevents dangerous commands)"
 echo "   • after-agent-response.ps1 - Usage analytics"
 echo ""
+
+if [ "$SETUP_MCP" = true ]; then
+    echo "🔌 MCP Servers configured:"
+    echo "   • GitHub MCP - PR automation (set GITHUB_TOKEN env var)"
+    echo "   • Filesystem MCP - Real-time ESC validation"
+    echo "   • See .claude/MCP_CONFIGURATION.md for details"
+    echo ""
+    echo "   Next: Export GITHUB_TOKEN and reload VS Code"
+    echo ""
+fi
+
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
