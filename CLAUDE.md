@@ -52,7 +52,7 @@ Workflow automation via slash commands:
 | `/auto-install-rules` | Install template to project | haiku |
 
 ### BC27 Base Code Index (`/BC27/`)
-Complete reference documentation (161 KB, 7 files):
+Complete reference documentation (217 KB, 9 files):
 
 1. **BC27_INDEX_README.md** - Navigation guide
 2. **BC27_ARCHITECTURE.md** - System design, layering, patterns
@@ -61,6 +61,8 @@ Complete reference documentation (161 KB, 7 files):
 5. **BC27_DEPENDENCY_REFERENCE.md** - Module relationships
 6. **BC27_FEATURES_INDEX.md** - 200+ features matrix
 7. **BC27_INTEGRATION_GUIDE.md** - 15+ external integrations
+8. **BC27_EVENT_CATALOG.md** - 50+ event subscribers/publishers for extensions
+9. **BC27_EXTENSION_POINTS.md** - Table/page extension patterns and guidelines
 
 ## Development Workflow
 
