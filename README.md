@@ -194,8 +194,7 @@ ProjectTemplate/
 │
 ├── docs/                              # Documentation files
 │   ├── QUICKSTART.md                  # 5-minute quick start guide
-│   ├── LLM_OPTIMIZATION_GUIDE.md      # Token efficiency guide
-│   └── planning/                      # Future roadmap & brainstorming
+│   └── LLM_OPTIMIZATION_GUIDE.md      # Token efficiency guide
 │
 ├── .cursorignore                      # Context exclusions for Cursor AI
 ├── .claudeignore                      # ⚡ NEW: Context exclusions for Claude Code

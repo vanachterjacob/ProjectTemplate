@@ -1,6 +1,8 @@
 # Claude Code Ignore File
 # Exclude files/folders from Claude Code's context and indexing
 # Syntax: same as .gitignore (glob patterns)
+#
+# IMPORTANT: Keep in sync with .cursorignore for consistent AI experience
 
 # ============================================================================
 # BUILD ARTIFACTS & COMPILED CODE
@@ -114,8 +116,3 @@ coverage/
 # Uncomment the following if context windows become constrained:
 # BC27/BC27_MODULES_OVERVIEW.md
 # BC27/BC27_FEATURES_INDEX.md
-
-# ============================================================================
-# CURSOR-SPECIFIC (Not needed for Claude Code)
-# ============================================================================
-.cursor/

@@ -168,7 +168,7 @@ if (Test-Path $SourceDocs) {
         New-Item -ItemType Directory -Path $TargetDocs -Force | Out-Null
     }
     Copy-Item -Path "$SourceDocs\*" -Destination $TargetDocs -Recurse -Force
-    Write-Success "Copied docs/ directory (QUICKSTART.md, LLM_OPTIMIZATION_GUIDE.md, planning/)"
+    Write-Success "Copied docs/ directory (QUICKSTART.md, LLM_OPTIMIZATION_GUIDE.md)"
 }
 
 # Copy src/AGENTS.md template if it exists and src/ folder exists

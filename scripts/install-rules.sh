@@ -193,7 +193,7 @@ fi
 if [ -d "$TEMPLATE_DIR/docs" ]; then
     mkdir -p "$TARGET_DIR/docs"
     cp -r "$TEMPLATE_DIR/docs"/* "$TARGET_DIR/docs/"
-    print_success "Copied docs/ directory (QUICKSTART.md, LLM_OPTIMIZATION_GUIDE.md, planning/)"
+    print_success "Copied docs/ directory (QUICKSTART.md, LLM_OPTIMIZATION_GUIDE.md)"
 fi
 
 # Copy src/AGENTS.md template if it exists and src/ folder exists
