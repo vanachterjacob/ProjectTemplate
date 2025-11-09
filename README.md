@@ -25,7 +25,10 @@ This template provides BC27 extension developers with:
 - **ESC Standards Compliance** - Automated enforcement of development standards
 - **AI Context Files** - Cursor rules (.mdc) and Claude commands for intelligent assistance
 - **LLM Optimization** - 60-96% token savings for AI code assistants (Cursor AI, Claude Code)
-- **Memory System** - 🧠 **NEW** Project-specific AI memory that persists across sessions (10-15 min saved per session)
+- **Memory System** - 🧠 Project-specific AI memory that persists across sessions (10-15 min saved per session)
+- **Session Checkpoints** - ✨ **NEW** Save & resume long development sessions without context loss
+- **Pattern Library** - ✨ **NEW** Reusable AL solutions from real projects (75-90% time savings)
+- **Impact Analysis** - ✨ **NEW** Pre-implementation risk assessment and dependency analysis
 - **BC27 Base Code Index** - Complete documentation of all 73 BC27 modules
 - **Event Discovery** - 210+ events across 10 modules with keyword search and LLM guidance
 - **Development Workflows** - Structured process from specification to implementation
@@ -172,14 +175,24 @@ git commit -m "feat: add customer credit limit feature"
 
 ### Available Commands
 
+**Core Workflow:**
 | Command | Purpose | Example |
 |---------|---------|---------|
 | `/specify` | Create user specification | `/specify feature-name` |
-| `/plan` | Create technical architecture | `/plan feature-name` |
+| `/plan` | Create technical architecture (with impact analysis) | `/plan feature-name` |
 | `/tasks` | Break plan into tasks | `/tasks feature-name all` |
 | `/implement` | Write code from tasks | `/implement feature-name next` |
 | `/review` | ESC compliance check | `/review src/` |
 | `/update_doc` | Maintain documentation | `/update_doc update` |
+
+**Advanced Features** ✨ **NEW**:
+| Command | Purpose | Example |
+|---------|---------|---------|
+| `/checkpoint` | Save session state for later | `/checkpoint commission-feature` |
+| `/resume` | Resume previous session | `/resume commission-feature` |
+| `/find-pattern` | Search pattern library | `/find-pattern custom ledger` |
+| `/save-pattern` | Save solution as pattern | `/save-pattern api-rate-limiter` |
+| `/impact-analyze` | Analyze change impact & risks | `/impact-analyze table "Sales Header" modify-field` |
 
 ## 📁 Template Structure
 
@@ -216,9 +229,15 @@ ProjectTemplate/
 │
 ├── .claude/                           # Claude Code configuration
 │   ├── commands/                      # Slash commands (/specify, /plan, etc.)
+│   │   ├── 0-specify.md through 6-auto-install-rules.md # Core workflow
+│   │   ├── 7-checkpoint.md            # ✨ NEW: Save session state
+│   │   ├── 8-resume.md                # ✨ NEW: Resume session
+│   │   ├── 9-find-pattern.md          # ✨ NEW: Search patterns
+│   │   ├── 10-save-pattern.md         # ✨ NEW: Save patterns
+│   │   └── 11-impact-analyze.md       # ✨ NEW: Impact analysis
 │   ├── skills/                        # Context presets for quick loading
 │   │   └── context-presets/          # 6 domain-specific presets
-│   ├── memories/                      # 🧠 NEW: Memory system
+│   ├── memories/                      # 🧠 Memory system
 │   │   ├── README.md                 # Complete memory guide
 │   │   └── templates/                # 7 project type templates
 │   │       ├── sales-project.md      # Sales & customer extensions
@@ -228,6 +247,15 @@ ProjectTemplate/
 │   │       ├── posting-project.md    # G/L & ledgers
 │   │       ├── esc-strict-mode.md    # Maximum ESC compliance
 │   │       └── customer-template.md  # Customer configuration
+│   ├── sessions/                      # ✨ NEW: Session checkpoints
+│   │   ├── README.md                 # Usage guide
+│   │   └── example-checkpoint.md     # Example checkpoint
+│   ├── patterns/                      # ✨ NEW: Pattern library
+│   │   ├── README.md                 # Pattern library guide
+│   │   ├── index.md                  # Searchable pattern index
+│   │   └── learned/                  # Reusable patterns
+│   │       ├── custom-ledger-posting.pattern.md
+│   │       └── api-rate-limiter.pattern.md
 │   ├── settings.json                  # Team-shared configuration
 │   └── settings.local.example.json    # Personal overrides template
 │
