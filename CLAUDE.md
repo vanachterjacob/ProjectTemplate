@@ -77,30 +77,6 @@ Workflow automation via slash commands:
 
 **See:** `.claude/skills/context-presets/README.md` for details
 
-### MCP Servers (`.claude/MCP_CONFIGURATION.md`)
-🔌 **Extend Claude capabilities** - MCP (Model Context Protocol) servers add powerful integrations:
-
-**Recommended for BC27:**
-- **GitHub MCP** ⭐ Auto-create PRs with ESC checklist after `/implement`
-- **Filesystem MCP** ⭐ Real-time ESC compliance validation on file save
-- **Brave Search MCP** - Verify latest BC27 event signatures
-- **Database MCP** - Validate table extensions and test queries
-
-**Quick Setup:**
-```bash
-# Create .claude/mcp_settings.json (see MCP_CONFIGURATION.md)
-# Set GITHUB_TOKEN environment variable
-# Reload VS Code/Cursor
-```
-
-**Benefits:**
-- ✅ PR automation (40-50% faster workflow)
-- ✅ Proactive ESC warnings (catch violations early)
-- ✅ Always current BC27 docs (auto-fetch from Microsoft Learn)
-- ✅ Schema validation before deployment
-
-**See:** `.claude/MCP_CONFIGURATION.md` for full guide and `.claude/RECOMMENDED_MCP_SERVERS.md` for quick reference
-
 ### BC27 Base Code Index (`/BC27/`)
 Complete reference documentation (360 KB, 18 files):
 
