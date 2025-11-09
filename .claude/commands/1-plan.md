@@ -78,7 +78,7 @@ BC26 architect creating technical plan from: `.agent/specs/$ARGUMENTS.md`
 
 ## Step 2: Load Context
 @.cursor/rules/000-project-overview.mdc
-@.cursor/rules/005-bc26-symbols.mdc
+@.cursor/rules/005-bc-symbols.mdc
 @CLAUDE.md
 
 Read:

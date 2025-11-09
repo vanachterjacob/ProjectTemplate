@@ -30,7 +30,7 @@ Auto-loaded AI context based on file patterns:
 | `002-development-patterns.mdc` | `*.al` | Early exit, TryFunction, Confirm | 126 |
 | `003-document-extensions.mdc` | `*Sales*`, `*Purchase*` | Complete document extensions | 57 |
 | `004-performance.mdc` | `*.al` | Performance patterns, thresholds | 96 |
-| `005-bc26-symbols.mdc` | @-mention | Local BC symbols reference | 61 |
+| `005-bc-symbols.mdc` | @-mention | Local BC26/BC27 symbols reference | 61 |
 | `006-tools-review.mdc` | @-mention | LinterCop, Object Ninja, extensions | 76 |
 | `007-deployment-security.mdc` | `*Install*`, `*Upgrade*`, `*Permission*` | Security, upgrades | 113 |
 | `008-bc27-quick-reference.mdc` | `*.al`, `app.json` | BC27 modules quick ref | 107 |

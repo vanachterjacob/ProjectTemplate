@@ -78,7 +78,7 @@ Use /review command with file path
 - **Naming Conventions:** @.cursor/rules/001-naming-conventions.mdc
 - **Development Patterns:** @.cursor/rules/002-development-patterns.mdc
 - **Performance Rules:** @.cursor/rules/004-performance.mdc
-- **BC26 Symbols:** @.cursor/rules/005-bc26-symbols.mdc
+- **BC Symbols:** @.cursor/rules/005-bc-symbols.mdc (BC26/BC27 compatible)
 
 ## Common Patterns
 

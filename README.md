@@ -206,7 +206,7 @@ ProjectTemplate/
 │   │   ├── 002-development-patterns.mdc # For *.al files
 │   │   ├── 003-document-extensions.mdc # For *Sales*, *Purchase*
 │   │   ├── 004-performance.mdc       # For *.al files
-│   │   ├── 005-bc26-symbols.mdc      # @-mention only
+│   │   ├── 005-bc-symbols.mdc        # @-mention only (BC26/BC27 symbols)
 │   │   ├── 006-tools-review.mdc      # @-mention only
 │   │   ├── 007-deployment-security.mdc # For *Install*, *Upgrade*
 │   │   ├── 008-bc27-quick-reference.mdc # Auto-loads for *.al

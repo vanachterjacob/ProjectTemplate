@@ -1,13 +1,15 @@
 ---
 alwaysApply: false
-description: BC26 base symbols reference configuration for @-mention when needed
+description: BC26/BC27 base symbols reference configuration for @-mention when needed
 ---
-# BC26 Base Symbols Reference
+# BC26/BC27 Base Symbols Reference
 
 ## Local Symbols Location
 
 **Base Path:** `C:\Temp\BC26Objects` (1.7GB, ~27,220 AL files)
 
+> **Note:** Path name says BC26, but symbols are valid for both BC26 and BC27 development.
+>
 > ⚠️ Always use LOCAL symbols - MCP not trusted
 
 ## Available Modules
@@ -16,6 +18,7 @@ description: BC26 base symbols reference configuration for @-mention when needed
 - **BaseApp** - Microsoft Base Application (26.3.36158.37931)
   - Standard tables, pages, codeunits
   - Core BC functionality
+  - Compatible with BC26 and BC27 development
 - **ALAppExtensions** - Microsoft AL App Extensions
 - **BCIntrastatCore** - Microsoft Intrastat Core (26.4.37194.37425)
 - **BC-RS** - BC Reference Symbols

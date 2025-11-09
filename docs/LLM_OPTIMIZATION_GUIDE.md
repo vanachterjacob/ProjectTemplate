@@ -145,7 +145,7 @@ Total Context Files: ~11,400 lines (~55KB)
 │   ├── 002-development-patterns.mdc (126 lines) ★ Load for *.al
 │   ├── 003-document-extensions.mdc (57 lines)
 │   ├── 004-performance.mdc (96 lines)
-│   ├── 005-bc26-symbols.mdc (61 lines)
+│   ├── 005-bc-symbols.mdc (61 lines)
 │   ├── 006-tools-review.mdc (76 lines)
 │   ├── 007-deployment-security.mdc (113 lines)
 │   ├── 008-bc27-quick-reference.mdc (107 lines)

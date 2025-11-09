@@ -31,7 +31,7 @@ description: ESC project configuration and standards overview
 
 **Performance & Symbols:**
 - `004-performance.mdc` - Thresholds, background processing
-- `005-bc26-symbols.mdc` - Local symbols at C:\Temp\BC26Objects (also valid for BC27)
+- `005-bc-symbols.mdc` - Local symbols at C:\Temp\BC26Objects (also valid for BC27)
 
 **Tools & Quality:**
 - `006-tools-review.mdc` - Extensions, Object Ninja, review
