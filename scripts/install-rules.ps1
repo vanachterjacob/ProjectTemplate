@@ -160,11 +160,15 @@ if (Test-Path $SourceClaudeIgnore) {
     Write-Success "Copied .claudeignore"
 }
 
-# Copy LLM_OPTIMIZATION_GUIDE.md
-$SourceLLMGuide = Join-Path $TemplateDir "LLM_OPTIMIZATION_GUIDE.md"
-if (Test-Path $SourceLLMGuide) {
-    Copy-Item -Path $SourceLLMGuide -Destination (Join-Path $TargetDirectory "LLM_OPTIMIZATION_GUIDE.md") -Force
-    Write-Success "Copied LLM_OPTIMIZATION_GUIDE.md"
+# Copy docs/ directory
+$SourceDocs = Join-Path $TemplateDir "docs"
+if (Test-Path $SourceDocs) {
+    $TargetDocs = Join-Path $TargetDirectory "docs"
+    if (-not (Test-Path $TargetDocs)) {
+        New-Item -ItemType Directory -Path $TargetDocs -Force | Out-Null
+    }
+    Copy-Item -Path "$SourceDocs\*" -Destination $TargetDocs -Recurse -Force
+    Write-Success "Copied docs/ directory (QUICKSTART.md, LLM_OPTIMIZATION_GUIDE.md)"
 }
 
 # Copy src/AGENTS.md template if it exists and src/ folder exists
@@ -299,7 +303,7 @@ Write-Host "   • .claude\commands\ - Workflow slash commands"
 Write-Host "   • CLAUDE.md - AI context documentation (with LLM optimization)"
 Write-Host "   • .cursorignore - Context exclusions for Cursor AI"
 Write-Host "   • .claudeignore - Context exclusions for Claude Code"
-Write-Host "   • LLM_OPTIMIZATION_GUIDE.md - Token efficiency guide"
+Write-Host "   • docs\ - Documentation (QUICKSTART, LLM_OPTIMIZATION_GUIDE, planning)"
 Write-Host "   • BC27\ - Base code index (18 files: 11 core + 7 module-specific)"
 Write-Host "      - BC27_LLM_QUICKREF.md ⭐ Token-optimized quick reference"
 Write-Host "   • Hooks configured in $HooksDir\hooks.json"
@@ -329,7 +333,7 @@ Write-Host "      For extensions: BC27_EVENT_CATALOG.md → events\BC27_EVENTS_[
 Write-Host "      For architecture: BC27_ARCHITECTURE.md → BC27_MODULES_OVERVIEW.md"
 Write-Host ""
 Write-Host "⚡ LLM Optimization:" -ForegroundColor Yellow
-Write-Host "   • LLM_OPTIMIZATION_GUIDE.md - Complete token efficiency guide"
+Write-Host "   • docs\LLM_OPTIMIZATION_GUIDE.md - Complete token efficiency guide"
 Write-Host "   • .cursor\rules\011-llm-optimization.mdc - Context loading strategies"
 Write-Host "   • .claudeignore / .cursorignore - Exclude ~50% of files from AI context"
 Write-Host "   • Token savings: 60-96% for typical AI code assistant queries"

@@ -194,10 +194,10 @@ When I say "standard extension", create:
 - `.cursor/rules/` - ESC standards (auto-loaded by file pattern)
 
 ### For Developers
-- `README.md` - Human-readable project guide
-- `.claude/memories/README.md` - Memory system guide
-- `.claude/skills/context-presets/README.md` - Context preset guide
-- `LLM_OPTIMIZATION_GUIDE.md` - Token efficiency best practices
+- `../README.md` - Human-readable project guide
+- `../.claude/memories/README.md` - Memory system guide
+- `../.claude/skills/context-presets/README.md` - Context preset guide
+- `LLM_OPTIMIZATION_GUIDE.md` - Token efficiency best practices (this directory)
 
 ## ⚡ Performance Benefits
 
@@ -223,15 +223,14 @@ If you prefer manual installation or the one-liner doesn't work:
 git clone https://github.com/vanachterjacob/ProjectTemplate.git
 cd ProjectTemplate
 
-# 2. Edit configuration
-nano install-to-project.sh
-# Set TARGET_PROJECT and PROJECT_PREFIX
+# 2. Run installation script directly
+bash scripts/install-rules.sh /path/to/your-project ABC
 
-# 3. Run installation
-bash install-to-project.sh
+# Or use the slash command
+# /auto-install-rules
 ```
 
-Or use the install script directly:
+Alternative - use the install script directly:
 
 ```bash
 bash scripts/install-rules.sh /path/to/project ABC
@@ -279,10 +278,10 @@ bash scripts/install-rules.sh /path/to/project ABC
 
 ### Essential Reading (in order)
 1. `QUICKSTART.md` (this file) - Get started fast
-2. `CLAUDE.md` - Complete AI context
-3. `.claude/memories/README.md` - Memory system
-4. `BC27/BC27_INDEX_README.md` - BC27 documentation guide
-5. `LLM_OPTIMIZATION_GUIDE.md` - Token efficiency
+2. `../CLAUDE.md` - Complete AI context
+3. `../.claude/memories/README.md` - Memory system
+4. `../BC27/BC27_INDEX_README.md` - BC27 documentation guide
+5. `LLM_OPTIMIZATION_GUIDE.md` - Token efficiency (this directory)
 
 ### Best Practices
 - Use memory for project-specific patterns

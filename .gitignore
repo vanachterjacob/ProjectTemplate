@@ -1,0 +1,17 @@
+# BC27 Development Template - Git Ignore
+# Version controlled template - exclude personal/local files
+
+# Personal Claude Code settings (team settings in settings.json)
+.claude/settings.local.json
+
+# Local development
+.vscode/
+*.code-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
