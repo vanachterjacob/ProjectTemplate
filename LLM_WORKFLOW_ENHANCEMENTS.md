@@ -579,6 +579,16 @@ Breaking change for external integration.
 
 ---
 
+## ✅ Implementation Status
+
+| Feature | Status | Commands | Files |
+|---------|--------|----------|-------|
+| **#3 Session Checkpoints** | ✅ **Implemented** | `/checkpoint`, `/resume` | `.claude/sessions/` |
+| **#4 Pattern Library** | ✅ **Implemented** | `/find-pattern`, `/save-pattern` | `.claude/patterns/` |
+| **#5 Impact Analysis** | ✅ **Implemented** | `/impact-analyze`, integrated in `/plan` | Auto-generated reports |
+
+---
+
 ## 📊 Comparison: Editor vs LLM Features
 
 | Feature | Editor (Cursor/VSCode) | LLM Enhancement |
@@ -596,35 +606,43 @@ Breaking change for external integration.
 
 ---
 
-## 🚀 Implementation Priority
+## 🚀 Implementation Status
 
-### Week 1: Essential (Direct productivity impact)
-1. **ADR Auto-tracking** - 2 days
+### ✅ Implemented (Ready to Use)
+
+**3. Session Checkpoints** - ✅ DONE
+   - Commands: `/checkpoint`, `/resume`
+   - Directory: `.claude/sessions/`
+   - Example: `example-checkpoint.md`
+   - Usage: Save/resume long development sessions
+   - **Status**: Production ready
+
+**4. Pattern Library** - ✅ DONE
+   - Commands: `/find-pattern`, `/save-pattern`
+   - Directory: `.claude/patterns/learned/`
+   - Example patterns: Custom Ledger Posting, API Rate Limiter
+   - Index: `patterns/index.md`
+   - **Status**: Production ready with 2 example patterns
+
+**5. Impact Analysis** - ✅ DONE
+   - Command: `/impact-analyze`
+   - Integration: Auto-runs in `/plan` command
+   - Features: Breaking change detection, dependency analysis, risk assessment
+   - **Status**: Production ready
+
+---
+
+### ⏳ Not Yet Implemented (Future Work)
+
+**1. ADR Auto-tracking** - 2 days
    - Command: /adr-create
    - Auto-detect decisions in conversation
    - Template generation
 
-2. **Multi-Project Switching** - 2 days
+**2. Multi-Project Switching** - 2 days
    - Project context files template
    - Command: /switch-project
    - Prefix/conventions auto-load
-
-### Week 2: High Value (Workflow improvement)
-3. **Session Checkpoints** - 3 days
-   - Commands: /checkpoint, /resume
-   - Auto-summarization logic
-   - Git integration
-
-### Week 3: Advanced (Team value)
-4. **Pattern Library** - 2 days
-   - Pattern template
-   - Command: /find-pattern
-   - Cross-reference system
-
-5. **Impact Analysis** - 3 days
-   - Dependency graph builder
-   - Command: /impact-analyze
-   - Breaking change detection
 
 ---
 
