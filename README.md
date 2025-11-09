@@ -68,19 +68,10 @@ Replace:
 - `ABC` - Your 3-letter prefix
 - `sales` - Project type (sales/warehouse/api/manufacturing/posting/general)
 
-**Option 3: Traditional Install**
-```powershell
-# Download this template
-git clone https://github.com/vanachterjacob/ProjectTemplate.git
-cd ProjectTemplate
-
-# Run installation wizard
-.\install-to-project.ps1
-
-# When prompted, enter:
-# - Path to your AL project
-# - Your 3-letter prefix (e.g., ABC, CON, FAB)
-# - Project type (for memory setup)
+**Option 3: Via Claude Code**
+```bash
+# In Claude Code CLI
+/auto-install-rules
 ```
 
 **Option 4: Manual Installation**
@@ -89,14 +80,14 @@ cd ProjectTemplate
 cp -r .cursor/rules/ /path/to/your-project/.cursor/rules/
 cp -r .claude/commands/ /path/to/your-project/.claude/commands/
 cp -r BC27/ /path/to/your-project/BC27/
+cp -r docs/ /path/to/your-project/docs/
 cp CLAUDE.md .cursorignore .claudeignore /path/to/your-project/
-cp LLM_OPTIMIZATION_GUIDE.md /path/to/your-project/
 
 # Update prefix in all files (replace ABC with your prefix)
 find /path/to/your-project/.cursor -type f -exec sed -i 's/ABC/YOUR_PREFIX/g' {} \;
 ```
 
-**Option 3: Via Claude Code**
+**Option 5: Traditional Install (Clone & Run)**
 ```bash
 # In Claude Code CLI
 /auto-install-rules
@@ -111,7 +102,7 @@ After installation:
 4. **Check app.json** - Ensure object ID ranges are configured
 5. **Test Workflow** - Run `/specify test-feature` to verify installation
 6. **Test Memory** - Use `/memory` to view loaded memories
-7. **Review LLM Optimization** - See `LLM_OPTIMIZATION_GUIDE.md` for AI assistant best practices
+7. **Review LLM Optimization** - See `docs/LLM_OPTIMIZATION_GUIDE.md` for AI assistant best practices
 
 ### 🧠 Memory System (NEW)
 
@@ -200,8 +191,11 @@ git commit -m "feat: add customer credit limit feature"
 ProjectTemplate/
 ├── README.md                          # This file (human-readable guide)
 ├── CLAUDE.md                          # AI context (for LLMs only)
-├── LLM_OPTIMIZATION_GUIDE.md          # ⚡ NEW: Token efficiency guide
-├── QUICKSTART.md                      # 5-minute quick start guide
+│
+├── docs/                              # Documentation files
+│   ├── QUICKSTART.md                  # 5-minute quick start guide
+│   ├── LLM_OPTIMIZATION_GUIDE.md      # Token efficiency guide
+│   └── planning/                      # Future roadmap & brainstorming
 │
 ├── .cursorignore                      # Context exclusions for Cursor AI
 ├── .claudeignore                      # ⚡ NEW: Context exclusions for Claude Code
@@ -291,12 +285,12 @@ ProjectTemplate/
 
 ### ⚡ LLM Optimization
 - **Quick Reference:** `BC27/BC27_LLM_QUICKREF.md` - ⭐ **START HERE** for BC27 queries (80-90% token savings)
-- **Complete Guide:** `LLM_OPTIMIZATION_GUIDE.md` - Token efficiency patterns and best practices
+- **Complete Guide:** `docs/LLM_OPTIMIZATION_GUIDE.md` - Token efficiency patterns and best practices
 - **Loading Strategy:** `.cursor/rules/011-llm-optimization.mdc` - Teaches AI efficient context loading
 - **Context Exclusions:** `.claudeignore` / `.cursorignore` - Files excluded from AI context
 
 ### 🧠 Memory System (NEW)
-- **Quick Start:** `QUICKSTART.md` - One-liner installation with memory setup
+- **Quick Start:** `docs/QUICKSTART.md` - One-liner installation with memory setup
 - **Memory Guide:** `.claude/memories/README.md` - Complete memory system documentation
 - **Project Memory:** `.claude/CLAUDE.md` - Auto-created during installation (team-shared)
 - **User Memory:** `~/.claude/CLAUDE.md` - Optional personal preferences
@@ -329,9 +323,9 @@ ProjectTemplate/
 - **Security:** `.cursor/rules/007-deployment-security.mdc`
 
 ### Development Context
-- **Quick Start:** `QUICKSTART.md` - ⚡ One-liner installation with memory setup
+- **Quick Start:** `docs/QUICKSTART.md` - ⚡ One-liner installation with memory setup
 - **AI Context:** `CLAUDE.md` - Complete guide for AI assistants (with LLM optimization section)
-- **LLM Optimization:** `LLM_OPTIMIZATION_GUIDE.md` - Token efficiency guide
+- **LLM Optimization:** `docs/LLM_OPTIMIZATION_GUIDE.md` - Token efficiency guide
 - **Memory System:** `.claude/memories/README.md` - Persistent AI context guide
 - **Hooks:** `.cursor/hooks/README.md` - Automation setup
 
@@ -353,7 +347,7 @@ ProjectTemplate/
 | BC27 queries | 50k tokens | 2k tokens | 96% |
 | Domain context | 8k tokens | 3k tokens | 62% |
 
-See `LLM_OPTIMIZATION_GUIDE.md` and `.claude/memories/README.md` for complete recommendations.
+See `docs/LLM_OPTIMIZATION_GUIDE.md` and `.claude/memories/README.md` for complete recommendations.
 
 ## ✅ ESC Standards Checklist
 
@@ -488,7 +482,7 @@ This template is free to use for Business Central development projects.
   - Added `quick-install.sh` - One-liner installation from GitHub
   - Added `scripts/setup-memories.sh` - Interactive memory configuration
   - Added `.claude/memories/` - Project type templates (sales, warehouse, api, manufacturing, posting, ESC strict, customer)
-  - Added `QUICKSTART.md` - Ultra-fast getting started guide
+  - Added `docs/QUICKSTART.md` - Ultra-fast getting started guide
   - Updated `scripts/install-rules.sh` - Integrated memory setup
   - Updated `CLAUDE.md` - Memory system section + token savings
   - **Benefits:** 90% token savings on project context, 10-15 min saved per session, instant context loading
@@ -496,7 +490,7 @@ This template is free to use for Business Central development projects.
   - Added `.claudeignore` for Claude Code context exclusions
   - Added `BC27_LLM_QUICKREF.md` - token-optimized quick reference (450 lines vs. 11k+)
   - Added `.cursor/rules/011-llm-optimization.mdc` - teaches AI efficient loading
-  - Added `LLM_OPTIMIZATION_GUIDE.md` - complete optimization guide
+  - Added `docs/LLM_OPTIMIZATION_GUIDE.md` - complete optimization guide
   - Updated `CLAUDE.md` with LLM optimization section
   - Based on 2025 web research of LLM best practices
 - **v3.1.0** (2025-11-08): BC27 event catalog expansion - 210+ events across 10 modules

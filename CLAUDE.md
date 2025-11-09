@@ -331,7 +331,7 @@ Complete reference documentation (360 KB, 18 files):
 
 ### Full Optimization Guide
 
-**See:** `LLM_OPTIMIZATION_GUIDE.md` for complete recommendations, patterns, and best practices.
+**See:** `docs/LLM_OPTIMIZATION_GUIDE.md` for complete recommendations, patterns, and best practices.
 
 ---
 

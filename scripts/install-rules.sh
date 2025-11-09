@@ -189,10 +189,11 @@ if [ -f "$TEMPLATE_DIR/.claudeignore" ]; then
     print_success "Copied .claudeignore"
 fi
 
-# Copy LLM_OPTIMIZATION_GUIDE.md
-if [ -f "$TEMPLATE_DIR/LLM_OPTIMIZATION_GUIDE.md" ]; then
-    cp "$TEMPLATE_DIR/LLM_OPTIMIZATION_GUIDE.md" "$TARGET_DIR/LLM_OPTIMIZATION_GUIDE.md"
-    print_success "Copied LLM_OPTIMIZATION_GUIDE.md"
+# Copy docs/ directory
+if [ -d "$TEMPLATE_DIR/docs" ]; then
+    mkdir -p "$TARGET_DIR/docs"
+    cp -r "$TEMPLATE_DIR/docs"/* "$TARGET_DIR/docs/"
+    print_success "Copied docs/ directory (QUICKSTART.md, LLM_OPTIMIZATION_GUIDE.md, planning/)"
 fi
 
 # Copy src/AGENTS.md template if it exists and src/ folder exists
