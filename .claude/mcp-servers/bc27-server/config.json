@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "bc27-integration": {
+      "command": "python",
+      "args": [
+        ".claude/mcp-servers/bc27-server/server.py"
+      ],
+      "env": {
+        "BC_DATABASE": "Server=localhost;Database=BC270;Integrated Security=true",
+        "BC_WEB_SERVICE_URL": "https://localhost:7048/BC270/ODataV4",
+        "OBJECT_NINJA_PATH": "C:/Tools/ObjectNinja/ObjectNinja.exe",
+        "LINTERCOP_PATH": "C:/Tools/LinterCop/LinterCop.dll"
+      },
+      "description": "Business Central 27 integration server for event discovery, object ID management, and development automation"
+    }
+  }
+}

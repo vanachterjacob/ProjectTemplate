@@ -1,0 +1,42 @@
+# BC27 Development Template - Python Dependencies
+#
+# Core dependencies for AwesomeClaude.ai improvements
+#
+# Installation:
+#   pip install -r .claude/requirements.txt
+#
+# Or use the installation script:
+#   ./claude/scripts/install.sh
+
+# === CORE DEPENDENCIES (Required) ===
+
+# Anthropic API for Claude Code integration
+anthropic>=0.18.0
+
+# ChromaDB for RAG (Retrieval-Augmented Generation)
+chromadb>=0.4.0
+
+# === OPTIONAL DEPENDENCIES ===
+
+# Model Context Protocol SDK (optional - for MCP server)
+# Uncomment if you want to run the MCP server
+# mcp>=0.1.0
+
+# Testing framework (optional - for development)
+# pytest>=7.4.0
+# pytest-asyncio>=0.21.0
+
+# BC Database integration (optional - requires SQL Server)
+# Uncomment when implementing database features
+# pyodbc>=4.0.39
+
+# BC Web Services (optional - for OData integration)
+# requests>=2.31.0
+# msal>=1.24.0  # Microsoft Authentication Library
+
+# === DEVELOPMENT DEPENDENCIES ===
+
+# Uncomment for development work
+# black>=23.0.0  # Code formatting
+# mypy>=1.0.0    # Type checking
+# ruff>=0.1.0    # Fast linting

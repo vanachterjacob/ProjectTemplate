@@ -1,0 +1,15 @@
+# BC27 MCP Server Requirements
+
+# Model Context Protocol SDK
+mcp>=0.1.0
+
+# Optional: Database integration (uncomment when implementing)
+# pyodbc>=4.0.39  # BC SQL Server database connection
+
+# Optional: Web services integration (uncomment when implementing)
+# requests>=2.31.0  # BC OData web services
+# msal>=1.24.0  # Microsoft Authentication Library (OAuth)
+
+# Development/testing
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
