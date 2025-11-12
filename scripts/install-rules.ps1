@@ -37,18 +37,39 @@ if (-not $TargetDirectory) {
     exit 1
 }
 
-# Check if target is an AL project (has app.json)
+# Find AL project root (where app.json is located)
+$AlProjectRoot = $TargetDirectory
 if (-not (Test-Path (Join-Path $TargetDirectory "app.json"))) {
-    Write-Warning "No app.json found in target directory. Are you sure this is an AL project?"
-    $continue = Read-Host "Continue anyway? (y/N)"
-    if ($continue -ne 'y' -and $continue -ne 'Y') {
-        Write-Info "Installation cancelled."
-        exit 0
+    # Try to find app.json in subdirectories (max 2 levels deep)
+    $foundAppJson = Get-ChildItem -Path $TargetDirectory -Filter "app.json" -Recurse -Depth 2 -ErrorAction SilentlyContinue | Select-Object -First 1
+    if ($foundAppJson) {
+        $AlProjectRoot = $foundAppJson.Directory.FullName
+        Write-Info "Found app.json in subdirectory: $AlProjectRoot"
+    }
+    else {
+        Write-Warning "No app.json found in target directory or subdirectories. Are you sure this is an AL project?"
+        $continue = Read-Host "Continue anyway? (y/N)"
+        if ($continue -ne 'y' -and $continue -ne 'Y') {
+            Write-Info "Installation cancelled."
+            exit 0
+        }
+        # Use TargetDirectory as fallback
+        $AlProjectRoot = $TargetDirectory
     }
 }
+else {
+    Write-Info "Found app.json in target directory"
+}
 
-Write-Info "Starting BC26 Development Template installation..."
+# Update TargetDirectory to AL project root for file operations
+$OriginalTargetDirectory = $TargetDirectory
+$TargetDirectory = $AlProjectRoot
+
+Write-Info "Starting BC27 Development Template installation..."
 Write-Info "Target Directory: $TargetDirectory"
+if ($OriginalTargetDirectory -and $OriginalTargetDirectory -ne $TargetDirectory) {
+    Write-Info "AL Project Root: $TargetDirectory (detected from app.json location)"
+}
 Write-Info "Project Prefix: $ProjectPrefix"
 
 # Step 1: Pull from git if repo URL provided
@@ -161,7 +182,7 @@ if (Test-Path $SourceClaudeIgnore) {
     Write-Success "Copied .claudeignore"
 }
 
-# Copy or update .gitignore
+# Copy or update .gitignore (place it where app.json is located)
 Write-Info "Setting up .gitignore..."
 $TargetGitIgnore = Join-Path $TargetDirectory ".gitignore"
 $SourceGitIgnore = Join-Path $TemplateDir ".gitignore.template"
@@ -190,7 +211,7 @@ if (Test-Path $SourceGitIgnore) {
             foreach ($pattern in $missingPatterns) {
                 Add-Content -Path $TargetGitIgnore -Value $pattern
             }
-            Write-Success "Updated .gitignore with $($missingPatterns.Count) missing patterns"
+            Write-Success "Updated .gitignore with $($missingPatterns.Count) missing patterns at $TargetGitIgnore"
         }
         else {
             Write-Info ".gitignore already contains all template patterns"
@@ -199,7 +220,7 @@ if (Test-Path $SourceGitIgnore) {
     else {
         # Copy template as new .gitignore
         Copy-Item -Path $SourceGitIgnore -Destination $TargetGitIgnore -Force
-        Write-Success "Created .gitignore"
+        Write-Success "Created .gitignore at $TargetGitIgnore"
     }
 }
 else {
@@ -352,8 +373,7 @@ Write-Host "   • CLAUDE.md - AI context documentation (with LLM optimization)"
 Write-Host "   • .cursorignore - Context exclusions for Cursor AI"
 Write-Host "   • .claudeignore - Context exclusions for Claude Code"
 Write-Host "   • .gitignore - Git ignore patterns for AL projects"
-Write-Host "   •  - BC27_LLM_QUICKREF.md ⭐ Token-optimized quick reference"
-Write-Host "   • Hooks configured in $HooksDir\hooks.json"
+Write-Host "   • 27_Ls configured in $HooksDir\hooks.json"
 Write-Host ""
 Write-Host "📝 Project Prefix: $ProjectPrefix" -ForegroundColor Cyan
 Write-Host ""
@@ -392,5 +412,6 @@ Write-Host "   • before-shell-execution.ps1 - Safety (prevents dangerous comma
 Write-Host "   • after-agent-response.ps1 - Usage analytics"
 Write-Host ""
 Write-Host ""
-Write-Host ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Gray━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Gray
+Write-Host ━"
+Write-Host ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Gray━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Gray━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Gray
 Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Gray

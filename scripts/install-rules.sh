@@ -67,19 +67,38 @@ if [ ! -d "$TARGET_DIR" ]; then
     exit 1
 fi
 
-# Check if target is an AL project (has app.json)
+# Find AL project root (where app.json is located)
+AL_PROJECT_ROOT="$TARGET_DIR"
 if [ ! -f "$TARGET_DIR/app.json" ]; then
-    print_warning "No app.json found in target directory. Are you sure this is an AL project?"
-    read -p "Continue anyway? (y/N) " -n 1 -r
-    echo
-    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-        print_info "Installation cancelled."
-        exit 0
+    # Try to find app.json in subdirectories (max 2 levels deep)
+    FOUND_APP_JSON=$(find "$TARGET_DIR" -maxdepth 2 -name "app.json" -type f 2>/dev/null | head -n 1)
+    if [ -n "$FOUND_APP_JSON" ]; then
+        AL_PROJECT_ROOT=$(dirname "$FOUND_APP_JSON")
+        print_info "Found app.json in subdirectory: $AL_PROJECT_ROOT"
+    else
+        print_warning "No app.json found in target directory or subdirectories. Are you sure this is an AL project?"
+        read -p "Continue anyway? (y/N) " -n 1 -r
+        echo
+        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+            print_info "Installation cancelled."
+            exit 0
+        fi
+        # Use TARGET_DIR as fallback
+        AL_PROJECT_ROOT="$TARGET_DIR"
     fi
+else
+    print_info "Found app.json in target directory"
 fi
 
-print_info "Starting BC26 Development Template installation..."
+# Update TARGET_DIR to AL project root for file operations
+ORIGINAL_TARGET_DIR="$TARGET_DIR"
+TARGET_DIR="$AL_PROJECT_ROOT"
+
+print_info "Starting BC27 Development Template installation..."
 print_info "Target Directory: $TARGET_DIR"
+if [ "$ORIGINAL_TARGET_DIR" != "$TARGET_DIR" ]; then
+    print_info "AL Project Root: $TARGET_DIR (detected from app.json location)"
+fi
 print_info "Project Prefix: $PROJECT_PREFIX"
 
 # Step 1: Pull from git if repo URL provided
@@ -189,7 +208,7 @@ if [ -f "$TEMPLATE_DIR/.claudeignore" ]; then
     print_success "Copied .claudeignore"
 fi
 
-# Copy or update .gitignore
+# Copy or update .gitignore (place it where app.json is located)
 print_info "Setting up .gitignore..."
 if [ -f "$TEMPLATE_DIR/.gitignore.template" ]; then
     if [ -f "$TARGET_DIR/.gitignore" ]; then
@@ -222,14 +241,14 @@ if [ -f "$TEMPLATE_DIR/.gitignore.template" ]; then
         done < "$TEMPLATE_DIR/.gitignore.template"
         
         if [ $MISSING_COUNT -gt 0 ]; then
-            print_success "Updated .gitignore with $MISSING_COUNT missing patterns"
+            print_success "Updated .gitignore with $MISSING_COUNT missing patterns at $TARGET_DIR/.gitignore"
         else
             print_info ".gitignore already contains all template patterns"
         fi
     else
         # Copy template as new .gitignore
         cp "$TEMPLATE_DIR/.gitignore.template" "$TARGET_DIR/.gitignore"
-        print_success "Created .gitignore"
+        print_success "Created .gitignore at $TARGET_DIR/.gitignore"
     fi
 else
     print_warning ".gitignore.template not found in template directory"

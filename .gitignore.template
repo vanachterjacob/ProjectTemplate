@@ -72,7 +72,15 @@ node_modules/
 package-lock.json
 yarn.lock
 
-# Cursor/Claude AI context files (optional - uncomment if you don't want to track these)
-# .cursor/
+# Cursor/Claude AI context files
+# Uncomment the following lines if you don't want to track these files in git:
+# .agent/
 # .claude/
+# .cursor/
+# .claudeignore
+# .cursorignore
+# CLAUDE.md
+# docs/
+# BC27/
+# src/AGENTS.md
 
