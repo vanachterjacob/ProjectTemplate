@@ -189,6 +189,52 @@ if [ -f "$TEMPLATE_DIR/.claudeignore" ]; then
     print_success "Copied .claudeignore"
 fi
 
+# Copy or update .gitignore
+print_info "Setting up .gitignore..."
+if [ -f "$TEMPLATE_DIR/.gitignore.template" ]; then
+    if [ -f "$TARGET_DIR/.gitignore" ]; then
+        # Merge existing .gitignore with template (add missing patterns)
+        print_info "Merging with existing .gitignore..."
+        
+        # Check which patterns are missing
+        MISSING_COUNT=0
+        ADDED_SECTION=0
+        
+        while IFS= read -r line; do
+            # Skip empty lines and comments
+            if [[ -z "$line" ]] || [[ "$line" =~ ^[[:space:]]*# ]]; then
+                continue
+            fi
+            
+            # Trim whitespace
+            pattern=$(echo "$line" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+            
+            # Check if pattern exists in target .gitignore
+            if [ -n "$pattern" ] && ! grep -qFx "$pattern" "$TARGET_DIR/.gitignore" 2>/dev/null; then
+                if [ $ADDED_SECTION -eq 0 ]; then
+                    echo "" >> "$TARGET_DIR/.gitignore"
+                    echo "# Added by BC27 Template installer" >> "$TARGET_DIR/.gitignore"
+                    ADDED_SECTION=1
+                fi
+                echo "$pattern" >> "$TARGET_DIR/.gitignore"
+                MISSING_COUNT=$((MISSING_COUNT + 1))
+            fi
+        done < "$TEMPLATE_DIR/.gitignore.template"
+        
+        if [ $MISSING_COUNT -gt 0 ]; then
+            print_success "Updated .gitignore with $MISSING_COUNT missing patterns"
+        else
+            print_info ".gitignore already contains all template patterns"
+        fi
+    else
+        # Copy template as new .gitignore
+        cp "$TEMPLATE_DIR/.gitignore.template" "$TARGET_DIR/.gitignore"
+        print_success "Created .gitignore"
+    fi
+else
+    print_warning ".gitignore.template not found in template directory"
+fi
+
 # Copy docs/ directory
 if [ -d "$TEMPLATE_DIR/docs" ]; then
     mkdir -p "$TARGET_DIR/docs"
@@ -328,6 +374,7 @@ echo "   • .claude/skills/context-presets/ - Quick context loading (6 presets)
 echo "   • CLAUDE.md - AI context documentation (with LLM optimization)"
 echo "   • .cursorignore - Context exclusions for Cursor AI"
 echo "   • .claudeignore - Context exclusions for Claude Code"
+echo "   • .gitignore - Git ignore patterns for AL projects"
 echo "   • LLM_OPTIMIZATION_GUIDE.md - Token efficiency guide"
 echo "   • BC27/ - Base code index (18 files: 11 core + 7 module-specific)"
 echo "      - BC27_LLM_QUICKREF.md ⭐ Token-optimized quick reference"

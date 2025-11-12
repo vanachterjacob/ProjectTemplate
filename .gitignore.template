@@ -1,0 +1,78 @@
+# ALTB - AL Language Template Base
+.alpackages/
+.alcache/
+.altemplates/
+.altestrunner/
+.snapshots/
+!launch.json
+!app.json
+rad.json
+*.app
+*.g.xlf
+!app/.appSourceCopPackages/*
+
+# Translations (Managed by XLIFF Sync tool)
+Translations/
+*.xlf
+
+# Build artifacts & compiled code
+*.bak
+*.dll
+*.zip
+
+# Cache & temporary files
+.vs/
+.vscode/.ropeproject/
+*.cache
+.temp/
+*.tmp
+.DS_Store
+Thumbs.db
+
+# BC26/BC27 Symbols (Too large for git)
+symbols/
+.netpackages/
+
+# Generated files
+*.backup
+*~
+
+# IDE-specific files (keep .vscode/launch.json if needed)
+.vscode/
+!launch.json
+.idea/
+*.swp
+*.swo
+
+# Logs & reports
+logs/
+reports/
+
+# Test artifacts
+TestResults/
+coverage/
+*.trx
+
+# Large data files
+*.csv
+*.xlsx
+*.xls
+*.log
+
+# Sensitive files
+*.env
+*.env.local
+credentials.json
+secrets.json
+*.key
+*.pem
+
+# Node modules (if using any JS tooling)
+node_modules/
+package-lock.json
+yarn.lock
+
+# Cursor/Claude AI context files (optional - uncomment if you don't want to track these)
+# .cursor/
+# .claude/
+

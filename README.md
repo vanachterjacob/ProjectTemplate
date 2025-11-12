@@ -4,8 +4,14 @@ Centralized configuration template for Business Central 27 (SaaS) extension deve
 
 ## ⚡ Ultra-Fast Installation
 
+**Linux/Mac:**
 ```bash
 curl -sSL https://raw.githubusercontent.com/vanachterjacob/ProjectTemplate/main/quick-install.sh | bash
+```
+
+**Windows (PowerShell):**
+```powershell
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/vanachterjacob/ProjectTemplate/main/quick-install.ps1" -OutFile "$env:TEMP\quick-install.ps1"; & "$env:TEMP\quick-install.ps1"
 ```
 
 **Time:** ~5 minutes | **Setup:** Fully automated | **Memory:** Auto-configured
@@ -45,8 +51,15 @@ This template provides BC27 extension developers with:
 ### Installation
 
 **Option 1: One-Liner Install (⚡ Fastest)**
+
+**Linux/Mac:**
 ```bash
 curl -sSL https://raw.githubusercontent.com/vanachterjacob/ProjectTemplate/main/quick-install.sh | bash
+```
+
+**Windows (PowerShell):**
+```powershell
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/vanachterjacob/ProjectTemplate/main/quick-install.ps1" -OutFile "$env:TEMP\quick-install.ps1"; & "$env:TEMP\quick-install.ps1"
 ```
 
 This will:
@@ -59,12 +72,19 @@ This will:
 **Time:** ~5 minutes including memory setup
 
 **Option 2: Quick Install with Parameters (Non-interactive)**
+
+**Linux/Mac:**
 ```bash
 curl -sSL https://raw.githubusercontent.com/vanachterjacob/ProjectTemplate/main/quick-install.sh | bash -s -- /path/to/project ABC sales
 ```
 
+**Windows (PowerShell):**
+```powershell
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/vanachterjacob/ProjectTemplate/main/quick-install.ps1" -OutFile "$env:TEMP\quick-install.ps1"; & "$env:TEMP\quick-install.ps1" -TargetProject "C:\Projects\MyProject" -ProjectPrefix "ABC" -ProjectType "sales"
+```
+
 Replace:
-- `/path/to/project` - Your AL project directory
+- `/path/to/project` or `C:\Projects\MyProject` - Your AL project directory
 - `ABC` - Your 3-letter prefix
 - `sales` - Project type (sales/warehouse/api/manufacturing/posting/general)
 

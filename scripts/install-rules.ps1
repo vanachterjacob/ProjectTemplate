@@ -3,17 +3,17 @@
 # Usage: .\install-rules.ps1 -TargetDirectory "C:\Path\To\Project" -ProjectPrefix "ABC" [-RepoUrl "https://..."]
 
 param(
-    [Parameter(Mandatory=$true, HelpMessage="Path to your AL project")]
+    [Parameter(Mandatory = $true, HelpMessage = "Path to your AL project")]
     [string]$TargetDirectory,
 
-    [Parameter(Mandatory=$true, HelpMessage="3-letter customer prefix (e.g., CON for Contoso)")]
+    [Parameter(Mandatory = $true, HelpMessage = "3-letter customer prefix (e.g., CON for Contoso)")]
     [ValidatePattern('^[A-Z]{3}$')]
     [string]$ProjectPrefix,
 
-    [Parameter(Mandatory=$false, HelpMessage="Git repository URL to pull latest template")]
+    [Parameter(Mandatory = $false, HelpMessage = "Git repository URL to pull latest template")]
     [string]$RepoUrl = "",
 
-    [Parameter(Mandatory=$false, HelpMessage="Git branch to clone (default: main)")]
+    [Parameter(Mandatory = $false, HelpMessage = "Git branch to clone (default: main)")]
     [string]$RepoBranch = "main"
 )
 
@@ -62,7 +62,8 @@ if ($RepoUrl) {
         git clone -b $RepoBranch $RepoUrl $TempCloneDir 2>$null
         Write-Success "Repository cloned successfully (branch: $RepoBranch)"
         $TemplateDir = $TempCloneDir
-    } catch {
+    }
+    catch {
         Write-Warning "Failed to clone repository. Using local template instead."
     }
 }
@@ -160,6 +161,51 @@ if (Test-Path $SourceClaudeIgnore) {
     Write-Success "Copied .claudeignore"
 }
 
+# Copy or update .gitignore
+Write-Info "Setting up .gitignore..."
+$TargetGitIgnore = Join-Path $TargetDirectory ".gitignore"
+$SourceGitIgnore = Join-Path $TemplateDir ".gitignore.template"
+
+if (Test-Path $SourceGitIgnore) {
+    if (Test-Path $TargetGitIgnore) {
+        # Merge existing .gitignore with template (add missing patterns)
+        Write-Info "Merging with existing .gitignore..."
+        
+        # Extract patterns from template that don't exist in existing file
+        $templateLines = Get-Content $SourceGitIgnore | Where-Object { $_ -notmatch '^\s*$' -and $_ -notmatch '^\s*#' }
+        $existingLines = Get-Content $TargetGitIgnore | Where-Object { $_ -notmatch '^\s*$' -and $_ -notmatch '^\s*#' }
+        
+        $missingPatterns = @()
+        foreach ($line in $templateLines) {
+            $pattern = $line.Trim()
+            if ($pattern -and $pattern -notmatch '^#' -and $existingLines -notcontains $pattern) {
+                $missingPatterns += $pattern
+            }
+        }
+        
+        if ($missingPatterns.Count -gt 0) {
+            # Append missing patterns
+            Add-Content -Path $TargetGitIgnore -Value ""
+            Add-Content -Path $TargetGitIgnore -Value "# Added by BC27 Template installer"
+            foreach ($pattern in $missingPatterns) {
+                Add-Content -Path $TargetGitIgnore -Value $pattern
+            }
+            Write-Success "Updated .gitignore with $($missingPatterns.Count) missing patterns"
+        }
+        else {
+            Write-Info ".gitignore already contains all template patterns"
+        }
+    }
+    else {
+        # Copy template as new .gitignore
+        Copy-Item -Path $SourceGitIgnore -Destination $TargetGitIgnore -Force
+        Write-Success "Created .gitignore"
+    }
+}
+else {
+    Write-Warning ".gitignore.template not found in template directory"
+}
+
 # Copy docs/ directory
 $SourceDocs = Join-Path $TemplateDir "docs"
 if (Test-Path $SourceDocs) {
@@ -240,10 +286,12 @@ if (Test-Path $HooksJsonPath) {
         $hooksContent = $hooksContent -replace '/path/to/project/.cursor/hooks', "$TargetDirectory\.cursor\hooks"
         Set-Content -Path $HooksJsonPath -Value $hooksContent -NoNewline
         Write-Success "Hooks installed to $HooksJsonPath"
-    } else {
+    }
+    else {
         Write-Info "Skipped hooks installation. You can manually configure hooks later."
     }
-} else {
+}
+else {
     Copy-Item -Path $ExampleHooksPath -Destination $HooksJsonPath -Force
     # Update paths in hooks.json to point to the project's .cursor/hooks directory
     $hooksContent = Get-Content $HooksJsonPath -Raw
@@ -303,9 +351,8 @@ Write-Host "   • .claude\commands\ - Workflow slash commands"
 Write-Host "   • CLAUDE.md - AI context documentation (with LLM optimization)"
 Write-Host "   • .cursorignore - Context exclusions for Cursor AI"
 Write-Host "   • .claudeignore - Context exclusions for Claude Code"
-Write-Host "   • docs\ - Documentation (QUICKSTART, LLM_OPTIMIZATION_GUIDE, planning)"
-Write-Host "   • BC27\ - Base code index (18 files: 11 core + 7 module-specific)"
-Write-Host "      - BC27_LLM_QUICKREF.md ⭐ Token-optimized quick reference"
+Write-Host "   • .gitignore - Git ignore patterns for AL projects"
+Write-Host "   •  - BC27_LLM_QUICKREF.md ⭐ Token-optimized quick reference"
 Write-Host "   • Hooks configured in $HooksDir\hooks.json"
 Write-Host ""
 Write-Host "📝 Project Prefix: $ProjectPrefix" -ForegroundColor Cyan
@@ -344,4 +391,6 @@ Write-Host "   • before-read-file.ps1 - Security (blocks sensitive files)"
 Write-Host "   • before-shell-execution.ps1 - Safety (prevents dangerous commands)"
 Write-Host "   • after-agent-response.ps1 - Usage analytics"
 Write-Host ""
+Write-Host ""
+Write-Host ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Gray━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Gray
 Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Gray
