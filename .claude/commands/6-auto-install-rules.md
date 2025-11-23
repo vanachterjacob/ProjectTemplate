@@ -59,9 +59,11 @@ The installation script will:
 - Copy `.cursor/rules/` (ESC standard rules)
 - Copy `.cursor/hooks/` (Quality & security hooks)
 - Copy `.claude/commands/` (Workflow slash commands)
+- Copy `.claude/skills/` (Context presets for fast domain loading)
 - Copy `CLAUDE.md` (AI context)
-- Copy `.cursorignore` (File exclusions)
-- Copy `BC27/` (Business Central 27 base code comprehensive index - 17 files including events/)
+- Copy `.cursorignore` and `.claudeignore` (File exclusions)
+- Copy `BC27/` (Business Central 27 base code comprehensive index - 18 files including events/)
+- Copy `LLM_OPTIMIZATION_GUIDE.md` (Token efficiency guide)
 - Replace ABC prefix with user's prefix throughout all files
 - Install hooks to `~/.cursor/hooks.json`
 - Create `.agent/` directory structure for documentation
@@ -82,7 +84,7 @@ https://github.com/yourorg/ProjectTemplate.git
 
 Remind user to:
 1. **Reload VS Code/Cursor** to activate configuration
-2. **Review BC27 documentation**: Start with `BC27/BC27_INDEX_README.md` for architecture and module reference
+2. **Review BC27 documentation**: Start with `BC27/BC27_LLM_QUICKREF.md` for token-optimized quick reference
 3. **Test with**: `/specify test-feature`
 4. **Review CLAUDE.md** for project guidelines
 5. **Verify app.json** has correct idRanges for their prefix
