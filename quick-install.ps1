@@ -32,10 +32,10 @@ $REPO_BRANCH = "main"
 $TEMP_DIR = ""
 
 # Helper functions
-function Write-Info { param([string]$Message) Write-Host "ℹ $Message" -ForegroundColor Blue }
-function Write-Success { param([string]$Message) Write-Host "✓ $Message" -ForegroundColor Green }
-function Write-Warning { param([string]$Message) Write-Host "⚠ $Message" -ForegroundColor Yellow }
-function Write-Error { param([string]$Message) Write-Host "✗ $Message" -ForegroundColor Red }
+function Write-Info { param([string]$Message) Write-Host ("ℹ " + $Message) -ForegroundColor Blue }
+function Write-Success { param([string]$Message) Write-Host ("✓ " + $Message) -ForegroundColor Green }
+function Write-Warning { param([string]$Message) Write-Host ("⚠ " + $Message) -ForegroundColor Yellow }
+function Write-CustomError { param([string]$Message) Write-Host ("✗ " + $Message) -ForegroundColor Red }
 function Write-Header { param([string]$Message) Write-Host $Message -ForegroundColor Cyan }
 
 # Cleanup function
@@ -65,31 +65,31 @@ if ([string]::IsNullOrWhiteSpace($TargetProject)) {
     while ($true) {
         Write-Host "Enter the full path to your AL project:" -ForegroundColor Cyan
         Write-Host "(e.g., C:\Projects\MyProject)" -ForegroundColor Yellow
-        $input = Read-Host
-        
-        if ([string]::IsNullOrWhiteSpace($input)) {
-            Write-Error "Project path cannot be empty"
+        $userInput = Read-Host
+
+        if ([string]::IsNullOrWhiteSpace($userInput)) {
+            Write-CustomError "Project path cannot be empty"
             continue
         }
-        
+
         # Expand environment variables and resolve path
-        $input = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($input)
-        
+        $userInput = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($userInput)
+
         # Create directory if it doesn't exist
-        if (-not (Test-Path $input)) {
+        if (-not (Test-Path $userInput)) {
             Write-Host ""
-            Write-Warning "Directory does not exist: $input"
+            Write-Warning "Directory does not exist: $userInput"
             $create = Read-Host "Create it? (y/N)"
             if ($create -eq 'y' -or $create -eq 'Y') {
-                New-Item -ItemType Directory -Path $input -Force | Out-Null
+                New-Item -ItemType Directory -Path $userInput -Force | Out-Null
                 Write-Success "Directory created"
             }
             else {
                 continue
             }
         }
-        
-        $TargetProject = $input
+
+        $TargetProject = $userInput
         break
     }
     
@@ -99,14 +99,14 @@ if ([string]::IsNullOrWhiteSpace($TargetProject)) {
     while ($true) {
         Write-Host "Enter your 3-letter project prefix:" -ForegroundColor Cyan
         Write-Host "(e.g., ABC, CON, FAB - must be UPPERCASE)" -ForegroundColor Yellow
-        $input = Read-Host
-        
-        if ($input -match '^[A-Z]{3}$') {
-            $ProjectPrefix = $input
+        $userInput = Read-Host
+
+        if ($userInput -match '^[A-Z]{3}$') {
+            $ProjectPrefix = $userInput
             break
         }
         else {
-            Write-Error "Prefix must be exactly 3 uppercase letters"
+            Write-CustomError "Prefix must be exactly 3 uppercase letters"
         }
     }
     
@@ -115,17 +115,17 @@ if ([string]::IsNullOrWhiteSpace($TargetProject)) {
 
 # Validate inputs
 if ([string]::IsNullOrWhiteSpace($TargetProject)) {
-    Write-Error "Target project path is required"
+    Write-CustomError "Target project path is required"
     exit 1
 }
 
 if ([string]::IsNullOrWhiteSpace($ProjectPrefix)) {
-    Write-Error "Project prefix is required"
+    Write-CustomError "Project prefix is required"
     exit 1
 }
 
 if ($ProjectPrefix -notmatch '^[A-Z]{3}$') {
-    Write-Error "Project prefix must be exactly 3 uppercase letters (e.g., ABC, CON, FAB)"
+    Write-CustomError "Project prefix must be exactly 3 uppercase letters (e.g., ABC, CON, FAB)"
     exit 1
 }
 
@@ -134,7 +134,7 @@ try {
     $TargetProject = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($TargetProject)
 }
 catch {
-    Write-Error "Invalid path: $TargetProject"
+    Write-CustomError "Invalid path: $TargetProject"
     exit 1
 }
 
@@ -166,12 +166,12 @@ try {
     # Check if git is available
     $gitAvailable = Get-Command git -ErrorAction SilentlyContinue
     if (-not $gitAvailable) {
-        Write-Error "Git is not installed or not in PATH. Please install Git for Windows."
+        Write-CustomError "Git is not installed or not in PATH. Please install Git for Windows."
         exit 1
     }
     
     # Clone repository
-    $cloneOutput = git clone -q -b $REPO_BRANCH --depth 1 $REPO_URL $TEMP_DIR 2>&1
+    git clone -q -b $REPO_BRANCH --depth 1 $REPO_URL $TEMP_DIR 2>&1 | Out-Null
     if ($LASTEXITCODE -ne 0) {
         throw "Git clone failed"
     }
@@ -179,7 +179,7 @@ try {
     Write-Success "Template downloaded"
 }
 catch {
-    Write-Error "Failed to clone repository from $REPO_URL"
+    Write-CustomError "Failed to clone repository from $REPO_URL"
     Write-Info "Please check your internet connection and try again"
     Cleanup
     exit 1
@@ -192,7 +192,7 @@ Write-Host ""
 $INSTALL_SCRIPT = Join-Path $TEMP_DIR "scripts\install-rules.ps1"
 
 if (-not (Test-Path $INSTALL_SCRIPT)) {
-    Write-Error "Installation script not found in repository"
+    Write-CustomError "Installation script not found in repository"
     Cleanup
     exit 1
 }
@@ -215,7 +215,7 @@ try {
     }
 }
 catch {
-    Write-Error "Installation failed: $_"
+    Write-CustomError "Installation failed: $_"
     Cleanup
     exit 1
 }
