@@ -1,14 +1,25 @@
-# ALTB - AL Language Template Base
-.alpackages/
-.alcache/
-.altemplates/
-.altestrunner/
-.snapshots/
-!launch.json
-!app.json
-rad.json
+# BC27 Development Template - Git Ignore for AL Projects
+# Standard patterns for Business Central AL extensions
+
+# AL build artifacts (applies to all subdirectories)
+**/.alpackages/**
+**/.alcache/**
+**/.altemplates/**
+**/.altestrunner/**
+**/.snapshots/**
+
+# VS Code rad.json (deployment metadata)
+**/.vscode/rad.json
+
+# Compiled app files (exclude .app but keep app.json)
 *.app
+*dep.app
+!app.json
+
+# Generated translation files
 *.g.xlf
+
+# Keep app source cop packages if needed
 !app/.appSourceCopPackages/*
 
 # Translations (Managed by XLIFF Sync tool)
@@ -37,12 +48,14 @@ symbols/
 *.backup
 *~
 
-# IDE-specific files (keep .vscode/launch.json if needed)
-.vscode/
-!launch.json
-.idea/
+# IDE-specific files
+**/.vscode/
+!**/.vscode/launch.json
+!**/.vscode/settings.json
+**/.idea/
 *.swp
 *.swo
+*.code-workspace
 
 # Logs & reports
 logs/

@@ -4,9 +4,21 @@
 # Personal Claude Code settings (team settings in settings.json)
 .claude/settings.local.json
 
-# Local development
-.vscode/
+# Local development (template repo only - projects get .gitignore.template)
+**/.vscode/
+!**/.vscode/launch.json
+!**/.vscode/settings.json
 *.code-workspace
+
+# AL build artifacts (in case template is tested as AL project)
+**/.alpackages/**
+**/.alcache/**
+**/.altemplates/**
+**/.altestrunner/**
+**/.snapshots/**
+**/.vscode/rad.json
+*.app
+*dep.app
 
 # OS files
 .DS_Store
@@ -15,3 +27,4 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.temp
+*.log
