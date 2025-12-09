@@ -32,6 +32,23 @@ enumextension 50007 "ABC Payment Terms" extends "Payment Terms"
 - Pattern: `<BaseNameShort>.<ObjectTypeShort><BaseId>-Ext.al`
 - Example: `Customer.TableExt18-Ext.al`, `CustomerCard.PageExt21-Ext.al`
 
+### Feature Module Prefixes
+For feature-specific objects in feature folders, use a sub-prefix:
+```al
+// Layout feature objects
+pageextension 50080 "ABC LAY Sales Quote" extends "Sales Quote"
+tableextension 50060 "ABC LAY Sales Header Archive" extends "Sales Header Archive"
+
+// PrePayment feature objects
+codeunit 50100 "ABC PRE Prepayment Mgt."
+```
+
+**Sub-prefix codes:**
+- `LAY` - Layout/printing features
+- `PRE` - PrePayment features
+- `LIC` - License features
+- `CON` - Contract features
+
 ### Interface Pattern
 ```al
 interface "IABC Customer Service"
@@ -56,7 +73,8 @@ var
 
 **Critical rules:**
 - Temp tables: `Temp` prefix mandatory
-- Records: `Rec` suffix to avoid conflicts
+- Records in tables/pages: `Rec` suffix only to avoid conflict with implicit `Rec` record
+- For parameter conflicts: rename parameter (e.g., `SourceItemUoM`) not local variable
 - Labels: `Lbl` suffix
 - English-only names (no Dutch)
 
@@ -67,6 +85,7 @@ var
     DeleteQst: Label 'Delete %1?';
     SuccessMsg: Label 'Process completed successfully';
     AmountLbl: Label 'Amount';
+    TextConstCodeLbl: Label 'MYCODE', Locked = true;  // Locked for non-translatable codes
 ```
 
 **Naming suffixes:**
@@ -74,6 +93,7 @@ var
 - `Msg` - Messages
 - `Err` - Errors
 - `Lbl` - Labels
+- `Txt` - Text constants (with `Locked = true`)
 
 ## Procedure Naming
 
@@ -95,6 +115,17 @@ src/
 ├── CustomerCredit/
 │   ├── ABCCreditLimit.Codeunit.al
 │   └── ABCCreditSetup.Table.al
+├── Layouts/
+│   └── PrintingUoMBOM/
+│       ├── Codeunits/
+│       ├── Enums/
+│       ├── PageExtensions/
+│       │   ├── Sales/              ← Sub-folder per document type
+│       │   └── Purchase/           ← Sub-folder per document type
+│       ├── ReportExtensions/
+│       ├── RDL/
+│       ├── TableExtensions/
+│       └── Tables/
 ├── Documents/
 │   ├── SalesHeader.TableExt37-Ext.al
 │   └── SalesOrder.PageExt42-Ext.al
@@ -104,5 +135,7 @@ src/
 
 **Guidelines:**
 - Group by feature/module
+- Feature folders should have sub-folders (Sales, Purchase, Tables, etc.)
+- Keep feature-specific fields in feature folders, not in generic document extensions
 - Permissions in `_Permissions/` folder
 - Use descriptive folder names

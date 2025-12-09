@@ -20,9 +20,134 @@ begin
 
     ProcessValidCustomer(Customer, Amount);
 end;
+
+// Always check empty key parameters first
+procedure GetItemPictureBase64(ItemNo: Code[20]): Text
+begin
+    if ItemNo = '' then
+        exit('');
+    // ... rest of logic
+end;
 ```
 
 **Rule:** Exit early for invalid conditions, process at the end.
+
+## Temporary Buffer Tables
+
+```al
+table 50000 "ABC My Buffer"
+{
+    Caption = 'My Buffer', Locked = true;      // Table caption locked (no UI)
+    DataClassification = SystemMetadata;        // At TABLE level
+    TableType = Temporary;
+
+    fields
+    {
+        field(1; "Entry No."; Integer)
+        {
+            Caption = 'Entry No.';              // Field captions NOT locked (may appear in reports)
+        }
+    }
+
+    keys
+    {
+        key(PK; "Entry No.")
+        {
+            Clustered = true;
+        }
+        // Secondary keys on temp tables: only add if actually used for filtering
+    }
+}
+```
+
+**Rules:**
+- Table Caption: `Locked = true` (no UI)
+- DataClassification: At table level, not field level
+- Field Captions: NOT locked (may appear in reports)
+- Secondary keys: Evaluate actual usage before adding
+
+## Enum Patterns
+
+```al
+enum 50000 "ABC My Internal Option"
+{
+    Extensible = false;  // false when not supporting extensibility/publishers
+    Caption = 'My Option';
+
+    value(0; "None")
+    {
+        Caption = 'None';
+    }
+}
+```
+
+**Rules:**
+- `Extensible = false` when enum is internal/not designed for extension
+- Caption should describe the option, not include data type
+
+## Page Field Properties
+
+```al
+// Document fields - editable
+field("ABC Print Option"; Rec."ABC Print Option")
+{
+    ApplicationArea = All;
+    Importance = Additional;    // Use Additional for rarely-used fields
+    ToolTip = 'Specifies...';
+}
+
+// Posted document fields - non-editable
+field("ABC Print Option"; Rec."ABC Print Option")
+{
+    ApplicationArea = All;
+    Editable = false;           // MANDATORY for posted documents
+    Importance = Additional;
+    ToolTip = 'Specifies...';
+}
+```
+
+**Rules:**
+- Don't duplicate Caption on page fields (inherits from table)
+- Use `Importance = Additional` for infrequently-used fields
+- Posted document fields MUST have `Editable = false`
+
+## Upgrade Codeunit Pattern
+
+```al
+codeunit 50000 "ABC Upgrade"
+{
+    Subtype = Upgrade;
+    Access = Internal;
+
+    trigger OnUpgradePerCompany()
+    begin
+        UpgradeMyFeature();
+    end;
+
+    local procedure UpgradeMyFeature()
+    var
+        UpgradeTag: Codeunit "Upgrade Tag";
+    begin
+        if UpgradeTag.HasUpgradeTag(GetMyFeatureUpgradeTag()) then
+            exit;
+
+        // Upgrade logic here
+
+        UpgradeTag.SetUpgradeTag(GetMyFeatureUpgradeTag());
+    end;
+
+    local procedure GetMyFeatureUpgradeTag(): Code[250]
+    begin
+        exit('ABC-MyFeature-001-20251209');
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Upgrade Tag", OnGetPerCompanyUpgradeTags, '', false, false)]
+    local procedure OnUpgradePerCompanyRegisterTags(var PerCompanyUpgradeTags: List of [Code[250]])
+    begin
+        PerCompanyUpgradeTags.Add(GetMyFeatureUpgradeTag());
+    end;
+}
+```
 
 ## Clean Conditionals (CASE over IF)
 
@@ -61,12 +186,6 @@ begin
     ProcessCustomerData(Customer);
     exit(true);
 end;
-
-// Usage
-if TryProcessCustomer(CustNo) then
-    ShowSuccessMessage()
-else
-    ShowErrorMessage();
 ```
 
 ## Confirm Dialogs (ESC Pattern)

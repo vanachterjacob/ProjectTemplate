@@ -49,6 +49,7 @@ description: ESC development tools and code review standards for @-mention when 
 - [ ] English-only code (no translation comments)
 - [ ] Variables don't match table names
 - [ ] Performance tested with production-scale data
+- [ ] Early exit for empty key parameters
 
 ### LinterCop Compliance
 - [ ] All objects have Access property (LC0011)
@@ -66,6 +67,33 @@ description: ESC development tools and code review standards for @-mention when 
 - [ ] Object Ninja used for final ID assignment
 - [ ] Centralized ruleset compliance verified
 
+### Feature Module Standards
+- [ ] Feature objects use sub-prefix (ABC LAY, ABC PRE, etc.)
+- [ ] Feature folders organized with sub-folders (Sales, Purchase, Tables)
+- [ ] Feature-specific fields in feature folder, not generic extensions
+- [ ] Report logic moved to codeunits to avoid code cloning
+
+### Temporary Buffer Tables
+- [ ] Table Caption: `Locked = true`
+- [ ] DataClassification: At table level (SystemMetadata)
+- [ ] Field Captions: NOT locked (may appear in reports)
+- [ ] Secondary keys only if actually used
+
+### Enum Standards
+- [ ] Extensible = false when not supporting publisher pattern
+- [ ] Caption describes option, doesn't include data type
+
+### Page Field Standards
+- [ ] No Caption property (inherits from table)
+- [ ] Posted document fields have `Editable = false`
+- [ ] Rarely-used fields have `Importance = Additional`
+- [ ] All fields have ToolTip
+
+### Upgrade Codeunits
+- [ ] Uses UpgradeTag pattern (check, execute, register)
+- [ ] Tags registered via OnGetPerCompanyUpgradeTags
+- [ ] Tag format: `ABC-FeatureName-Version-Date`
+
 ## Red Flags (Immediate Action)
 
 1. **Mixed language code** - Refactor immediately
@@ -74,3 +102,7 @@ description: ESC development tools and code review standards for @-mention when 
 4. **No permission validation** - Add security checks
 5. **Untested upgrade path** - Block deployment
 6. **Production performance not validated** - Require testing
+7. **Feature fields in generic document extensions** - Move to feature folder
+8. **Editable fields on posted document pages** - Add Editable = false
+9. **Duplicate code between reports** - Refactor to shared codeunit
+10. **Upgrade codeunit without UpgradeTag** - Add proper pattern
