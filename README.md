@@ -124,6 +124,50 @@ After installation:
 6. **Test Memory** - Use `/memory` to view loaded memories
 7. **Review LLM Optimization** - See `docs/LLM_OPTIMIZATION_GUIDE.md` for AI assistant best practices
 
+### 🏢 Multi-Extension Workspaces (NEW)
+
+The installer now intelligently handles multi-extension workspaces:
+
+**Automatic Detection:**
+- Searches up to 3 levels deep for `app.json` files
+- Detects all AL extensions in workspace structure
+- Shows extension names and relative paths
+
+**Interactive Selection:**
+When multiple extensions are found, you'll see:
+```
+Multiple AL projects detected in this workspace:
+
+  [1] Main/
+      App: Vanca Base Extension
+  [2] Customizations/
+      App: Customer Customizations
+  [3] Tests/
+      App: Test Suite
+
+Which extension should receive the template?
+(Enter number 1-3, or 0 to install at workspace root)
+```
+
+**Use Cases:**
+- **Option 0** - Install at workspace root (shared AI context for all extensions)
+- **Option 1-N** - Install in specific extension (extension-specific context)
+
+**Example Workspace Structure:**
+```
+C:\Projects\CustomerProject\
+├── Main\                  # Main extension
+│   ├── app.json
+│   ├── .claude\          # ← Template installed here if selected
+│   └── src\
+├── Customizations\        # Customer-specific extension
+│   ├── app.json
+│   └── src\
+└── Tests\                 # Test extension
+    ├── app.json
+    └── src\
+```
+
 ### 🧠 Memory System (NEW)
 
 The template now includes Claude Code's memory feature for persistent AI context:

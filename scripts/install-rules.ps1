@@ -40,11 +40,66 @@ if (-not $TargetDirectory) {
 # Find AL project root (where app.json is located)
 $AlProjectRoot = $TargetDirectory
 if (-not (Test-Path (Join-Path $TargetDirectory "app.json"))) {
-    # Try to find app.json in subdirectories (max 2 levels deep)
-    $foundAppJson = Get-ChildItem -Path $TargetDirectory -Filter "app.json" -Recurse -Depth 2 -ErrorAction SilentlyContinue | Select-Object -First 1
-    if ($foundAppJson) {
-        $AlProjectRoot = $foundAppJson.Directory.FullName
-        Write-Info "Found app.json in subdirectory: $AlProjectRoot"
+    # Try to find app.json in subdirectories (max 3 levels deep to catch nested structures)
+    $foundAppJsonFiles = Get-ChildItem -Path $TargetDirectory -Filter "app.json" -Recurse -Depth 3 -ErrorAction SilentlyContinue
+
+    if ($foundAppJsonFiles) {
+        if ($foundAppJsonFiles.Count -eq 1) {
+            # Single AL project found
+            $AlProjectRoot = $foundAppJsonFiles[0].Directory.FullName
+            Write-Info "Found app.json in subdirectory: $AlProjectRoot"
+        }
+        else {
+            # Multiple AL projects found (multi-extension workspace)
+            Write-Host ""
+            Write-Warning "Multiple AL projects detected in this workspace:"
+            Write-Host ""
+
+            $projectList = @()
+            $index = 1
+            foreach ($appJson in $foundAppJsonFiles) {
+                $projectPath = $appJson.Directory.FullName
+                $relativePath = $projectPath.Replace($TargetDirectory, "").TrimStart('\', '/')
+
+                # Try to read app name from app.json
+                try {
+                    $appContent = Get-Content $appJson.FullName -Raw | ConvertFrom-Json
+                    $appName = $appContent.name
+                    Write-Host "  [$index] $relativePath" -ForegroundColor Cyan
+                    Write-Host "      App: $appName" -ForegroundColor Gray
+                }
+                catch {
+                    Write-Host "  [$index] $relativePath" -ForegroundColor Cyan
+                }
+
+                $projectList += $projectPath
+                $index++
+            }
+
+            Write-Host ""
+            Write-Host "Which extension should receive the template?" -ForegroundColor Yellow
+            Write-Host "(Enter number 1-$($projectList.Count), or 0 to install at workspace root)" -ForegroundColor Yellow
+
+            while ($true) {
+                $choice = Read-Host "Selection"
+                if ($choice -match '^\d+$' -and [int]$choice -ge 0 -and [int]$choice -le $projectList.Count) {
+                    if ([int]$choice -eq 0) {
+                        # Install at workspace root
+                        $AlProjectRoot = $TargetDirectory
+                        Write-Info "Installing at workspace root (multi-extension setup)"
+                    }
+                    else {
+                        # Install in selected extension
+                        $AlProjectRoot = $projectList[[int]$choice - 1]
+                        Write-Info "Selected: $AlProjectRoot"
+                    }
+                    break
+                }
+                else {
+                    Write-Warning "Invalid selection. Please enter a number between 0 and $($projectList.Count)"
+                }
+            }
+        }
     }
     else {
         Write-Warning "No app.json found in target directory or subdirectories. Are you sure this is an AL project?"

@@ -70,11 +70,61 @@ fi
 # Find AL project root (where app.json is located)
 AL_PROJECT_ROOT="$TARGET_DIR"
 if [ ! -f "$TARGET_DIR/app.json" ]; then
-    # Try to find app.json in subdirectories (max 2 levels deep)
-    FOUND_APP_JSON=$(find "$TARGET_DIR" -maxdepth 2 -name "app.json" -type f 2>/dev/null | head -n 1)
-    if [ -n "$FOUND_APP_JSON" ]; then
-        AL_PROJECT_ROOT=$(dirname "$FOUND_APP_JSON")
-        print_info "Found app.json in subdirectory: $AL_PROJECT_ROOT"
+    # Try to find app.json in subdirectories (max 3 levels deep to catch nested structures)
+    mapfile -t FOUND_APP_JSON_FILES < <(find "$TARGET_DIR" -maxdepth 3 -name "app.json" -type f 2>/dev/null)
+
+    if [ ${#FOUND_APP_JSON_FILES[@]} -gt 0 ]; then
+        if [ ${#FOUND_APP_JSON_FILES[@]} -eq 1 ]; then
+            # Single AL project found
+            AL_PROJECT_ROOT=$(dirname "${FOUND_APP_JSON_FILES[0]}")
+            print_info "Found app.json in subdirectory: $AL_PROJECT_ROOT"
+        else
+            # Multiple AL projects found (multi-extension workspace)
+            echo ""
+            print_warning "Multiple AL projects detected in this workspace:"
+            echo ""
+
+            PROJECT_LIST=()
+            INDEX=1
+            for APP_JSON_PATH in "${FOUND_APP_JSON_FILES[@]}"; do
+                PROJECT_PATH=$(dirname "$APP_JSON_PATH")
+                RELATIVE_PATH="${PROJECT_PATH#$TARGET_DIR/}"
+
+                # Try to read app name from app.json
+                if command -v jq &> /dev/null; then
+                    APP_NAME=$(jq -r '.name // "Unknown"' "$APP_JSON_PATH" 2>/dev/null)
+                    echo "  [$INDEX] $RELATIVE_PATH"
+                    echo "      App: $APP_NAME"
+                else
+                    echo "  [$INDEX] $RELATIVE_PATH"
+                fi
+
+                PROJECT_LIST+=("$PROJECT_PATH")
+                ((INDEX++))
+            done
+
+            echo ""
+            echo "Which extension should receive the template?"
+            echo "(Enter number 1-${#PROJECT_LIST[@]}, or 0 to install at workspace root)"
+
+            while true; do
+                read -p "Selection: " CHOICE
+                if [[ "$CHOICE" =~ ^[0-9]+$ ]] && [ "$CHOICE" -ge 0 ] && [ "$CHOICE" -le ${#PROJECT_LIST[@]} ]; then
+                    if [ "$CHOICE" -eq 0 ]; then
+                        # Install at workspace root
+                        AL_PROJECT_ROOT="$TARGET_DIR"
+                        print_info "Installing at workspace root (multi-extension setup)"
+                    else
+                        # Install in selected extension
+                        AL_PROJECT_ROOT="${PROJECT_LIST[$((CHOICE-1))]}"
+                        print_info "Selected: $AL_PROJECT_ROOT"
+                    fi
+                    break
+                else
+                    print_warning "Invalid selection. Please enter a number between 0 and ${#PROJECT_LIST[@]}"
+                fi
+            done
+        fi
     else
         print_warning "No app.json found in target directory or subdirectories. Are you sure this is an AL project?"
         read -p "Continue anyway? (y/N) " -n 1 -r
