@@ -86,14 +86,14 @@ package-lock.json
 yarn.lock
 
 # Cursor/Claude AI context files
-# Uncomment the following lines if you don't want to track these files in git:
-# .agent/
-# .claude/
-# .cursor/
-# .claudeignore
-# .cursorignore
-# CLAUDE.md
-# docs/
-# BC27/
-# src/AGENTS.md
+# These files are excluded from git (local development only)
+.agent/
+.claude/
+.cursor/
+.claudeignore
+.cursorignore
+CLAUDE.md
+docs/
+BC27/
+src/AGENTS.md
 
